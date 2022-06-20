@@ -1,3 +1,52 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.navbar > button {
+  background-color: #ffffff;
+  color: #ff6b6b;
+  fill: #ff6b6b;
+}
+
+.sidebar {
+  background-color: #ffffff;
+}
+.dashboard-link:hover {
+  text-decoration: none !important;
+  background-color: #f0f4f9 !important;
+  transition: all 0.1s ease-in-out !important;
+}
+
+.daftar-mahasiswa-link:hover {
+  text-decoration: none !important;
+  background-color: #f0f4f9 !important;
+  transition: all 0.1s ease-in-out !important;
+}
+
+.daftar-panitia-link:hover {
+  text-decoration: none !important;
+  background-color: #f0f4f9 !important;
+  transition: all 0.1s ease-in-out !important;
+}
+
+.HoME:hover {
+  text-decoration: none !important;
+  background-color: #f0f4f9 !important;
+  transition: all 0.1s ease-in-out !important;
+}
+
+.HoME-radio {
+  fill: none !important;
+}
+
+.HoME-radio:hover {
+  color: #5e81f4 !important;
+  fill: #5e81f4 !important;
+  transition: all 0.1s ease-in-out !important;
+}
+
+.STATE:hover {
+  text-decoration: none !important;
+  background-color: #f0f4f9 !important;
+  transition: all 0.1s ease-in-out !important;
+}

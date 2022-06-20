@@ -6,7 +6,7 @@ import Layout from "../components/Layout";
 //importing chakra ui components
 import { Box, Center, Container } from "@chakra-ui/react";
 
-const Dashboard: NextPage = () => {
+const DaftarMahasiswa: NextPage = () => {
   return (
     <Box>
       <Layout>
@@ -17,4 +17,4 @@ const Dashboard: NextPage = () => {
   );
 };
 
-export default Dashboard;
+export default DaftarMahasiswa;
