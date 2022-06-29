@@ -1,13 +1,13 @@
 import type { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useState, Component } from "react";
 import { useEffect } from "react";
 
 //importing local components
-import Layout from "../components/Layout";
-import ActiveLink from "../components/ActiveLink";
+import Layout from "../../components/Layout";
+import ActiveLink from "../../components/ActiveLink";
 
 //importing local icons
-import MaximaIcon from "../components/svgs/mxmIcon.svg";
+import MaximaIcon from "../../components/svgs/mxmIcon.svg";
 
 //importing chakra ui components
 import {
@@ -41,28 +41,26 @@ import { EditIcon, CheckIcon, CloseIcon, CheckCircleIcon } from "@chakra-ui/icon
 import MUIDataTable from "mui-datatables";
 import { TableCell, FormControlLabel } from "@material-ui/core";
 import { MUIDataTableColumn } from "mui-datatables";
+import { render } from "react-dom";
 
-const DaftarMahasiswa: NextPage = () => {
-  interface DaftarMahasiswa {
-    namaMahasiswa: String;
-    email: String;
+const DaftarOrganisatorHoME: NextPage = () => {
+  interface DaftarOrganisatorHoME {
+    shift(): void;
+    namaOrganisator: String;
+    kategori: String;
     pengaturan: Boolean;
   }
 
-  const [data]: DaftarMahasiswa[] = useState([
-    { namaMahasiswa: "William Chandra", email: "34995", pengaturan: true },
-    { namaMahasiswa: "Muhammad Naufal Syarif", email: "34996", divisi: "Rocuta", pengaturan: false },
-    { namaMahasiswa: "Raditya Herikristo", email: "34997", divisi: "Rocuta", pengaturan: false },
-    { namaMahasiswa: "Tesalonika Abigail", email: "34998", divisi: "Rocuta", pengaturan: false },
-    { namaMahasiswa: "Felix Ferdianto", email: "34999", divisi: "Rocuta", pengaturan: false },
-    { namaMahasiswa: "Chris Evan", email: "34995", divisi: "Acting", pengaturan: true },
-    { namaMahasiswa: "Korean Jett", email: "35000", divisi: "Duelist", pengaturan: false },
+  const [data]: DaftarOrganisatorHoME[] = useState([
+    { namaOrganisator: "Game Development UMN", kategori: "UKM Pengembangan Game", pengaturan: true },
+    { namaOrganisator: "Kompas Corner", kategori: "UKM Nongkrong", pengaturan: false },
+    { namaOrganisator: "Fortius E-Sport", kategori: "UKM E-Sport", divisi: "Rocuta", pengaturan: false },
   ]);
 
   const columns: MUIDataTableColumn[] = [
     {
-      label: "Nama Mahasiswa",
-      name: "namaMahasiswa",
+      label: "Nama Organisator",
+      name: "namaOrganisator",
       options: {
         customHeadRender: ({ index, ...column }) => {
           return (
@@ -91,8 +89,8 @@ const DaftarMahasiswa: NextPage = () => {
       },
     },
     {
-      label: "Alamat Email",
-      name: "email",
+      label: "Kategori",
+      name: "kategori",
       options: {
         customHeadRender: ({ index, ...column }) => {
           return (
@@ -137,6 +135,8 @@ const DaftarMahasiswa: NextPage = () => {
               <Flex>
                 {value ? (
                   <Button
+                    w={"5em"}
+                    me={"0.5em"}
                     colorScheme="facebook"
                     size="xs"
                     onClick={(event: any) => {
@@ -150,6 +150,8 @@ const DaftarMahasiswa: NextPage = () => {
                   </Button>
                 ) : (
                   <Button
+                    w={"5em"}
+                    me={"0.5em"}
                     colorScheme="facebook"
                     variant="outline"
                     size="xs"
@@ -166,6 +168,19 @@ const DaftarMahasiswa: NextPage = () => {
                     </Flex>
                   </Button>
                 )}
+                <Button
+                  colorScheme={"red"}
+                  size="xs"
+                  onClick={() => {
+                    data.shift();
+
+                    console.log(data);
+                  }}
+                >
+                  <Center>
+                    <CloseIcon />
+                  </Center>
+                </Button>
               </Flex>
             );
           };
@@ -189,7 +204,7 @@ const DaftarMahasiswa: NextPage = () => {
     return (
       <Flex justifyContent={"space-between"} p={["0", "1em 0"]}>
         <Center>
-          <Heading size={["sm", "lg"]}>Daftar Panitia</Heading>
+          <Heading size={["sm", "lg"]}>Daftar PIC Organisator</Heading>
         </Center>
         <Center>
           <MaximaIcon />
@@ -212,4 +227,4 @@ const DaftarMahasiswa: NextPage = () => {
   );
 };
 
-export default DaftarMahasiswa;
+export default DaftarOrganisatorHoME;

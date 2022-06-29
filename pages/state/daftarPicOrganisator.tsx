@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 //importing local components
-import Layout from "../components/Layout";
-import ActiveLink from "../components/ActiveLink";
+import Layout from "../../components/Layout";
+import ActiveLink from "../../components/ActiveLink";
 
 //importing local icons
-import MaximaIcon from "../components/svgs/mxmIcon.svg";
+import MaximaIcon from "../../components/svgs/mxmIcon.svg";
 
 //importing chakra ui components
 import { Box, Center, Container, Flex, Heading, Divider, Text, Button, Editable, EditableInput, EditableTextarea, EditablePreview, useEditableControls, Input, IconButton, ButtonGroup, FormControl, Switch, Image } from "@chakra-ui/react";
@@ -20,28 +20,25 @@ import MUIDataTable from "mui-datatables";
 import { TableCell, FormControlLabel } from "@material-ui/core";
 import { MUIDataTableColumn } from "mui-datatables";
 
-const DaftarPanitia: NextPage = () => {
-  interface DaftarPanitia {
-    namaPanitia: String;
+const DaftarPICOrganisator: NextPage = () => {
+  interface DaftarAkunOrganisator {
+    pic: String;
     nim: Number;
-    divisi: String;
-    verifikasi: Boolean;
+    state: String;
   }
 
-  const [data]: DaftarPanitia[] = useState([
-    { namaPanitia: "William Chandra", nim: "34995", divisi: "Rocuta", verifikasi: true },
-    { namaPanitia: "Muhammad Naufal Syarif", nim: "34996", divisi: "Rocuta", verifikasi: false },
-    { namaPanitia: "Raditya Herikristo", nim: "34997", divisi: "Rocuta", verifikasi: false },
-    { namaPanitia: "Tesalonika Abigail", nim: "34998", divisi: "Rocuta", verifikasi: false },
-    { namaPanitia: "Felix Ferdianto", nim: "34999", divisi: "Rocuta", verifikasi: false },
-    { namaPanitia: "Chris Evan", nim: "34995", divisi: "Acting", verifikasi: true },
-    { namaPanitia: "Korean Jett", nim: "35000", divisi: "Duelist", verifikasi: false },
+  const [data]: DaftarAkunOrganisator[] = useState([
+    { pic: "William Chandra", nim: "34995", state: "UMN Band" },
+    { pic: "Muhammad Naufal Syarif", nim: "34996", state: "J-Cafe" },
+    { pic: "Raditya Herikristo", nim: "34997", state: "Skystar Venture" },
+    { pic: "Chris Evan", nim: "34995", state: "Teater Katak" },
+    { pic: "Alucard", nim: "35000", state: "Mobile Legends" },
   ]);
 
   const columns: MUIDataTableColumn[] = [
     {
-      label: "Nama Panitia",
-      name: "namaPanitia",
+      label: "PIC",
+      name: "pic",
       options: {
         customHeadRender: ({ index, ...column }) => {
           return (
@@ -77,43 +74,14 @@ const DaftarPanitia: NextPage = () => {
       },
     },
     {
-      label: "Divisi",
-      name: "divisi",
+      label: "STATE",
+      name: "state",
       options: {
         customHeadRender: ({ index, ...column }) => {
           return (
             <TableCell key={index} style={{ zIndex: -1 }}>
               <b>{column.label}</b>
             </TableCell>
-          );
-        },
-      },
-    },
-    {
-      label: "Verifikasi",
-      name: "verifikasi",
-      options: {
-        customHeadRender: ({ index, ...column }) => {
-          return (
-            <TableCell key={index} style={{ zIndex: -1 }}>
-              <Flex justifyContent={{ base: "none", lg: "center" }}>
-                <b>{column.label}</b>
-              </Flex>
-            </TableCell>
-          );
-        },
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return (
-            <Flex ms={["0.7em", "0.7em", "0.7em", "2em"]} justifyContent={{ base: "none", lg: "center" }}>
-              <FormControlLabel
-                label=""
-                value={value ? "Yes" : "No"}
-                control={<Switch colorScheme={"blue"} isChecked={value} value={value ? "Yes" : "No"} />}
-                onChange={(event) => {
-                  updateValue(event.target.value === "Yes" ? false : true);
-                }}
-              />
-            </Flex>
           );
         },
       },
@@ -157,4 +125,4 @@ const DaftarPanitia: NextPage = () => {
   );
 };
 
-export default DaftarPanitia;
+export default DaftarPICOrganisator;

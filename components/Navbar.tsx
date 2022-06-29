@@ -17,7 +17,28 @@ import StateIcon from "../components/svgs/stateIcon.svg";
 import RadioIcon from "../components/svgs/radioIcon.svg";
 
 //importing chakra ui components
-import { Box, Flex, Text, Button, Heading, ButtonGroup, Image, Center, useDisclosure, Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Avatar, Container, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Text,
+  Button,
+  Heading,
+  ButtonGroup,
+  Image,
+  Center,
+  useDisclosure,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Avatar,
+  Container,
+  VStack,
+  Collapse,
+} from "@chakra-ui/react";
 
 //importing chakra ui icons
 import { HamburgerIcon, SmallCloseIcon, ChevronUpIcon } from "@chakra-ui/icons";
@@ -66,7 +87,7 @@ const NavbarDrawerContent = () => {
 
 const Dashboard = () => {
   return (
-    <ActiveLink href="/dashboard">
+    <ActiveLink href="/">
       <Flex className={"dashboard-link"} cursor={"pointer"} userSelect={"none"}>
         <Center>
           <Text fontSize={"xl"} fontWeight={"medium"} ms={"1.5px"}>
@@ -117,6 +138,7 @@ const DaftarPanitia = () => {
 
 const HoME = () => {
   const [isToggled, setIsToggled] = useState(false);
+  const { isOpen, onToggle } = useDisclosure();
 
   const animation = {
     open: { opacity: 1 },
@@ -153,11 +175,20 @@ const HoME = () => {
     },
   ];
 
+  const isCurrentPath = useRouter().pathname === HoME[0].HoMEContent[0].link || useRouter().pathname === HoME[0].HoMEContent[1].link || useRouter().pathname === HoME[0].HoMEContent[2].link;
+
   return (
-    <Box className={"HoME"} cursor={"pointer"} userSelect={"none"} onClick={() => setIsToggled((isToggled) => !isToggled)}>
+    <Box
+      cursor={"pointer"}
+      userSelect={"none"}
+      onClick={() => {
+        setIsToggled((isToggled) => !isToggled);
+        onToggle();
+      }}
+    >
       {HoME.map((item, key) => (
         <>
-          <Flex justifyContent={"space-between"} key={key}>
+          <Flex justifyContent={"space-between"} key={key} color={isCurrentPath ? "#5e81f4" : "black"} fill={isCurrentPath ? "#5e81f4" : "black"}>
             <Flex>
               <Center>
                 <Text fontSize={"lg"} fontWeight={"medium"} ms={"1px"}>
@@ -174,22 +205,24 @@ const HoME = () => {
               </motion.div>
             </Center>
           </Flex>
-          <motion.div animate={isToggled ? "open" : "closed"} variants={animation}>
-            <Box display={isToggled ? "block" : "none"} mt={2} px={"0.15em"} w={"109%"}>
-              <VStack align="stretch">
-                {item.HoMEContent.map((item, key) => (
-                  <ActiveLink href={item.link} key={key}>
-                    <Flex className={"HoME-radio"} justifyContent={"start"}>
-                      <Center>{item.icon}</Center>
-                      <Text fontSize={"16px"} fontWeight={"medium"} ms={"0.65em"}>
-                        {item.title}
-                      </Text>
-                    </Flex>
-                  </ActiveLink>
-                ))}
-              </VStack>
-            </Box>
-          </motion.div>
+          <Collapse in={isOpen} animateOpacity>
+            <motion.div animate={isToggled ? "open" : "closed"} variants={animation}>
+              <Box mt={2} px={"0.15em"} w={"109%"}>
+                <VStack align="stretch">
+                  {item.HoMEContent.map((item, key) => (
+                    <ActiveLink href={item.link} key={key}>
+                      <Flex className={"HoME-radio"} justifyContent={"start"}>
+                        <Center>{item.icon}</Center>
+                        <Text fontSize={"16px"} fontWeight={"medium"} ms={"0.65em"}>
+                          {item.title}
+                        </Text>
+                      </Flex>
+                    </ActiveLink>
+                  ))}
+                </VStack>
+              </Box>
+            </motion.div>
+          </Collapse>
         </>
       ))}
     </Box>
@@ -198,6 +231,7 @@ const HoME = () => {
 
 const STATE = () => {
   const [isToggled, setIsToggled] = useState(false);
+  const { isOpen, onToggle } = useDisclosure();
 
   const animation = {
     open: { opacity: 1 },
@@ -232,23 +266,37 @@ const STATE = () => {
         },
         {
           title: "Daftar PIC Organisator",
-          link: "/state/daftarPicOrg",
+          link: "/state/daftarPicOrganisator",
           icon: <RadioIcon />,
         },
         {
           title: "Tambah PIC Organisator",
-          link: "/state/tambahPicOrg",
+          link: "/state/tambahPicOrganisator",
           icon: <RadioIcon />,
         },
       ],
     },
   ];
 
+  const isCurrentPath =
+    useRouter().pathname === STATE[0].STATEContent[0].link ||
+    useRouter().pathname === STATE[0].STATEContent[1].link ||
+    useRouter().pathname === STATE[0].STATEContent[2].link ||
+    useRouter().pathname === STATE[0].STATEContent[3].link ||
+    useRouter().pathname === STATE[0].STATEContent[4].link;
+
   return (
-    <Box className={"HoME"} cursor={"pointer"} userSelect={"none"} onClick={() => setIsToggled((isToggled) => !isToggled)}>
+    <Box
+      cursor={"pointer"}
+      userSelect={"none"}
+      onClick={() => {
+        setIsToggled((isToggled) => !isToggled);
+        onToggle();
+      }}
+    >
       {STATE.map((item, key) => (
         <>
-          <Flex justifyContent={"space-between"} key={key}>
+          <Flex justifyContent={"space-between"} key={key} color={isCurrentPath ? "#5e81f4" : "black"} fill={isCurrentPath ? "#5e81f4" : "black"}>
             <Flex>
               <Center>
                 <Text fontSize={"lg"} fontWeight={"medium"} ms={"1px"}>
@@ -265,22 +313,24 @@ const STATE = () => {
               </motion.div>
             </Center>
           </Flex>
-          <motion.div animate={isToggled ? "open" : "closed"} variants={animation}>
-            <Box display={isToggled ? "block" : "none"} mt={2} px={"0.15em"} w={"109%"}>
-              <VStack align="stretch">
-                {item.STATEContent.map((item, key) => (
-                  <ActiveLink href={item.link} key={key}>
-                    <Flex className={"HoME-radio"} justifyContent={"start"}>
-                      <Center>{item.icon}</Center>
-                      <Text fontSize={"16px"} fontWeight={"medium"} ms={"0.65em"}>
-                        {item.title}
-                      </Text>
-                    </Flex>
-                  </ActiveLink>
-                ))}
-              </VStack>
-            </Box>
-          </motion.div>
+          <Collapse in={isOpen} animateOpacity>
+            <motion.div animate={isToggled ? "open" : "closed"} variants={animation}>
+              <Box mt={2} px={"0.15em"} w={"109%"}>
+                <VStack align="stretch">
+                  {item.STATEContent.map((item, key) => (
+                    <ActiveLink href={item.link} key={key}>
+                      <Flex className={"HoME-radio"} justifyContent={"start"}>
+                        <Center>{item.icon}</Center>
+                        <Text fontSize={"16px"} fontWeight={"medium"} ms={"0.65em"}>
+                          {item.title}
+                        </Text>
+                      </Flex>
+                    </ActiveLink>
+                  ))}
+                </VStack>
+              </Box>
+            </motion.div>
+          </Collapse>
         </>
       ))}
     </Box>
@@ -313,7 +363,7 @@ const Navbar = () => {
           <Drawer placement="left" onClose={onClose} isOpen={isOpen} size={"full"}>
             <DrawerOverlay />
             <DrawerContent>
-              <DrawerBody>
+              <DrawerBody pb={"2em"}>
                 <Flex justifyContent={"space-between"} my={"0.5em"}>
                   <Heading as="h4" size="md">
                     Dashboard Maxima 2022
