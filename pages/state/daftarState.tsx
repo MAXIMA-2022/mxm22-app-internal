@@ -9,81 +9,92 @@ import {
   HStack
 } from '@chakra-ui/react'
 import MUIDataTable, {MUIDataTableColumn} from "mui-datatables"
-import { TableCell } from '@material-ui/core'
+import { TableCell, TableRow } from '@material-ui/core'
 import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
+import Link from 'next/link'
 import { EditIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 
-const listSTATE = () => {
-  interface DataSTATE {
-    name: String,
-    registered: String,
-    quota: String,
-    kodePresensi: String,
+export const getStaticProps = async ()=>{
+  const res = await fetch('https://jsonplaceholder.typicode.com/users')
+  const data = await res.json()
+  return {
+    props: {
+      dataSTATE: data
+    }
   }
+}
+
+const listSTATE = ({dataSTATE}: any) => {
+  // interface DataSTATE {
+  //   name: String,
+  //   registered: String,
+  //   quota: String,
+  //   kodePresensi: String,
+  // }
   
-  const dataSTATE: DataSTATE[] = [
-    {
-      name: "Mufomic",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "SDF670",
-    },
-    {
-      name: "Lions",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "ABC170",
-    },
-    {
-      name: "Rencang",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "RTH270",
-    },
-    {
-      name: "YouTube",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "DSC470",
-    },
-    {
-      name: "Instagram",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "WRE770",
-    },
-    {
-      name: "Mufomic",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "DDD670",
-    },
-    {
-      name: "Lions",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "ZCX170",
-    },
-    {
-      name: "Rencang",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "CVX270",
-    },
-    {
-      name: "YouTube",
-      registered: "100",
-      quota: "200",
-      kodePresensi: "PIN470",
-    },
-    {
-      name: "Instagram",
-      registered: "10",
-      quota: "200",
-      kodePresensi: "KIP770",
-    },
-  ]
+  // const dataSTATE: DataSTATE[] = [
+  //   {
+  //     name: "Mufomic",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "SDF670",
+  //   },
+  //   {
+  //     name: "Lions",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "ABC170",
+  //   },
+  //   {
+  //     name: "Rencang",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "RTH270",
+  //   },
+  //   {
+  //     name: "YouTube",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "DSC470",
+  //   },
+  //   {
+  //     name: "Instagram",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "WRE770",
+  //   },
+  //   {
+  //     name: "Mufomic",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "DDD670",
+  //   },
+  //   {
+  //     name: "Lions",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "ZCX170",
+  //   },
+  //   {
+  //     name: "Rencang",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "CVX270",
+  //   },
+  //   {
+  //     name: "YouTube",
+  //     registered: "100",
+  //     quota: "200",
+  //     kodePresensi: "PIN470",
+  //   },
+  //   {
+  //     name: "Instagram",
+  //     registered: "10",
+  //     quota: "200",
+  //     kodePresensi: "KIP770",
+  //   },
+  // ]
   
   const columnsSTATE: MUIDataTableColumn[] = [
     {
@@ -159,18 +170,20 @@ const listSTATE = () => {
             </TableCell>
           )
         },
-        customBodyRender: (value) => {
+        customBodyRender: (value: any, tableMeta: any) => {
           return(
             <HStack spacing={2}>
-              <Button
-                size="xs"
-                leftIcon={<InfoOutlineIcon/>}
-                color="white"
-                bgColor={'#163161'}
-                _hover={{bgColor: '#1a4173'}}
-              >
-                Detail
-              </Button>
+                  <Link href={"daftarState/" + tableMeta.rowData[0]}>
+                    <Button
+                      size="xs"
+                      leftIcon={<InfoOutlineIcon/>}
+                      color="white"
+                      bgColor={'#163161'}
+                      _hover={{bgColor: '#1a4173'}}
+                    >
+                      Detail
+                    </Button>
+                  </Link>
               <Button
                 size={'xs'}
                 leftIcon={<EditIcon/>}
