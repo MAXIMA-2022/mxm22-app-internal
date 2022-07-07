@@ -17,7 +17,8 @@
     "next": "latest",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-dropzone": "^14.2.1"
+    "react-dropzone": "^14.2.1",
+    "react-tinder-card": "^1.4.5"
   },
   "devDependencies": {
     "@types/mui-datatables": "^3.7.9",
