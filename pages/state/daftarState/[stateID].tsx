@@ -12,6 +12,8 @@ import UltimagzPNG from "../../../public/ultimagz.png";
 import Image from "next/image";
 import { TableCell } from "@material-ui/core";
 import { EditIcon, CheckCircleIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from 'react'
+
 
 export const getStaticPaths = async () => {
   const res = await fetch('https://jsonplaceholder.typicode.com/users');
@@ -162,7 +164,7 @@ const detailSTATE = ({dataSTATE}: any) => {
         <Box w={"full"} bgColor={"white"} borderRadius={20} mb={4}>
           <Flex justifyContent={"space-between"} alignItems={"center"} mx={4} borderBottom={"solid black"}>
             <Text fontSize={["15px", "25px", "25px", "25px"]} fontFamily="rubik" fontWeight={600} textColor={"black"}>
-              Detail Kegiatan dan Peserta Registrasi STATE
+              Detail Kegiatan dan Peserta Registrasi STATE {dataSTATE.name}
             </Text>
             <Flex p={"10px"}>
               <Image src={MxmIconSVG} width={"50px"} height={"50px"} />
