@@ -33,10 +33,9 @@ export const getStaticPaths = async () => {
   }
 }
 
-export const getStaticProps = async (context: any) => {
-  const id = context.params.stateID;
-  const res = await fetch('https://jsonplaceholder.typicode.com/users' + id)
-  const data = await res.json()
+export const getStaticProps = async ({ params }: any) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/users?name=${params.stateID}`);
+  const data = await res.json();
   return {
     props: {
       dataSTATE: data
@@ -44,32 +43,8 @@ export const getStaticProps = async (context: any) => {
   }
 }
 
-const HeaderDetailSTATE = ({dataSTATE}: any) => {
-  // interface HeaderDetailSTATE {
-  //   name: String;
-  //   registered: String;
-  //   quota: String;
-  //   kodePresensi: String;
-  //   hari: String;
-  //   tanggal: String;
-  // }
-
-  // const headerDetailSTATE: HeaderDetailSTATE[] = [
-  //   {
-  //     name: "Ultimagz",
-  //     registered: "87",
-  //     quota: "200",
-  //     kodePresensi: "ULT670",
-  //     hari: "1",
-  //     tanggal: "Rabu, 6 Agustus 2022",
-  //   },
-  // ];
-  // return (
-    
-  // );
-};
-
 const detailSTATE = ({dataSTATE}: any) => {
+  console.log(dataSTATE);
   interface DataDetailSTATE {
     name: String;
     nim: String;
@@ -164,7 +139,7 @@ const detailSTATE = ({dataSTATE}: any) => {
         <Box w={"full"} bgColor={"white"} borderRadius={20} mb={4}>
           <Flex justifyContent={"space-between"} alignItems={"center"} mx={4} borderBottom={"solid black"}>
             <Text fontSize={["15px", "25px", "25px", "25px"]} fontFamily="rubik" fontWeight={600} textColor={"black"}>
-              Detail Kegiatan dan Peserta Registrasi STATE {dataSTATE.name}
+              Detail STATE
             </Text>
             <Flex p={"10px"}>
               <Image src={MxmIconSVG} width={"50px"} height={"50px"} />
@@ -177,23 +152,23 @@ const detailSTATE = ({dataSTATE}: any) => {
       <Box width={"100%"} py={["0", "2em"]}>
           <Box ps={["0", "1.5em"]}>
             <Heading pb={"0.5em"} fontSize={["2xl", "4xl"]} fontFamily="rubik" fontWeight={"extrabold"}>
-              {dataSTATE.name}
+              {dataSTATE[0].name}
             </Heading>
             <VStack spacing={[2, 5]} align="stretch">
               <HStack spacing={5}>
                 <Image src={JadwalSVG} />
                 <Text fontFamily="rubik">
-                  Hari ke-{dataSTATE.email} ({dataSTATE.website})
+                  Hari ke-{dataSTATE[0].email} ({dataSTATE[0].website})
                 </Text>
               </HStack>
               <HStack spacing={5}>
                 <Image src={ParticipantSVG} />
-                {/* <Text fontFamily="rubik">{dataSTATE.address.city}</Text> */}
-                <HStack spacing={5} ps={"1.5em"}>
-                  <Image src={KeySVG} />
-                  {/* <Text fontFamily="rubik">{dataSTATE.address.street}</Text> */}
-                </HStack>
+                <Text fontFamily="rubik">{dataSTATE[0].address.city}</Text>
               </HStack>
+              <HStack spacing={5}>
+                  <Image src={KeySVG} />
+                  <Text fontFamily="rubik">{dataSTATE[0].address.street}</Text>
+                </HStack>
             </VStack>
           </Box>
       </Box>
