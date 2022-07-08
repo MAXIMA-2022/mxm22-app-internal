@@ -100,15 +100,8 @@ const tambahState = () => {
                   </Box>
                   <Box width={'100%'} px={2} mt={[2, 2, 0, 0]}>
                     <FormLabel textColor={'black'}>Kuota</FormLabel>
-                    <NumberInput //{...register('kuota', {required: "Kuota tidak boleh 0"})} name='kuota' textColor={'black'}
-                     defaultValue={0}>
-                      <NumberInputField border={'solid'}/>
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                      {/* {errors.kuota == 0 && <Text textColor={'red'}>{errors.kuota.message}</Text>} */}
-                    </NumberInput>
+                    <Input {...register('kuota', {required: "Kuota harap diisi", min: {value: 1, message: "Kuota tidak boleh ≤ 0"}, max: {value: 100, message: "Kuota tidak boleh lebih dari 100"}})} type={'number'} name='kuota' textColor={'black'} border={'solid'}/>
+                    {errors.kuota !== undefined && <Text textColor={'red'}>{errors.kuota.message}</Text>}
                   </Box>
               </Flex>
               <Flex justifyContent={'space-between'} mt={2} flexDirection={['column', 'column', 'row', 'row']}>
