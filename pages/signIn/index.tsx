@@ -35,7 +35,7 @@ const signIn = () => {
                 <FormLabel fontFamily="rubik">Nomor Induk Mahasiswa</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiAccountCircleLine color="black" />} />
-                  <Input {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="text" name="nim" textColor={"black"} border={"solid"} />
+                  <Input {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="number" name="nim" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.nim !== undefined && <Text textColor={"red"}>{errors.nim.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik">

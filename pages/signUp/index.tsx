@@ -66,7 +66,7 @@ const signIn = () => {
                 <FormLabel mt={"1em"} fontFamily="rubik">
                   Divisi
                 </FormLabel>
-                <Input {...register("divisi", { required: "Divisi harus diisi" })} placeholder="Divisi 1" type="text" name="divisi" textColor={"black"} border={"solid"} />
+                <Select {...register("divisi", { required: "Divisi harus dipilih" })} placeholder="Divisi 1" name="divisi" textColor={"black"} border={"solid"} />
                 {errors.divisi !== undefined && <Text textColor={"red"}>{errors.divisi.message}</Text>}
               </FormControl>
               <Flex w={"100%"} justifyContent={"center"} py={3} mt={"0.5em"}>
