@@ -26,7 +26,7 @@ import Image from 'next/image'
 import { useForm } from 'react-hook-form';
 
 const tambahState = () => {
-  const onSubmit = async (data)=>{}
+  const onSubmit = async (data: any)=>{}
   const { register, handleSubmit, formState:{errors} } = useForm()
   const DragAndDropFiles = () => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
