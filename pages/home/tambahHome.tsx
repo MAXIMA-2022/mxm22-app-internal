@@ -18,10 +18,28 @@ import Link from 'next/link';
 import Dropzone from 'react-dropzone';
 import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 const tambahHome = () => {
-  const onSubmit = async (data)=>{}
+  const [divisi, setDivisi] = useState([])
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
+  const [error, setError] = useState(undefined)
+  const onSubmit = async (data: any) => {
+    console.log(data)
+    try{
+      setIsButtonLoading(true)
+      setTimeout(async () => {
+        setIsButtonLoading(false)
+      }, 3000)
+    } catch(err){
+        console.log(err.response.data.message)
+        setError(err.response.data.message)
+        setTimeout(async () => {
+          setIsButtonLoading(false)
+        }, 3000)
+    }
+  };
   const { register, handleSubmit, formState:{errors} } = useForm()
   return ( 
     <>
@@ -111,7 +129,26 @@ const tambahHome = () => {
                   </Box>
               </Flex>
               <Flex width={'100%'} px={2} mt={2} justifyContent={'right'}>
-                  <Button w={100} borderRadius={'999px'} type="submit" textColor= 'black' bgColor={'green.200'} _hover={{bgColor: "yellow.200"}}>SUBMIT</Button>
+                {isButtonLoading === true ? 
+                <Button 
+                isLoading 
+                w={100} 
+                borderRadius={'999px'} 
+                type="submit" textColor='black' 
+                bgColor={'green.200'} 
+                _hover={{bgColor: "yellow.200"}}>
+                  SUBMIT
+                </Button> 
+                : 
+                <Button 
+                w={100} 
+                borderRadius={'999px'} 
+                type="submit" 
+                textColor='black'
+                bgColor={'green.200'} 
+                _hover={{bgColor: "yellow.200"}}>
+                  SUBMIT
+                </Button>}
               </Flex>
             </form>
           </Box>

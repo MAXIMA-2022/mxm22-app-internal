@@ -16,10 +16,28 @@ import { TableCell } from '@material-ui/core';
 import { VStack } from '@chakra-ui/react';
 import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
-import { useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form'
+import { useState } from 'react'
 
 const tambahMedia = () => {
-  const onSubmit = async (data)=>{}
+  const [divisi, setDivisi] = useState([])
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
+  const [error, setError] = useState(undefined)
+  const onSubmit = async (data: any) => {
+    console.log(data)
+    try{
+      setIsButtonLoading(true)
+      setTimeout(async () => {
+        setIsButtonLoading(false)
+      }, 3000)
+    } catch(err){
+        console.log(err.response.data.message)
+        setError(err.response.data.message)
+        setTimeout(async () => {
+          setIsButtonLoading(false)
+        }, 3000)
+    }
+  };
   const { register, handleSubmit, formState:{errors} } = useForm()
   return ( 
     <>
@@ -73,7 +91,11 @@ const tambahMedia = () => {
                 {errors.link_media !== undefined && <Text textColor={'red'}>{errors.link_media.message}</Text>}
               </FormControl>
               <Flex w={'100%'} justifyContent={'right'} py={3}>
+                {isButtonLoading === true ? 
+                  <Button isLoading borderRadius={'999px'} type="submit" fontFamily={'rubik'}>SUBMIT</Button> 
+                  : 
                   <Button borderRadius={'999px'} type="submit" fontFamily={'rubik'}>SUBMIT</Button>
+                }
               </Flex>
             </form>
           </Box>

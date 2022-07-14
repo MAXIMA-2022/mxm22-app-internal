@@ -14,7 +14,24 @@ const signIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = async (data: any) => {};
+  const [divisi, setDivisi] = useState([])
+  const [isButtonLoading, setIsButtonLoading] = useState(false)
+  const [error, setError] = useState(undefined)
+  const onSubmit = async (data: any) => {
+    console.log(data)
+    try{
+      setIsButtonLoading(true)
+      setTimeout(async () => {
+        setIsButtonLoading(false)
+      }, 3000)
+    } catch(err){
+        console.log(err.response.data.message)
+        setError(err.response.data.message)
+        setTimeout(async () => {
+          setIsButtonLoading(false)
+        }, 3000)
+    }
+  };
   return (
     <>
       <Flex minH={"100vh"} justifyContent={"center"} alignItems={"center"} bgGradient={"linear(to-r, #bd0116, #f74f24)"}>
@@ -66,13 +83,31 @@ const signIn = () => {
                 <FormLabel mt={"1em"} fontFamily="rubik">
                   Divisi
                 </FormLabel>
-                <Select {...register("divisi", { required: "Divisi harus dipilih" })} placeholder="Divisi 1" name="divisi" textColor={"black"} border={"solid"} />
+                <Input {...register("divisi", { required: "Divisi harus dipilih" })} placeholder="Divisi 1" name="divisi" textColor={"black"} border={"solid"} />
                 {errors.divisi !== undefined && <Text textColor={"red"}>{errors.divisi.message}</Text>}
               </FormControl>
               <Flex w={"100%"} justifyContent={"center"} py={3} mt={"0.5em"}>
-                <Button borderRadius={"md"} w={"full"} type="submit" fontFamily={"rubik"} color={"#fff"} colorScheme={"orange"} bgColor={"#FF855F"}>
+                {isButtonLoading === true ? 
+                <Button
+                isLoading
+                borderRadius={"md"}
+                w={"full"} type="submit"
+                fontFamily={"rubik"}
+                color={"#fff"}
+                colorScheme={"orange"}
+                bgColor={"#FF855F"}>
                   Sign Up
                 </Button>
+                : 
+                <Button
+                borderRadius={"md"}
+                w={"full"} type="submit"
+                fontFamily={"rubik"}
+                color={"#fff"}
+                colorScheme={"orange"}
+                bgColor={"#FF855F"}>
+                  Sign Up
+                </Button>}
               </Flex>
             </form>
             <Flex justifyContent={"center"} alignItems={"center"}>
