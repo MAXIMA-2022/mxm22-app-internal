@@ -103,7 +103,7 @@ const tambahState = () => {
               <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                 <Box width={"100%"} px={2}>
                   <FormLabel textColor={"black"}>Nama STATE</FormLabel>
-                  <Input {...register("nama_state", { required: "Nama STATE harap diisi" })} type={"text"} name="nama_state" textColor={"black"} border={"solid"} />
+                  <Input {...register("nama_state", { required: "Nama STATE harap diisi" })} type={"text"} name="nama_state" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
                   {errors.nama_state !== undefined && <Text textColor={"red"}>{errors.nama_state.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
@@ -114,6 +114,7 @@ const tambahState = () => {
                     name="kuota"
                     textColor={"black"}
                     border={"solid"}
+                    borderColor={'gray.700'}
                   />
                   {errors.kuota !== undefined && <Text textColor={"red"}>{errors.kuota.message}</Text>}
                 </Box>
@@ -123,20 +124,20 @@ const tambahState = () => {
                   <FormLabel textColor={"black"} placeholder="Pilih Hari Pelaksanaan STATE">
                     Hari Kegiatan
                   </FormLabel>
-                  <Select {...register("hari_state", { required: "Hari kegiatan harap dipilih" })} name="hari_state" textColor={"black"} border={"solid"} />
+                  <Select {...register("hari_state", { required: "Hari kegiatan harap dipilih" })} name="hari_state" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
                   {errors.hari_state !== undefined && <Text textColor={"red"}>{errors.hari_state.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"} placeholder="Pilih Kategori STATE">
                     Kategori
                   </FormLabel>
-                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} />
+                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
                   {errors.kategori !== undefined && <Text textColor={"red"}>{errors.kategori.message}</Text>}
                 </Box>
               </Flex>
               <Box width={"100%"} px={2} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Deskripsi Singkat</FormLabel>
-                <Textarea {...register("deskripsi_singkat", { required: "Deskripsi singkat harap diisi" })} name="deskripsi_singkat" textColor={"black"} border={"solid"} />
+                <Textarea {...register("deskripsi_singkat", { required: "Deskripsi singkat harap diisi" })} name="deskripsi_singkat" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
                 {errors.deskripsi_singkat !== undefined && <Text textColor={"red"}>{errors.deskripsi_singkat.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
@@ -147,7 +148,7 @@ const tambahState = () => {
                 {errors.logo !== undefined && <Text textColor={"red"}>{errors.logo.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
-                <FormLabel>Foto Sampul</FormLabel>
+                <FormLabel textColor={"black"}>Foto Sampul</FormLabel>
                 <Box padding={"1em"} border={"solid #e2e8f0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
                   <Previews {...register("foto_sampul", { required: "Foto sampul harap diisi" })} name="foto_sampul" />
                 </Box>

@@ -53,13 +53,13 @@ const tambahPIC = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl onSubmit={handleSubmit(onSubmit)}>
                 <Box mb={"0.8em"}>
-                  <FormLabel>Akun Organisator</FormLabel>
-                  <Select mb={"0.8em"} {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} />
+                  <FormLabel textColor={"black"}>Akun Organisator</FormLabel>
+                  <Select mb={"0.8em"} {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
                   {errors.akun_organisator !== undefined && <Text textColor={"red"}>{errors.akun_organisator.message}</Text>}
                 </Box>
                 <Box>
-                  <FormLabel>Kegiatan STATE</FormLabel>
-                  <Select {...register("kegiatan_state", { required: "Kegiatan STATE harap dipilih" })} name="kegiatan_state" textColor={"black"} border={"solid"} />
+                  <FormLabel textColor={"black"}>Kegiatan STATE</FormLabel>
+                  <Select {...register("kegiatan_state", { required: "Kegiatan STATE harap dipilih" })} name="kegiatan_state" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
                   {errors.kegiatan_state !== undefined && <Text textColor={"red"}>{errors.kegiatan_state.message}</Text>}
                 </Box>
               </FormControl>
