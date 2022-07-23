@@ -54,12 +54,12 @@ const tambahMedia = () => {
               <FormControl onSubmit={handleSubmit(onSubmit)}>
                 <Box mb={"0.8em"}>
                   <FormLabel textColor={"black"}>Akun Organisator</FormLabel>
-                  <Select {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                  <Select {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
                   {errors.akun_organisator !== undefined && <Text textColor={"red"}>{errors.akun_organisator.message}</Text>}
                 </Box>
                 <Box>
                   <FormLabel textColor={"black"}>Link Media</FormLabel>
-                  <Input {...register("link_media", { required: "Link media harap diisi" })} name="link_media" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                  <Input {...register("link_media", { required: "Link media harap diisi" })} name="link_media" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
                   {errors.link_media !== undefined && <Text textColor={"red"}>{errors.link_media.message}</Text>}
                 </Box>
               </FormControl>

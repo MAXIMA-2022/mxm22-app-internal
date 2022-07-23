@@ -322,7 +322,7 @@ const Sidebar = () => {
     <Box display={{base: 'none', lg: 'block'}}>
       <SideBarContent onClose={onClose}/>
     </Box>
-    <Box pt={2} pos={'fixed'} display={{lg: 'none'}} zIndex={2}>
+    <Box pt={2} pos={'fixed'} display={{lg: 'none'}} zIndex={2} ml={4}>
       <IconButton
         textColor={'black'}
         size={'lg'}

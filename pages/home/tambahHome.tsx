@@ -52,46 +52,46 @@ const tambahHome = () => {
               <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                 <Box width={"100%"} px={2}>
                   <FormLabel textColor={"black"}>Nama Organisator</FormLabel>
-                  <Input {...register("nama_organisator", { required: "Nama organisator harap diisi" })} type={"text"} name="nama_organisator" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                  <Input {...register("nama_organisator", { required: "Nama organisator harap diisi" })} type={"text"} name="nama_organisator" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
                   {errors.nama_organisator !== undefined && <Text textColor={"red"}>{errors.nama_organisator.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"}>Kategori</FormLabel>
-                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
                   {errors.kategori !== undefined && <Text textColor={"red"}>{errors.kategori.message}</Text>}
                 </Box>
               </Flex>
               <Box width={"100%"} px={2} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Narasi Pendek</FormLabel>
-                <Input {...register("narasi_pendek", { required: "Narasi pendek harap diisi" })} name="narasi_pendek" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                <Input {...register("narasi_pendek", { required: "Narasi pendek harap diisi" })} name="narasi_pendek" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
                 {errors.narasi_pendek !== undefined && <Text textColor={"red"}>{errors.narasi_pendek.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                 <FormLabel textColor={"black"} htmlFor="no_hp">
                   Narasi Panjang
                 </FormLabel>
-                <Textarea {...register("narasi_panjang", { required: "Narasi panjang harap diisi" })} name="narasi_panjang" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                <Textarea {...register("narasi_panjang", { required: "Narasi panjang harap diisi" })} name="narasi_panjang" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} />
                 {errors.narasi_panjang !== undefined && <Text textColor={"red"}>{errors.narasi_panjang.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Link Logo</FormLabel>
-                <Input {...register("link_logo", { required: "Link logo harap diisi" })} name="link_logo" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                <Input {...register("link_logo", { required: "Link logo harap diisi" })} name="link_logo" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} />
                 {errors.link_logo !== undefined && <Text textColor={"red"}>{errors.link_logo.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Link Video YouTube</FormLabel>
-                <Input {...register("link_yt", { required: "Link video YouTube harap diisi" })} name="link_yt" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                <Input {...register("link_yt", { required: "Link video YouTube harap diisi" })} name="link_yt" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} />
                 {errors.link_yt !== undefined && <Text textColor={"red"}>{errors.link_yt.message}</Text>}
               </Box>
               <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                 <Box width={"100%"} px={2}>
                   <FormLabel textColor={"black"}>Media Sosial (LINE)</FormLabel>
-                  <Input {...register("line", { required: "Media sosial (LINE) harap diisi" })} name="line" textColor={"black"} border={"solid"} borderColor={'gray.700'}/>
+                  <Input {...register("line", { required: "Media sosial (LINE) harap diisi" })} name="line" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} />
                   {errors.line !== undefined && <Text textColor={"red"}>{errors.line.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"}>Media Sosial (Instagram)</FormLabel>
-                  <Input {...register("instagram", { required: "Media sosial (Instagram) harap diisi" })} name="instagram" textColor={"black"} placeholder="Tidak Perlu Menggunakan @" border={"solid"} borderColor={'gray.700'}/>
+                  <Input {...register("instagram", { required: "Media sosial (Instagram) harap diisi" })} name="instagram" textColor={"black"} placeholder="Tidak Perlu Menggunakan @" border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} />
                   {errors.instagram !== undefined && <Text textColor={"red"}>{errors.instagram.message}</Text>}
                 </Box>
               </Flex>
