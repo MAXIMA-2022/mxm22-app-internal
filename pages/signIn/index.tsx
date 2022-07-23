@@ -52,18 +52,18 @@ const signIn = () => {
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
               <FormControl onSubmit={handleSubmit(onSubmit)}>
-                <FormLabel fontFamily="rubik">Nomor Induk Mahasiswa</FormLabel>
+                <FormLabel fontFamily="rubik" textColor={"black"}>Nomor Induk Mahasiswa</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiAccountCircleLine color="black" />} />
-                  <Input {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="number" name="nim" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'gray.700'} {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="number" name="nim" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.nim !== undefined && <Text textColor={"red"}>{errors.nim.message}</Text>}
-                <FormLabel mt={"1em"} fontFamily="rubik">
+                <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
                   Password
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiKey2Fill color="black" />} />
-                  <Input {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'gray.700'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.password !== undefined && <Text textColor={"red"}>{errors.password.message}</Text>}
               </FormControl>
