@@ -1,13 +1,13 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Avatar, Img, FormControl, FormLabel, Input, Button, Select, Textarea } from "@chakra-ui/react";
+import { Box, Flex, Text, Avatar, Img, FormControl, FormLabel, Input, Button, Select, Textarea, Center } from "@chakra-ui/react";
 import { HStack } from "@chakra-ui/react";
 import Link from "next/link";
-import Dropzone from "react-dropzone";
+import Dropzone, { useDropzone } from "react-dropzone";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const tambahHome = () => {
   const [divisi, setDivisi] = useState([]);
@@ -33,6 +33,60 @@ const tambahHome = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const Previews = (props: any) => {
+    const [files, setFiles] = useState([]);
+    const { getRootProps, getInputProps } = useDropzone({
+      maxFiles: 1,
+      accept: {
+        "image/jpg": [],
+        "image/jpeg": [],
+        "image/png": [],
+      },
+      onDrop: (acceptedFiles: any) => {
+        setFiles(
+          acceptedFiles.map((file: any) =>
+            Object.assign(file, {
+              preview: URL.createObjectURL(file),
+            })
+          )
+        );
+      },
+    });
+
+    const thumbs = files.map((file: any) => (
+      <Box display={"inline-flex"} borderRadius={4} border={"2px solid #eaeaea"} mt={"16px"} mx={1} w={"auto"} h={"auto"} p={1} boxSizing={"border-box"} key={file.name}>
+        <Box display={"flex"} w={"auto"} h={"100%"}>
+          <img
+            src={file.preview}
+            style={{ display: "block", width: "auto", height: "100%" }}
+            onLoad={() => {
+              URL.revokeObjectURL(file.preview);
+            }}
+          />
+        </Box>
+      </Box>
+    ));
+
+    useEffect(() => {
+      return () => files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+    }, []);
+
+    return (
+      <>
+        <Center p={"0.8em"} border={"dashed #e2e8f0"} width={"100%"} height={"5em"} borderRadius={10} {...getRootProps({ className: "dropzone" })} transition={"0.1s ease-in-out"} _hover={{ border: "dashed #CBD5E0", cursor: "pointer" }}>
+          <input {...getInputProps()} />
+          <Text color={"#A6A8AC"} userSelect={"none"} align={"center"}>
+            Seret dan taruh file di sini, atau klik untuk memilih file
+          </Text>
+        </Center>
+        <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"}>
+          {thumbs}
+        </Box>
+      </>
+    );
+  };
+
   return (
     <>
       <Navbar />
@@ -73,10 +127,12 @@ const tambahHome = () => {
                 <Textarea {...register("narasi_panjang", { required: "Narasi panjang harap diisi" })} name="narasi_panjang" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} />
                 {errors.narasi_panjang !== undefined && <Text textColor={"red"}>{errors.narasi_panjang.message}</Text>}
               </Box>
-              <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
-                <FormLabel textColor={"black"}>Link Logo</FormLabel>
-                <Input {...register("link_logo", { required: "Link logo harap diisi" })} name="link_logo" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} />
-                {errors.link_logo !== undefined && <Text textColor={"red"}>{errors.link_logo.message}</Text>}
+              <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
+                <FormLabel textColor={"black"}>Logo</FormLabel>
+                <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
+                  <Previews {...register("logo", { required: "Logo harap diisi" })} name="logo" />
+                </Box>
+                {errors.logo !== undefined && <Text textColor={"red"}>{errors.logo.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Link Video YouTube</FormLabel>
