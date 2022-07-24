@@ -37,8 +37,11 @@ const tambahState = () => {
   const Previews = (props: any) => {
     const [files, setFiles] = useState([]);
     const { getRootProps, getInputProps } = useDropzone({
+      maxFiles: 1,
       accept: {
-        "image/*": [],
+        "image/jpg": [],
+        "image/jpeg": [],
+        "image/png": [],
       },
       onDrop: (acceptedFiles: any) => {
         setFiles(
@@ -52,7 +55,7 @@ const tambahState = () => {
     });
 
     const thumbs = files.map((file: any) => (
-      <Box display={"inline-flex"} borderRadius={4} border={"2px solid #eaeaea"} mt={"16px"} mx={1} w={100} h={100} p={1} boxSizing={"border-box"} key={file.name}>
+      <Box display={"inline-flex"} borderRadius={4} border={"2px solid #eaeaea"} mt={"16px"} mx={1} w={"auto"} h={"auto"} p={1} boxSizing={"border-box"} key={file.name}>
         <Box display={"flex"} w={"auto"} h={"100%"}>
           <img
             src={file.preview}
@@ -103,7 +106,7 @@ const tambahState = () => {
               <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                 <Box width={"100%"} px={2}>
                   <FormLabel textColor={"black"}>Nama STATE</FormLabel>
-                  <Input {...register("nama_state", { required: "Nama STATE harap diisi" })} type={"text"} name="nama_state" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                  <Input {...register("nama_state", { required: "Nama STATE harap diisi" })} type={"text"} name="nama_state" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
                   {errors.nama_state !== undefined && <Text textColor={"red"}>{errors.nama_state.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
@@ -114,7 +117,8 @@ const tambahState = () => {
                     name="kuota"
                     textColor={"black"}
                     border={"solid"}
-                    borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}
+                    borderColor={"#CBD5E0"}
+                    _hover={{ border: "solid #CBD5E0" }}
                   />
                   {errors.kuota !== undefined && <Text textColor={"red"}>{errors.kuota.message}</Text>}
                 </Box>
@@ -124,32 +128,32 @@ const tambahState = () => {
                   <FormLabel textColor={"black"} placeholder="Pilih Hari Pelaksanaan STATE">
                     Hari Kegiatan
                   </FormLabel>
-                  <Select {...register("hari_state", { required: "Hari kegiatan harap dipilih" })} name="hari_state" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                  <Select {...register("hari_state", { required: "Hari kegiatan harap dipilih" })} name="hari_state" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
                   {errors.hari_state !== undefined && <Text textColor={"red"}>{errors.hari_state.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"} placeholder="Pilih Kategori STATE">
                     Kategori
                   </FormLabel>
-                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
                   {errors.kategori !== undefined && <Text textColor={"red"}>{errors.kategori.message}</Text>}
                 </Box>
               </Flex>
               <Box width={"100%"} px={2} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Deskripsi Singkat</FormLabel>
-                <Textarea {...register("deskripsi_singkat", { required: "Deskripsi singkat harap diisi" })} name="deskripsi_singkat" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                <Textarea {...register("deskripsi_singkat", { required: "Deskripsi singkat harap diisi" })} name="deskripsi_singkat" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
                 {errors.deskripsi_singkat !== undefined && <Text textColor={"red"}>{errors.deskripsi_singkat.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
                 <FormLabel textColor={"black"}>Logo</FormLabel>
-                <Box padding={"1em"} border={'solid #CBD5E0'} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
+                <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
                   <Previews {...register("logo", { required: "Logo harap diisi" })} name="logo" />
                 </Box>
                 {errors.logo !== undefined && <Text textColor={"red"}>{errors.logo.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Foto Sampul</FormLabel>
-                <Box padding={"1em"} border={'solid #CBD5E0'} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
+                <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
                   <Previews {...register("foto_sampul", { required: "Foto sampul harap diisi" })} name="foto_sampul" />
                 </Box>
                 {errors.foto_sampul !== undefined && <Text textColor={"red"}>{errors.foto_sampul.message}</Text>}
