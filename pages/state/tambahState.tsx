@@ -125,7 +125,9 @@ const tambahState = () => {
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"}>Kuota</FormLabel>
                   <Input
-                    {...register("kuota", { required: "Kuota harap diisi", min: { value: 1, message: "Kuota tidak boleh ≤ 0" }, max: { value: 100, message: "Kuota tidak boleh lebih dari 100" } })}
+                    {...register("kuota", { required: "Kuota harap diisi", min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
+                    //max: { value: 100, message: "Kuota tidak boleh lebih dari 100" } 
+                    })}
                     type={"number"}
                     name="kuota"
                     textColor={"black"}
@@ -141,14 +143,22 @@ const tambahState = () => {
                   <FormLabel textColor={"black"} placeholder="Pilih Hari Pelaksanaan STATE">
                     Hari Kegiatan
                   </FormLabel>
-                  <Select {...register("hari_state", { required: "Hari kegiatan harap dipilih" })} name="hari_state" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
+                  <Select {...register("hari_state", { required: "Hari kegiatan harap dipilih" })} name="hari_state" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
+                    <option value='option1'>Option 1</option>
+                    <option value='option2'>Option 2</option>
+                    <option value='option3'>Option 3</option>
+                  </Select>
                   {errors.hari_state !== undefined && <Text textColor={"red"}>{errors.hari_state.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"} placeholder="Pilih Kategori STATE">
                     Kategori
                   </FormLabel>
-                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
+                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
+                    <option value='option1'>Option 1</option>
+                    <option value='option2'>Option 2</option>
+                    <option value='option3'>Option 3</option>
+                  </Select>
                   {errors.kategori !== undefined && <Text textColor={"red"}>{errors.kategori.message}</Text>}
                 </Box>
               </Flex>

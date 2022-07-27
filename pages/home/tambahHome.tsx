@@ -19,7 +19,6 @@ const Previews = (props: any) => {
       "image/png": [],
     },
     onDrop: (acceptedFiles: any) => {
-      console.log(acceptedFiles)
       setFiles(
         acceptedFiles.map((file: any) =>
           Object.assign(file, {
@@ -71,9 +70,8 @@ const tambahHome = () => {
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
   const onSubmit = async (data: any) => {
-    // console.log(files[0])
-    // console.log(data);
-    const formData = new FormData()
+    try {
+      const formData = new FormData()
       formData.append("nama_organisator", data.nama_organisator)
       formData.append("kategori", data.kategori)
       formData.append("narasi_pendek", data.narasi_pendek)
@@ -82,8 +80,9 @@ const tambahHome = () => {
       formData.append("logo", files[0])
       formData.append("line", data.line)
       formData.append("instagram", data.instagram)
-    try {
       console.log(formData)
+      console.log(data)
+      console.log(files[0])
       setIsButtonLoading(true);
       setTimeout(async () => {
         setIsButtonLoading(false);
@@ -101,8 +100,6 @@ const tambahHome = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  
 
   return (
     <>
@@ -128,7 +125,11 @@ const tambahHome = () => {
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"}>Kategori</FormLabel>
-                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}>
+                    <option value='option1'>Option 1</option>
+                    <option value='option2'>Option 2</option>
+                    <option value='option3'>Option 3</option>
+                  </Select>
                   {errors.kategori !== undefined && <Text textColor={"red"}>{errors.kategori.message}</Text>}
                 </Box>
               </Flex>
