@@ -23,6 +23,9 @@ const tambahMedia = () => {
   const onSubmit = async (data: any) => {
     console.log(data);
     try {
+      const formData = new FormData()
+        formData.append("akun_organisator", data.akun_organisator)
+        formData.append("link_media", data.link_media)
       setIsButtonLoading(true);
       setTimeout(async () => {
         setIsButtonLoading(false);

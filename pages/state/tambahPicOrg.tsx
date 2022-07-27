@@ -22,6 +22,9 @@ const tambahPIC = () => {
   const onSubmit = async (data: any) => {
     console.log(data);
     try {
+      const formData = new FormData()
+        formData.append("akun_organisator", data.akun_organisator)
+        formData.append("kegiatan_state", data.kegiatan_state)
       setIsButtonLoading(true);
       setTimeout(async () => {
         setIsButtonLoading(false);
