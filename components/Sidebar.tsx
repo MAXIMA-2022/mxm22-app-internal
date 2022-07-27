@@ -158,6 +158,10 @@ const Accor = ({pathName}: AccorProps) => {
       icon2: HomeBlueSVG,
       accor: [
         {
+          name: 'Daftar Home',
+          link: '/home/daftarHome',
+        },
+        {
           name: 'Tambah Data HoME',
           link: '/home/tambahHome',
         },
