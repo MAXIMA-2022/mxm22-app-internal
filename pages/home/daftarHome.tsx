@@ -6,7 +6,7 @@ import { TableCell, TableRow } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import Link from "next/link";
-import { EditIcon, InfoOutlineIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 
 const listHOME = () => {
   interface DataHoME {
@@ -66,17 +66,7 @@ const listHOME = () => {
         },
         customBodyRender: (value: any, tableMeta: any) => {
           return (
-            <HStack spacing={2}>
-              <Link href={"daftarState/" + tableMeta.rowData[0]}>
-                <Button size="xs" color="white" bgColor={"#163161"} _hover={{ bgColor: "#1a4173" }}>
-                  <Center>
-                    <HStack spacing={2}>
-                      <InfoOutlineIcon />
-                      <Text display={{ base: "none", sm: "block" }}>Detail</Text>
-                    </HStack>
-                  </Center>
-                </Button>
-              </Link>
+            <HStack spacing={2} w={'150px'} justify={['flex-start', 'flex-start', 'flex-start', 'center']}>
               <Button size={"xs"} bgColor="white" color={"#163161"} border={"1px"} borderColor={"#163161"}>
                 <Center>
                   <HStack spacing={2}>
@@ -85,7 +75,7 @@ const listHOME = () => {
                   </HStack>
                 </Center>
               </Button>
-              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} />
+              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }}/>
             </HStack>
           );
         },
@@ -125,7 +115,7 @@ const listHOME = () => {
               fontWeight={600}
               textColor={'black'}
             >
-              Daftar STATE
+              Daftar HoME
             </Text>
             <Flex p={'10px'}>
               <Image src={MxmIconSVG} width={'50px'} height={'50px'}/>
