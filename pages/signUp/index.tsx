@@ -20,6 +20,13 @@ const signIn = () => {
   const onSubmit = async (data: any) => {
     console.log(data);
     try {
+      const formData = new FormData()
+        formData.append("nim", data.nim)
+        formData.append("password", data.password)
+        formData.append("namaLengkap", data.namaLengkap)
+        formData.append("email", data.email)
+        formData.append("divisi", data.divisi)
+      // console.log(formData)
       setIsButtonLoading(true);
       setTimeout(async () => {
         setIsButtonLoading(false);
@@ -53,7 +60,7 @@ const signIn = () => {
                 <FormLabel fontFamily="rubik" textColor={"black"}>Nomor Induk Mahasiswa</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiAccountCircleLine color="black" />} />
-                  <Input borderColor={'gray.700'} {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="text" name="nim" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="text" name="nim" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.nim !== undefined && <Text textColor={"red"}>{errors.nim.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
@@ -61,7 +68,7 @@ const signIn = () => {
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<MdDriveFileRenameOutline color="black" />} />
-                  <Input borderColor={'gray.700'} {...register("namaLengkap", { required: "Nama lengkap harus diisi" })} placeholder="John Doe" type="text" name="namaLengkap" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("namaLengkap", { required: "Nama lengkap harus diisi" })} placeholder="John Doe" type="text" name="namaLengkap" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.namaLengkap !== undefined && <Text textColor={"red"}>{errors.namaLengkap.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
@@ -69,7 +76,7 @@ const signIn = () => {
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<MdOutlineAlternateEmail color="black" />} />
-                  <Input borderColor={'gray.700'} {...register("email", { required: "Email harus diisi" })} placeholder="abc@student.umn.ac.id" type="text" name="email" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("email", { required: "Email harus diisi" })} placeholder="abc@student.umn.ac.id" type="text" name="email" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.email !== undefined && <Text textColor={"red"}>{errors.email.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
@@ -77,13 +84,13 @@ const signIn = () => {
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiKey2Fill color="black" />} />
-                  <Input borderColor={'gray.700'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.password !== undefined && <Text textColor={"red"}>{errors.password.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
                   Divisi
                 </FormLabel>
-                <Input borderColor={'gray.700'} {...register("divisi", { required: "Divisi harus dipilih" })} placeholder="Divisi 1" name="divisi" textColor={"black"} border={"solid"} />
+                <Select borderColor={'#CBD5E0'} {...register("divisi", { required: "Divisi harus dipilih" })} placeholder="Divisi 1" name="divisi" textColor={"black"} border={"solid"} />
                 {errors.divisi !== undefined && <Text textColor={"red"}>{errors.divisi.message}</Text>}
               </FormControl>
               <Flex w={"100%"} justifyContent={"center"} py={3} mt={"0.5em"}>

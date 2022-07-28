@@ -19,8 +19,11 @@ const signIn = () => {
   const [error, setError] = useState(undefined);
 
   const onSubmit = async (data: any) => {
-    console.log(data);
+    // console.log(data);
     try {
+      const formData = new FormData()
+        formData.append("nim", data.nim)
+        formData.append("password", data.password)
       setIsButtonLoading(true);
       setTimeout(async () => {
         setIsButtonLoading(false);
@@ -55,7 +58,7 @@ const signIn = () => {
                 <FormLabel fontFamily="rubik" textColor={"black"}>Nomor Induk Mahasiswa</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiAccountCircleLine color="black" />} />
-                  <Input borderColor={'gray.700'} {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="number" name="nim" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="number" name="nim" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.nim !== undefined && <Text textColor={"red"}>{errors.nim.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
@@ -63,7 +66,7 @@ const signIn = () => {
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiKey2Fill color="black" />} />
-                  <Input borderColor={'gray.700'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} />
                 </InputGroup>
                 {errors.password !== undefined && <Text textColor={"red"}>{errors.password.message}</Text>}
               </FormControl>
