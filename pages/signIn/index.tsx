@@ -1,39 +1,79 @@
-import { Flex, Text, Box, Button, HStack, Link, Select, Input, InputGroup, InputLeftAddon, InputRightAddon, InputLeftElement, VStack, FormControl, FormLabel, Heading, Center, Container } from "@chakra-ui/react";
+import { 
+  Flex, 
+  Text, 
+  Box, 
+  Button, 
+  HStack, 
+  Link, 
+  Input, 
+  InputGroup, 
+  InputLeftElement, 
+  FormControl, 
+  FormLabel, 
+  Heading, 
+  Center
+} from "@chakra-ui/react";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { RiKey2Fill } from "react-icons/ri";
+import { useLocalStorage, useReadLocalStorage } from "usehooks-ts"
+import { useRouter } from "next/router";
+import { isExpired } from 'react-jwt'
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Swal from 'sweetalert2'
+
+interface IUserInfo {
+  nim: string;
+  password: string;
+}
 
 const signIn = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const [divisi, setDivisi] = useState([]);
+  const router = useRouter()
+  const { register, handleSubmit, formState: { errors } } = useForm<IUserInfo>();
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
+  
+  const [, setLocalStorage] = useLocalStorage("token", '')
+  const jwt = useReadLocalStorage("token");
 
-  const onSubmit = async (data: any) => {
-    // console.log(data);
+  const isMyTokenExpired = isExpired(jwt as string)
+
+  useEffect(() => {
+    if(jwt && !isMyTokenExpired) {
+      router.push('/')
+    }
+  }, [])
+
+  const onSubmit: SubmitHandler<IUserInfo> = async (data: any) => {
     try {
-      const formData = new FormData()
-        formData.append("nim", data.nim)
-        formData.append("password", data.password)
       setIsButtonLoading(true);
-      setTimeout(async () => {
-        setIsButtonLoading(false);
-      }, 3000);
+
+      const formData = new FormData()
+      formData.append("nim", data.nim)
+      formData.append("password", data.password)
+
+      const response = await axios.post(
+        'https://maxima2022.herokuapp.com/api/panit/login',
+        formData,
+      )
+
+      setLocalStorage(response.data.token)
+
+      router.push('/')
+      
     } catch (err: any) {
-      console.log(err.response.data.message);
+      toast.error(err.response.data.message)
       setError(err.response.data.message);
-      setTimeout(async () => {
-        setIsButtonLoading(false);
-      }, 3000);
+      setIsButtonLoading(false);
+      // Swal.fire({
+      //   title: `${err.response.data.message}`,
+      //   icon: `error`
+      // })
     }
   };
 
@@ -58,7 +98,7 @@ const signIn = () => {
                 <FormLabel fontFamily="rubik" textColor={"black"}>Nomor Induk Mahasiswa</FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiAccountCircleLine color="black" />} />
-                  <Input borderColor={'#CBD5E0'} {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="number" name="nim" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("nim", { required: "NIM harus diisi" })} placeholder="44898" type="number" name="nim" textColor={"black"} border={"solid"} _hover={{ border: "solid #CBD5E0" }}/>
                 </InputGroup>
                 {errors.nim !== undefined && <Text textColor={"red"}>{errors.nim.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
@@ -66,7 +106,7 @@ const signIn = () => {
                 </FormLabel>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none" children={<RiKey2Fill color="black" />} />
-                  <Input borderColor={'#CBD5E0'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} />
+                  <Input borderColor={'#CBD5E0'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} _hover={{ border: "solid #CBD5E0" }}/>
                 </InputGroup>
                 {errors.password !== undefined && <Text textColor={"red"}>{errors.password.message}</Text>}
               </FormControl>
@@ -93,6 +133,17 @@ const signIn = () => {
           </Box>
         </Flex>
       </Flex>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+      />
     </>
   );
 };

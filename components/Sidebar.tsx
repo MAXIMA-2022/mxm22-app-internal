@@ -33,10 +33,22 @@ import HomeSVG from '../public/home.svg'
 import HomeBlueSVG from '../public/homeBlue.svg'
 import IconSVG from '../public/icon.svg'
 import IconBlueSVG from '../public/iconBlue.svg'
-
-// const role = 'superAdmin'
+import { useEffect } from 'react'
+import { useReadLocalStorage } from 'usehooks-ts'
+import { isExpired, decodeToken } from 'react-jwt'
+import { useUserContext } from '../useContext/UserContext'
 
 const Title = ({onClose} : SidebarProps)=>{
+  const router = useRouter()
+  const jwt = useReadLocalStorage("token");
+  const isMyTokenExpired = isExpired(jwt as string)
+
+  useEffect(() => {
+    if(jwt === '' || isMyTokenExpired){
+      router.push('/signIn')
+    }
+  })
+
   return(
     <Flex 
       h={20}
@@ -62,6 +74,7 @@ const Title = ({onClose} : SidebarProps)=>{
 }
 
 const Account = ()=>{
+  const userProfile = useUserContext()
   return(
     <Flex 
       align={'center'}
@@ -74,7 +87,7 @@ const Account = ()=>{
         justifyContent={'center'}
       >
         <Avatar/>
-        <Text>William Chandra</Text>
+        <Text>{userProfile.nim}</Text>
         <Text fontSize={'12px'} textColor={'gray.500'}>Backend Engineer</Text>
       </Stack>   
     </Flex>
@@ -255,7 +268,6 @@ const Accor = ({pathName}: AccorProps) => {
                 accor.accor.some(acc => acc.link === pathName) === true ? accor.icon2 : accor.icon
               }/>
               <Box 
-                pr={95} 
                 flex='1' 
                 textAlign='left'
               >
@@ -313,8 +325,22 @@ const SideBarContent = ({onClose}: SidebarProps) => {
     >
       <Title onClose={onClose}/>
       <Account/>
-      <Links pathName = {router.pathname}/>
-      <Accor pathName = {router.pathname}/>
+      <Box 
+        h={'550px'} 
+        overflowX={'hidden'} 
+        overflowY={'auto'}
+        css={{
+          '&::-webkit-scrollbar': {
+            width: '3px',
+          },
+          '&::-webkit-scrollbar-thumb':{
+            background: '#FF855F',
+          },
+        }}
+      >
+        <Links pathName = {router.pathname}/>
+        <Accor pathName = {router.pathname}/>
+      </Box>
     </Box>
   )
 }
