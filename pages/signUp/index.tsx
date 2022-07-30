@@ -40,11 +40,14 @@ const signOut = () => {
     }
 
     const fetchDivisi = async () => {
-      const response = await axios.get('https://maxima2022.herokuapp.com/api/divisi')
-      setDivisi(response.data)
+      try{
+        const response = await axios.get(`${process.env.API}/api/divisi`)
+        setDivisi(response.data)
+      } catch(err: any){
+        console.log(err)
+      }
     }
     fetchDivisi()
-    
   }, [])
 
   const onSubmit = async (data: any) => {

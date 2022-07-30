@@ -58,7 +58,7 @@ const signIn = () => {
       formData.append("password", data.password)
 
       const response = await axios.post(
-        'https://maxima2022.herokuapp.com/api/panit/login',
+        `${process.env.API}/api/panit/login`,
         formData,
       )
 
