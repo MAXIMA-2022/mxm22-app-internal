@@ -7,16 +7,46 @@ import { useEffect, useState } from "react";
 import { RiAccountCircleLine } from "react-icons/ri";
 import { RiKey2Fill } from "react-icons/ri";
 import { MdDriveFileRenameOutline, MdOutlineAlternateEmail } from "react-icons/md";
+import axios from 'axios'
+import { useReadLocalStorage } from "usehooks-ts";
+import { isExpired } from "react-jwt";
 
-const signIn = () => {
+interface IUserInfo {
+  nim: string;
+  password: string;
+  namaLengkap: string;
+  email: string;
+  divisi: string;
+}
+
+const signOut = () => {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const [divisi, setDivisi] = useState([]);
+  } = useForm<IUserInfo>();
+
+  const [divisi, setDivisi] = useState<string[] | number[]>([]);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
+  
+  const jwt = useReadLocalStorage("token");
+  const isMyTokenExpired = isExpired(jwt as string);
+
+  useEffect(() => {
+    if(jwt && !isMyTokenExpired) {
+      router.push('/')
+    }
+
+    const fetchDivisi = async () => {
+      const response = await axios.get('https://maxima2022.herokuapp.com/api/divisi')
+      setDivisi(response.data)
+    }
+    fetchDivisi()
+    
+  }, [])
+
   const onSubmit = async (data: any) => {
     console.log(data);
     try {
@@ -90,7 +120,13 @@ const signIn = () => {
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
                   Divisi
                 </FormLabel>
-                <Select borderColor={'#CBD5E0'} {...register("divisi", { required: "Divisi harus dipilih" })} placeholder="Divisi 1" name="divisi" textColor={"black"} border={"solid"} />
+                <Select borderColor={'#CBD5E0'} {...register("divisi", { required: "Divisi harus dipilih" })} placeholder="Pilih Divisi" name="divisi" textColor={"black"} border={"solid"}>
+                  {divisi.map((item: any, index: number) => {
+                    return (
+                      <option key={index} value={item.id}>{item.name}</option>
+                    )
+                  })}
+                </Select>
                 {errors.divisi !== undefined && <Text textColor={"red"}>{errors.divisi.message}</Text>}
               </FormControl>
               <Flex w={"100%"} justifyContent={"center"} py={3} mt={"0.5em"}>
@@ -120,4 +156,4 @@ const signIn = () => {
   );
 };
 
-export default signIn;
+export default signOut;
