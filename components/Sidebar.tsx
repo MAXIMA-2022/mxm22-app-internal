@@ -20,7 +20,7 @@ import Image from 'next/image'
 import { CloseIcon, HamburgerIcon} from '@chakra-ui/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DashBoardSVG from '../public/dashboard.svg'
 import DashBoardBlueSVG from '../public/dashboardBlue.svg'
 import DaftarMhsSVG from '../public/daftarMhs.svg'
@@ -33,10 +33,13 @@ import HomeSVG from '../public/home.svg'
 import HomeBlueSVG from '../public/homeBlue.svg'
 import IconSVG from '../public/icon.svg'
 import IconBlueSVG from '../public/iconBlue.svg'
+import { useReadLocalStorage } from 'usehooks-ts'
+import { isExpired, decodeToken } from 'react-jwt'
+import { useUserContext } from '../useContext/UserContext'
 
 // const role = 'superAdmin'
 
-const Title = ({onClose} : SidebarProps)=>{
+const Title = ({onClose} : SidebarProps)=>{  
   return(
     <Flex 
       h={20}
@@ -62,6 +65,7 @@ const Title = ({onClose} : SidebarProps)=>{
 }
 
 const Account = ()=>{
+  const { name, divisiName } = useUserContext()
   return(
     <Flex 
       align={'center'}
@@ -74,18 +78,19 @@ const Account = ()=>{
         justifyContent={'center'}
       >
         <Avatar/>
-        <Text>William Chandra</Text>
-        <Text fontSize={'12px'} textColor={'gray.500'}>Backend Engineer</Text>
+        <Text>{name}</Text>
+        <Text fontSize={'12px'} textColor={'gray.500'}>{divisiName}</Text>
       </Stack>   
     </Flex>
   )
 }
 
 interface LinksProps {
-  pathName: string
+  pathName: string,
 }
 
 const Links = ({pathName}: LinksProps)=>{
+  const { divisiName } = useUserContext()
   const linksData = [
     {
       name: "Dashboard",
@@ -106,7 +111,7 @@ const Links = ({pathName}: LinksProps)=>{
       link: "/panitia/daftarPanit",
       logo: DaftarPanitSVG,
       logo2: DaftarPanitBlueSVG,
-      role: ['superAdmin']
+      role: ['SuperAdmin', 'Rocuta', 'Griffin']
     }
   ]
   return(
@@ -130,10 +135,10 @@ const Links = ({pathName}: LinksProps)=>{
               pathName === link.link ? {textColor: '#5e81f4'} : {textColor: 'black'} 
             }
             transition={'0.5s'}
-            // display={
-            //   link.role.length === 0 ? 'flex' :
-            //   link.role.includes(role) === true ? 'flex' : 'none'
-            // }
+            display={
+              link.role.length === 0 ? 'flex' :
+              link.role.includes(divisiName as string) === true ? 'flex' : 'none'
+            }
           >
             <HStack>
               <Image src={pathName === link.link ? link.logo2 : link.logo}/>
@@ -302,6 +307,15 @@ interface SidebarProps{
 
 const SideBarContent = ({onClose}: SidebarProps) => {
   const router = useRouter()
+  const jwt = useReadLocalStorage("token")
+  const isMyTokenExpired = isExpired(jwt as string)
+
+  useEffect(() => {
+    if(!jwt || isMyTokenExpired){
+      router.push('/signIn')
+    }
+  })
+
   return(
     <Box
       bg={'white'}
