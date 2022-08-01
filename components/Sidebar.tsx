@@ -34,10 +34,8 @@ import HomeBlueSVG from '../public/homeBlue.svg'
 import IconSVG from '../public/icon.svg'
 import IconBlueSVG from '../public/iconBlue.svg'
 import { useReadLocalStorage } from 'usehooks-ts'
-import { isExpired, decodeToken } from 'react-jwt'
+import { isExpired } from 'react-jwt'
 import { useUserContext } from '../useContext/UserContext'
-
-// const role = 'superAdmin'
 
 const Title = ({onClose} : SidebarProps)=>{  
   return(
@@ -87,31 +85,35 @@ const Account = ()=>{
 
 interface LinksProps {
   pathName: string,
+  role: string | undefined,
+  divisiName: string | undefined,
 }
 
-const Links = ({pathName}: LinksProps)=>{
-  const { divisiName } = useUserContext()
+const Links = ({pathName, role, divisiName}: LinksProps)=>{
   const linksData = [
     {
       name: "Dashboard",
       link: "/",
       logo: DashBoardSVG,
       logo2: DashBoardBlueSVG,
-      role: []
+      role: ['panitia', 'organisator'],
+      divisi: []
     },
     {
       name: "Daftar Mahasiswa",
       link: "/mahasiswa/daftarMhs",
       logo: DaftarMhsSVG,
       logo2: DaftarMhsBlueSVG,
-      role: []
+      role: ['panitia'],
+      divisi: []
     },
     {
       name: "Daftar Panitia",
       link: "/panitia/daftarPanit",
       logo: DaftarPanitSVG,
       logo2: DaftarPanitBlueSVG,
-      role: ['SuperAdmin', 'Rocuta', 'Griffin']
+      role: ['panitia'],
+      divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
     }
   ]
   return(
@@ -136,8 +138,8 @@ const Links = ({pathName}: LinksProps)=>{
             }
             transition={'0.5s'}
             display={
-              link.role.length === 0 ? 'flex' :
-              link.role.includes(divisiName as string) === true ? 'flex' : 'none'
+              link.role.includes(role as string) && link.divisi.length === 0 ? 'flex' :
+              link.role.includes(role as string) && link.divisi.includes(divisiName as string) ? 'flex' : 'none'
             }
           >
             <HStack>
@@ -152,31 +154,42 @@ const Links = ({pathName}: LinksProps)=>{
 }
 
 interface AccorProps {
-  pathName: string
+  pathName: string,
+  role: string | undefined,
+  divisiName: string | undefined,
 }
 
-const Accor = ({pathName}: AccorProps) => {
+const Accor = ({pathName, role, divisiName}: AccorProps) => {
   const accors = [
     {
       name: 'HoME',
       icon: HomeSVG,
       icon2: HomeBlueSVG,
+      role: ['panitia'],
       accor: [
         {
           name: 'Daftar Home',
           link: '/home/daftarHome',
+          role: ['panitia'],
+          divisi: []
         },
         {
           name: 'Tambah Data HoME',
           link: '/home/tambahHome',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
         },
         {
           name: 'Tambah Media HoME',
           link: '/home/tambahMediaHome',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
         },
         {
           name: 'Daftar Organisator HoME',
           link: '/home/daftarOrganisator',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
         }
       ]
     },
@@ -184,26 +197,31 @@ const Accor = ({pathName}: AccorProps) => {
       name: 'STATE',
       icon: StateSVG,
       icon2: StateBlueSVG,
+      role: ['panitia', 'organisator'],
       accor: [
         {
           name: 'Tambah STATE',
           link: '/state/tambahState',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin'],
         },
         {
           name: 'Daftar STATE',
           link: '/state/daftarState',
+          role: ['panitia', 'organisator'],
+          divisi: []
         },
         {
           name: 'Daftar Akun Organisator',
           link: '/state/daftarAkunOrganisator',
-        },
-        {
-          name: 'Daftar PIC Organisator',
-          link: '/state/daftarPicOrg',
+          role: ['panitia'],
+          divisi: [],
         },
         {
           name: 'Tambah PIC Organisator',
           link: '/state/tambahPicOrg',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin'],
         }
       ]
     }
@@ -222,6 +240,9 @@ const Accor = ({pathName}: AccorProps) => {
           key={key}
         >
           <AccordionButton 
+            display={
+              accor.role.includes(role as string) ? 'flex' : 'none'
+            }
             p={0} 
             _hover={{bg: 'none'}}
             _focus={{boxShadow: 'none'}}
@@ -275,6 +296,11 @@ const Accor = ({pathName}: AccorProps) => {
                 <Link href={acc.link} key={key}>
                   <HStack 
                     cursor={'pointer'}
+                    display={
+                      acc.role.includes(role as string) && (acc.divisi.length === 0) ? 'flex' : 
+                      acc.role.includes(role as string) && acc.divisi.includes(divisiName as string) ? 'flex' : 'none'
+                    }
+
                     borderRight={
                       pathName === acc.link ? {base: 'none', lg: 'solid'} : 'none'
                     }
@@ -309,6 +335,7 @@ const SideBarContent = ({onClose}: SidebarProps) => {
   const router = useRouter()
   const jwt = useReadLocalStorage("token")
   const isMyTokenExpired = isExpired(jwt as string)
+  const {role, divisiName} = useUserContext()
 
   useEffect(() => {
     if(!jwt || isMyTokenExpired){
@@ -327,8 +354,8 @@ const SideBarContent = ({onClose}: SidebarProps) => {
     >
       <Title onClose={onClose}/>
       <Account/>
-      <Links pathName = {router.pathname}/>
-      <Accor pathName = {router.pathname}/>
+      <Links pathName = {router.pathname} role = {role} divisiName = {divisiName}/>
+      <Accor pathName = {router.pathname} role = {role} divisiName = {divisiName}/>
     </Box>
   )
 }
