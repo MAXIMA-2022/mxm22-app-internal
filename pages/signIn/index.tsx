@@ -58,7 +58,7 @@ const signIn = () => {
       formData.append("password", data.password)
 
       const response = await axios.post(
-        `${process.env.API}/api/panit/login`,
+        `${process.env.API_URL}/api/panit/login`,
         formData,
       )
 

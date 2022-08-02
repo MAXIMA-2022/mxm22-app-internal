@@ -1,24 +1,57 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Button, CloseButton, HStack, Center } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, CloseButton, HStack, Center} from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import { TableCell, TableRow } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { EditIcon, InfoOutlineIcon } from "@chakra-ui/icons";
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useReadLocalStorage } from "usehooks-ts";
+import { isExpired } from "react-jwt";
+import { useRouter } from 'next/router'
 
-export const getStaticProps = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const data = await res.json();
-  return {
-    props: {
-      dataSTATE: data,
-    },
-  };
-};
+interface StateInfo{
+  id: number,
+  name: string,
+  quota: number,
+  day: string,
+  category: string,
+  identifier: string,
+  // stateLogo: string,
+  // coverPhoto: string,
+}
 
-const listSTATE = ({ dataSTATE }: any) => {
+const dataSTATE: StateInfo[] = [
+  {id: 1, name: 'Home 1', day: 'day 1', quota: 100, category: 'cat', identifier: 'asd'},
+  {id: 2, name: 'Home 2', day: 'day 2', quota: 100, category: 'cat', identifier: 'asd'},
+  {id: 3, name: 'Home 3', day: 'day 3', quota: 100, category: 'cat', identifier: 'asd'},
+  {id: 4, name: 'Home 4', day: 'day 4', quota: 100, category: 'cat', identifier: 'asd'},
+  {id: 5, name: 'Home 5', day: 'day 5', quota: 100, category: 'cat', identifier: 'asd'},
+  {id: 6, name: 'Home 6', day: 'day 6', quota: 100, category: 'cat', identifier: 'asd'},
+]
+
+const listSTATE = () => {
+  const [state, setState] = useState<StateInfo[]>([]);
+  const jwt = useReadLocalStorage<string>("token")
+  useEffect(() => {
+    const fetchState = async () => {
+      try{
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{
+          headers: {
+            "x-access-token": jwt!
+          }
+        })
+        setState(response.data)
+        console.log(response.data)
+      } catch(err: any){
+        console.log(err)
+      }
+    }
+    fetchState()
+  }, [])
   const columnsSTATE: MUIDataTableColumn[] = [
     {
       label: "Nama STATE",
@@ -124,7 +157,19 @@ const listSTATE = ({ dataSTATE }: any) => {
 
   return (
     <>
-      <Navbar />
+    {/* {data.map((item: any, index: number) => {
+          return (
+            <Flex key={index} value={item.id}>{item.name}</Flex>
+          )
+        })} */}
+      <Flex>
+      {state.map((item: any, index: number) => {
+                    return (
+                      <Text key={index}>{item.name}</Text>
+                    )
+                  })}
+      </Flex>
+      {/* <Navbar />
       <Sidebar />
       <Flex minH="100vh" bg={"#dee1e6"} ml={{ base: 0, lg: "240px" }} px={5} pt={"75px"} direction={"column"} alignItems={"center"} justifyContent={"center"}>
         <Box w={"full"} bgColor={"white"} borderRadius={20} mb={4}>
@@ -149,7 +194,7 @@ const listSTATE = ({ dataSTATE }: any) => {
             />
           </Box>
         </Box>
-      </Flex>
+      </Flex> */}
     </>
   );
 };

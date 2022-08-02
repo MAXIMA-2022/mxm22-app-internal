@@ -13,7 +13,7 @@ import Image from "next/image";
 import { TableCell } from "@material-ui/core";
 import { EditIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from 'react'
-
+import axios from 'axios'
 
 export const getStaticPaths = async () => {
   const res = await fetch('https://jsonplaceholder.typicode.com/users');

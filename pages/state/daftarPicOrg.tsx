@@ -13,6 +13,7 @@ import MxmIconSVG from '../../public/mxmIcon.svg'
 
 const listPIC = () => {
   interface DataPIC {
+    //id: number,
     namePIC: String,
     nim: String,
     nameState: String

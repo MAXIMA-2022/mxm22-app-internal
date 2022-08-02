@@ -87,7 +87,7 @@ const Account = ()=>{
         justifyContent={'center'}
       >
         <Avatar/>
-        <Text>{userProfile.nim}</Text>
+        <Text>{userProfile.name}</Text>
         <Text fontSize={'12px'} textColor={'gray.500'}>Backend Engineer</Text>
       </Stack>   
     </Flex>

@@ -7,6 +7,21 @@ import { useDropzone } from "react-dropzone";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useLocalStorage } from "usehooks-ts";
+
+interface StateInfo{
+  id: number,
+  name: string,
+  quota: number,
+  day: string,
+  category: string,
+  identifier: string,
+  stateLogo: File,
+  coverPhoto: File,
+}
 
 const Previews = (props: any) => {
   const [files, setFiles] = useState([]);
@@ -68,7 +83,10 @@ const tambahState = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
+    formState: { isSubmitSuccessful }
   } = useForm();
+  const [, setLocalStorage] = useLocalStorage("token", '')
   const [filesLogo, setFilesLogo] = useState([])
   const [filesSampul, setFilesSampul] = useState([])
   const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -79,6 +97,7 @@ const tambahState = () => {
     console.log(filesLogo[0])
     console.log(filesSampul[0])
     try {
+      setIsButtonLoading(true);
       const formData = new FormData()
         formData.append("nama_state", data.nama_state)
         formData.append("kuota", data.kuota)
@@ -87,16 +106,26 @@ const tambahState = () => {
         formData.append("deskripsi_singkat", data.deskripsi_singkat)
         formData.append("logo", filesLogo[0])
         formData.append("foto_sampul", filesSampul[0])
-      setIsButtonLoading(true);
-      setTimeout(async () => {
-        setIsButtonLoading(false);
-      }, 3000);
+      toast.success('Data berhasil diinput!', {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      const res = await axios.post(
+        `${process.env.API_URL}/api/stateAct/createState`, 
+        formData,
+      )
+      setLocalStorage(res.data.token)
+      setIsButtonLoading(false);
     } catch (err: any) {
+      toast.error(err.response.data.message)
       console.log(err.response.data.message);
       setError(err.response.data.message);
-      setTimeout(async () => {
-        setIsButtonLoading(false);
-      }, 3000);
+      setIsButtonLoading(false);
     }
   };
 
@@ -196,6 +225,17 @@ const tambahState = () => {
           </Box>
         </Box>
       </Flex>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };
