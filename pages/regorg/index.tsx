@@ -8,20 +8,21 @@ import { RiAccountCircleLine } from "react-icons/ri";
 import { RiKey2Fill } from "react-icons/ri";
 import { MdDriveFileRenameOutline, MdOutlineAlternateEmail } from "react-icons/md";
 import axios from 'axios'
-import { useReadLocalStorage } from "usehooks-ts";
+import { useLocalStorage, useReadLocalStorage } from "usehooks-ts";
 import { isExpired } from "react-jwt";
+import React from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface IUserInfo {
   nim: string;
-  password: string;
   name: string;
   email: string;
-  divisiID: string;
+  password: string;
+  stateID: number;
 }
 
-const signUp = () => {
+const signOrg = () => {
   const router = useRouter()
   const {
     register,
@@ -29,39 +30,38 @@ const signUp = () => {
     formState: { errors },
   } = useForm<IUserInfo>();
 
-  const [divisi, setDivisi] = useState<string[] | number[]>([]);
+  const [state, setState] = useState<IUserInfo[]>([]);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
-  
-  const jwt = useReadLocalStorage("token");
+  const jwt = useReadLocalStorage<string>("token");
   const isMyTokenExpired = isExpired(jwt as string);
 
   useEffect(() => {
     if(jwt && !isMyTokenExpired) {
       router.push('/')
     }
-    const fetchDivisi = async () => {
+    const fetchSTATE = async () => {
       try{
-        const response = await axios.get(`${process.env.API_URL}/api/divisi`)
-        setDivisi(response.data)
+        const response = await axios.get(`${process.env.API_URL}/api/state_activities`)
+        setState(response.data)
       } catch(err: any){
         console.log(err)
       }
     }
-    fetchDivisi()
+    fetchSTATE()
   }, [])
 
   const onSubmit = async (data: any) => {
     try {
-      setIsButtonLoading(true);
+    setIsButtonLoading(true);
       const formData = new FormData()
         formData.append("nim", data.nim)
-        formData.append("password", data.password)
         formData.append("name", data.name)
         formData.append("email", data.email)
-        formData.append("divisiID", data.divisiID)
+        formData.append("password", data.password)
+        formData.append("stateID", data.stateID)
       await axios.post(
-        `${process.env.API_URL}/api/panit/register`, 
+        `${process.env.API_URL}/api/org/register`, 
         formData,
       )
       toast.success('Pendaftaran berhasil!', {
@@ -72,10 +72,10 @@ const signUp = () => {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-      });
+        });
       setIsButtonLoading(false);
     } catch (err: any) {
-      toast.error(err.response.data.message)
+    toast.error(err.response.data.message)
       console.log(err.response.data.message);
       setError(err.response.data.message);
       setIsButtonLoading(false);
@@ -94,7 +94,7 @@ const signUp = () => {
             </HStack>
             <Center>
               <Heading as="h3" size="lg" color={"#5E81F4"} my={"0.5em"}>
-                Panitia Registration<span style={{ color: "#F16484" }}>!</span>
+                Organisator Registration<span style={{ color: "#F16484" }}>!</span>
               </Heading>
             </Center>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -130,16 +130,16 @@ const signUp = () => {
                 </InputGroup>
                 {errors.password !== undefined && <Text textColor={"red"}>{errors.password.message}</Text>}
                 <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
-                  Divisi
+                  STATE
                 </FormLabel>
-                <Select borderColor={'#CBD5E0'} {...register("divisiID", { required: "Divisi harus dipilih" })} placeholder="Pilih Divisi" name="divisiID" textColor={"black"} border={"solid"}>
-                  {divisi.map((item: any, index: number) => {
+                <Select borderColor={'#CBD5E0'} {...register("stateID", { required: "STATE harus dipilih" })} placeholder="Pilih STATE" name="stateID" textColor={"black"} border={"solid"}>
+                  {state.map((item: any, index: number) => {
                     return (
-                      <option key={index} value={item.divisiID}>{item.name}</option>
+                      <option key={index} value={item.stateID}>{item.name}</option>
                     )
                   })}
                 </Select>
-                {errors.divisiID !== undefined && <Text textColor={"red"}>{errors.divisiID.message}</Text>}
+                {errors.stateID !== undefined && <Text textColor={"red"}>{errors.stateID.message}</Text>}
               </FormControl>
               <Flex w={"100%"} justifyContent={"center"} py={3} mt={"0.5em"}>
                 {isButtonLoading === true ? (
@@ -179,4 +179,4 @@ const signUp = () => {
   );
 };
 
-export default signUp;
+export default signOrg;

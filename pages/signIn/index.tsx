@@ -70,10 +70,6 @@ const signIn = () => {
       toast.error(err.response.data.message)
       setError(err.response.data.message);
       setIsButtonLoading(false);
-      // Swal.fire({
-      //   title: `${err.response.data.message}`,
-      //   icon: `error`
-      // })
     }
   };
 
