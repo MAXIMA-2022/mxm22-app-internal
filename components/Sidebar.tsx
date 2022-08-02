@@ -100,21 +100,21 @@ const Links = ({pathName, role, divisiName}: LinksProps)=>{
       divisi: []
     },
     {
-      name: "Daftar Mahasiswa",
-      link: "/mahasiswa/daftarMhs",
+      name: "Toggle",
+      link: "/",
       logo: DaftarMhsSVG,
       logo2: DaftarMhsBlueSVG,
       role: ['panitia'],
-      divisi: []
-    },
-    {
-      name: "Daftar Panitia",
-      link: "/panitia/daftarPanit",
-      logo: DaftarPanitSVG,
-      logo2: DaftarPanitBlueSVG,
-      role: ['panitia'],
-      divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
+      divisi: ['SuperAdmin', 'Rocuta']
     }
+    // {
+    //   name: "Daftar Panitia",
+    //   link: "/panitia/daftarPanit",
+    //   logo: DaftarPanitSVG,
+    //   logo2: DaftarPanitBlueSVG,
+    //   role: ['panitia'],
+    //   divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
+    // }
   ]
   return(
     <>
@@ -138,7 +138,7 @@ const Links = ({pathName, role, divisiName}: LinksProps)=>{
             }
             transition={'0.5s'}
             display={
-              link.role.includes(role as string) && link.divisi.length === 0 ? 'flex' :
+              link.role.includes(role as string) && link.divisi.length === 0 ? 'flex' : 
               link.role.includes(role as string) && link.divisi.includes(divisiName as string) ? 'flex' : 'none'
             }
           >
@@ -162,6 +162,38 @@ interface AccorProps {
 const Accor = ({pathName, role, divisiName}: AccorProps) => {
   const accors = [
     {
+      name: "Accounts",
+      icon: DaftarPanitSVG,
+      icon2: DaftarPanitBlueSVG,
+      role: ['panitia'],
+      accor: [
+        {
+          name: "Daftar Mahasiswa",
+          link: "/account/mahasiswa",
+          role: ['panitia'],
+          divisi: []
+        },
+        {
+          name: "Daftar Panitia",
+          link: "/account/panitia",
+          role: ['panitia'],
+          divisi: []
+        },
+        // {
+        //   name: 'Daftar Organisator HoME',
+        //   link: '/home/Organisator',
+        //   role: ['panitia'],
+        //   divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
+        // },
+        {
+          name: 'Daftar Organisator',
+          link: '/account/organisator',
+          role: ['panitia'],
+          divisi: [],
+        },
+      ]
+    },
+    {
       name: 'HoME',
       icon: HomeSVG,
       icon2: HomeBlueSVG,
@@ -184,12 +216,6 @@ const Accor = ({pathName, role, divisiName}: AccorProps) => {
           link: '/home/tambahMediaHome',
           role: ['panitia'],
           divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
-        },
-        {
-          name: 'Daftar Organisator HoME',
-          link: '/home/daftarOrganisator',
-          role: ['panitia'],
-          divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
         }
       ]
     },
@@ -210,12 +236,6 @@ const Accor = ({pathName, role, divisiName}: AccorProps) => {
           link: '/state/daftarState',
           role: ['panitia', 'organisator'],
           divisi: []
-        },
-        {
-          name: 'Daftar Akun Organisator',
-          link: '/state/daftarAkunOrganisator',
-          role: ['panitia'],
-          divisi: [],
         },
         {
           name: 'Tambah PIC Organisator',
