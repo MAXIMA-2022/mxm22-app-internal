@@ -140,14 +140,14 @@ const signIn = () => {
             <Stack justifyContent={"center"} alignItems={"center"}>
               <Text fontSize={"14px"} fontFamily="rubik" color={"gray.500"}>
                 Need an panitia account?
-                <Link href="/signUp" color={"#FF855F"} fontFamily="rubik">
-                  <a> Register</a>
+                <Link href="/signUp/panitia" color={"#FF855F"} fontFamily="rubik">
+                  <a> <b>Panitia</b></a>
                 </Link>
               </Text>
               <Text fontSize={"14px"} fontFamily="rubik" color={"gray.500"}>
                 Need an organisator account?
-                <Link href="/signUp" color={"#FF855F"} fontFamily="rubik">
-                  <a> Register</a>
+                <Link href="/signUp/organisator" color={"#FF855F"} fontFamily="rubik">
+                  <a> <b>Organisator</b></a>
                 </Link>
               </Text>  
             </Stack>
