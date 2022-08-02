@@ -11,7 +11,7 @@ import MUIDataTable, {MUIDataTableColumn} from "mui-datatables"
 import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
 import { TableCell } from '@material-ui/core'
-import { EditIcon, CheckCircleIcon } from '@chakra-ui/icons'
+import { CheckCircleIcon } from '@chakra-ui/icons'
 
 const listAkun = () => {
   interface DataAkunOrg {

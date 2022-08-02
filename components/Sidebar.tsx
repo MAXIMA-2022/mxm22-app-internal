@@ -20,7 +20,7 @@ import Image from 'next/image'
 import { CloseIcon, HamburgerIcon} from '@chakra-ui/icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import DashBoardSVG from '../public/dashboard.svg'
 import DashBoardBlueSVG from '../public/dashboardBlue.svg'
 import DaftarMhsSVG from '../public/daftarMhs.svg'
@@ -33,10 +33,11 @@ import HomeSVG from '../public/home.svg'
 import HomeBlueSVG from '../public/homeBlue.svg'
 import IconSVG from '../public/icon.svg'
 import IconBlueSVG from '../public/iconBlue.svg'
+import { useReadLocalStorage } from 'usehooks-ts'
+import { isExpired } from 'react-jwt'
+import { useUserContext } from '../useContext/UserContext'
 
-// const role = 'superAdmin'
-
-const Title = ({onClose} : SidebarProps)=>{
+const Title = ({onClose} : SidebarProps)=>{  
   return(
     <Flex 
       h={20}
@@ -62,6 +63,7 @@ const Title = ({onClose} : SidebarProps)=>{
 }
 
 const Account = ()=>{
+  const { name, divisiName } = useUserContext()
   return(
     <Flex 
       align={'center'}
@@ -74,40 +76,45 @@ const Account = ()=>{
         justifyContent={'center'}
       >
         <Avatar/>
-        <Text>William Chandra</Text>
-        <Text fontSize={'12px'} textColor={'gray.500'}>Backend Engineer</Text>
+        <Text>{name}</Text>
+        <Text fontSize={'12px'} textColor={'gray.500'}>{divisiName}</Text>
       </Stack>   
     </Flex>
   )
 }
 
 interface LinksProps {
-  pathName: string
+  pathName: string,
+  role: string | undefined,
+  divisiName: string | undefined,
 }
 
-const Links = ({pathName}: LinksProps)=>{
+const Links = ({pathName, role, divisiName}: LinksProps)=>{
   const linksData = [
     {
       name: "Dashboard",
       link: "/",
       logo: DashBoardSVG,
       logo2: DashBoardBlueSVG,
-      role: []
+      role: ['panitia', 'organisator'],
+      divisi: []
     },
     {
-      name: "Daftar Mahasiswa",
-      link: "/mahasiswa/daftarMhs",
+      name: "Toggle",
+      link: "/",
       logo: DaftarMhsSVG,
       logo2: DaftarMhsBlueSVG,
-      role: []
-    },
-    {
-      name: "Daftar Panitia",
-      link: "/panitia/daftarPanit",
-      logo: DaftarPanitSVG,
-      logo2: DaftarPanitBlueSVG,
-      role: ['superAdmin']
+      role: ['panitia'],
+      divisi: ['SuperAdmin', 'Rocuta']
     }
+    // {
+    //   name: "Daftar Panitia",
+    //   link: "/panitia/daftarPanit",
+    //   logo: DaftarPanitSVG,
+    //   logo2: DaftarPanitBlueSVG,
+    //   role: ['panitia'],
+    //   divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
+    // }
   ]
   return(
     <>
@@ -130,10 +137,10 @@ const Links = ({pathName}: LinksProps)=>{
               pathName === link.link ? {textColor: '#5e81f4'} : {textColor: 'black'} 
             }
             transition={'0.5s'}
-            // display={
-            //   link.role.length === 0 ? 'flex' :
-            //   link.role.includes(role) === true ? 'flex' : 'none'
-            // }
+            display={
+              link.role.includes(role as string) && link.divisi.length === 0 ? 'flex' : 
+              link.role.includes(role as string) && link.divisi.includes(divisiName as string) ? 'flex' : 'none'
+            }
           >
             <HStack>
               <Image src={pathName === link.link ? link.logo2 : link.logo}/>
@@ -147,27 +154,68 @@ const Links = ({pathName}: LinksProps)=>{
 }
 
 interface AccorProps {
-  pathName: string
+  pathName: string,
+  role: string | undefined,
+  divisiName: string | undefined,
 }
 
-const Accor = ({pathName}: AccorProps) => {
+const Accor = ({pathName, role, divisiName}: AccorProps) => {
   const accors = [
+    {
+      name: "Accounts",
+      icon: DaftarPanitSVG,
+      icon2: DaftarPanitBlueSVG,
+      role: ['panitia'],
+      accor: [
+        {
+          name: "Daftar Mahasiswa",
+          link: "/account/mahasiswa",
+          role: ['panitia'],
+          divisi: []
+        },
+        {
+          name: "Daftar Panitia",
+          link: "/account/panitia",
+          role: ['panitia'],
+          divisi: []
+        },
+        // {
+        //   name: 'Daftar Organisator HoME',
+        //   link: '/home/Organisator',
+        //   role: ['panitia'],
+        //   divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
+        // },
+        {
+          name: 'Daftar Organisator',
+          link: '/account/organisator',
+          role: ['panitia'],
+          divisi: [],
+        },
+      ]
+    },
     {
       name: 'HoME',
       icon: HomeSVG,
       icon2: HomeBlueSVG,
+      role: ['panitia'],
       accor: [
+        {
+          name: 'Daftar Home',
+          link: '/home/daftarHome',
+          role: ['panitia'],
+          divisi: []
+        },
         {
           name: 'Tambah Data HoME',
           link: '/home/tambahHome',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
         },
         {
           name: 'Tambah Media HoME',
           link: '/home/tambahMediaHome',
-        },
-        {
-          name: 'Daftar Organisator HoME',
-          link: '/home/daftarOrganisator',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
         }
       ]
     },
@@ -175,26 +223,25 @@ const Accor = ({pathName}: AccorProps) => {
       name: 'STATE',
       icon: StateSVG,
       icon2: StateBlueSVG,
+      role: ['panitia', 'organisator'],
       accor: [
         {
           name: 'Tambah STATE',
           link: '/state/tambahState',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin'],
         },
         {
           name: 'Daftar STATE',
           link: '/state/daftarState',
-        },
-        {
-          name: 'Daftar Akun Organisator',
-          link: '/state/daftarAkunOrganisator',
-        },
-        {
-          name: 'Daftar PIC Organisator',
-          link: '/state/daftarPicOrg',
+          role: ['panitia', 'organisator'],
+          divisi: []
         },
         {
           name: 'Tambah PIC Organisator',
           link: '/state/tambahPicOrg',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin'],
         }
       ]
     }
@@ -213,6 +260,9 @@ const Accor = ({pathName}: AccorProps) => {
           key={key}
         >
           <AccordionButton 
+            display={
+              accor.role.includes(role as string) ? 'flex' : 'none'
+            }
             p={0} 
             _hover={{bg: 'none'}}
             _focus={{boxShadow: 'none'}}
@@ -266,6 +316,11 @@ const Accor = ({pathName}: AccorProps) => {
                 <Link href={acc.link} key={key}>
                   <HStack 
                     cursor={'pointer'}
+                    display={
+                      acc.role.includes(role as string) && (acc.divisi.length === 0) ? 'flex' : 
+                      acc.role.includes(role as string) && acc.divisi.includes(divisiName as string) ? 'flex' : 'none'
+                    }
+
                     borderRight={
                       pathName === acc.link ? {base: 'none', lg: 'solid'} : 'none'
                     }
@@ -298,6 +353,16 @@ interface SidebarProps{
 
 const SideBarContent = ({onClose}: SidebarProps) => {
   const router = useRouter()
+  const jwt = useReadLocalStorage("token")
+  const isMyTokenExpired = isExpired(jwt as string)
+  const {role, divisiName} = useUserContext()
+
+  useEffect(() => {
+    if(!jwt || isMyTokenExpired){
+      router.push('/signIn')
+    }
+  })
+
   return(
     <Box
       bg={'white'}
@@ -309,8 +374,8 @@ const SideBarContent = ({onClose}: SidebarProps) => {
     >
       <Title onClose={onClose}/>
       <Account/>
-      <Links pathName = {router.pathname}/>
-      <Accor pathName = {router.pathname}/>
+      <Links pathName = {router.pathname} role = {role} divisiName = {divisiName}/>
+      <Accor pathName = {router.pathname} role = {role} divisiName = {divisiName}/>
     </Box>
   )
 }

@@ -22,6 +22,9 @@ const tambahPIC = () => {
   const onSubmit = async (data: any) => {
     console.log(data);
     try {
+      const formData = new FormData()
+        formData.append("akun_organisator", data.akun_organisator)
+        formData.append("kegiatan_state", data.kegiatan_state)
       setIsButtonLoading(true);
       setTimeout(async () => {
         setIsButtonLoading(false);
@@ -54,22 +57,30 @@ const tambahPIC = () => {
               <FormControl onSubmit={handleSubmit(onSubmit)}>
                 <Box mb={"0.8em"}>
                   <FormLabel textColor={"black"}>Akun Organisator</FormLabel>
-                  <Select mb={"0.8em"} {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                  <Select mb={"0.8em"} {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}>
+                    <option value='option1'>Option 1</option>
+                    <option value='option2'>Option 2</option>
+                    <option value='option3'>Option 3</option>
+                  </Select>
                   {errors.akun_organisator !== undefined && <Text textColor={"red"}>{errors.akun_organisator.message}</Text>}
                 </Box>
                 <Box>
                   <FormLabel textColor={"black"}>Kegiatan STATE</FormLabel>
-                  <Select {...register("kegiatan_state", { required: "Kegiatan STATE harap dipilih" })} name="kegiatan_state" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                  <Select {...register("kegiatan_state", { required: "Kegiatan STATE harap dipilih" })} name="kegiatan_state" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}>
+                    <option value='option1'>Option 1</option>
+                    <option value='option2'>Option 2</option>
+                    <option value='option3'>Option 3</option>
+                  </Select>
                   {errors.kegiatan_state !== undefined && <Text textColor={"red"}>{errors.kegiatan_state.message}</Text>}
                 </Box>
               </FormControl>
               <Flex w={"100%"} justifyContent={"right"} py={3}>
                 {isButtonLoading === true ? (
-                  <Button isLoading borderRadius={"999px"} type="submit" fontFamily={"rubik"}>
+                  <Button isLoading w={100} borderRadius={"999px"} type="submit" textColor="black" bgColor={"green.200"} _hover={{ bgColor: "yellow.200" }}>
                     SUBMIT
                   </Button>
                 ) : (
-                  <Button borderRadius={"999px"} type="submit" fontFamily={"rubik"}>
+                  <Button w={100} borderRadius={"999px"} type="submit" textColor="black" bgColor={"green.200"} _hover={{ bgColor: "yellow.200" }}>
                     SUBMIT
                   </Button>
                 )}

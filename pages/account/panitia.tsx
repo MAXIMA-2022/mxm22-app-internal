@@ -31,28 +31,28 @@ const DaftarPanit = () => {
       verifikasi: true
     },
     {
-      name: "Naufal",
-      nim: "34991",
+      name: "Naufal Syarif",
+      nim: "55788",
       divisi: "Rocuta",
       verifikasi: true
     },
     {
-      name: "Anastasius Raditya",
-      nim: "34991",
+      name: "Atanasius Raditya",
+      nim: "44898",
       divisi: "Rocuta",
       verifikasi: true
     },
     {
       name: "Tesalonika Abigail",
-      nim: "34111",
+      nim: "44503",
       divisi: "Rocuta",
       verifikasi: true
     },
     {
-      name: "Do Kwon",
-      nim: "34915",
-      divisi: "Cerberus",
-      verifikasi: false
+      name: "Felix Ferdianto",
+      nim: "45398",
+      divisi: "Rocuta",
+      verifikasi: true
     },
     {
       name: "Fareza",

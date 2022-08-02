@@ -23,6 +23,9 @@ const tambahMedia = () => {
   const onSubmit = async (data: any) => {
     console.log(data);
     try {
+      const formData = new FormData()
+        formData.append("akun_organisator", data.akun_organisator)
+        formData.append("link_media", data.link_media)
       setIsButtonLoading(true);
       setTimeout(async () => {
         setIsButtonLoading(false);
@@ -54,7 +57,11 @@ const tambahMedia = () => {
               <FormControl onSubmit={handleSubmit(onSubmit)}>
                 <Box mb={"0.8em"}>
                   <FormLabel textColor={"black"}>Akun Organisator</FormLabel>
-                  <Select {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}/>
+                  <Select {...register("akun_organisator", { required: "Akun organisator harap dipilih" })} name="akun_organisator" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}}>
+                    <option value='option1'>Option 1</option>
+                    <option value='option2'>Option 2</option>
+                    <option value='option3'>Option 3</option>
+                  </Select>
                   {errors.akun_organisator !== undefined && <Text textColor={"red"}>{errors.akun_organisator.message}</Text>}
                 </Box>
                 <Box>
@@ -64,12 +71,12 @@ const tambahMedia = () => {
                 </Box>
               </FormControl>
               <Flex w={"100%"} justifyContent={"right"} py={3}>
-                {isButtonLoading === true ? (
-                  <Button isLoading borderRadius={"999px"} type="submit" fontFamily={"rubik"}>
+              {isButtonLoading === true ? (
+                  <Button isLoading w={100} borderRadius={"999px"} type="submit" textColor="black" bgColor={"green.200"} _hover={{ bgColor: "yellow.200" }}>
                     SUBMIT
                   </Button>
                 ) : (
-                  <Button borderRadius={"999px"} type="submit" fontFamily={"rubik"}>
+                  <Button w={100} borderRadius={"999px"} type="submit" textColor="black" bgColor={"green.200"} _hover={{ bgColor: "yellow.200" }}>
                     SUBMIT
                   </Button>
                 )}
