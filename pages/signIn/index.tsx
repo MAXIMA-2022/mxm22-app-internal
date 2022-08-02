@@ -11,7 +11,9 @@ import {
   FormControl, 
   FormLabel, 
   Heading, 
-  Center
+  Center,
+  Select,
+  Stack
 } from "@chakra-ui/react";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
@@ -25,11 +27,11 @@ import { isExpired } from 'react-jwt'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Swal from 'sweetalert2'
 
 interface IUserInfo {
   nim: string;
   password: string;
+  role: string
 }
 
 const signIn = () => {
@@ -49,7 +51,7 @@ const signIn = () => {
     }
   }, [])
 
-  const onSubmit: SubmitHandler<IUserInfo> = async (data: any) => {
+  const onSubmit: SubmitHandler<IUserInfo> = async (data: IUserInfo) => {
     try {
       setIsButtonLoading(true);
 
@@ -57,12 +59,21 @@ const signIn = () => {
       formData.append("nim", data.nim)
       formData.append("password", data.password)
 
-      const response = await axios.post(
-        `${process.env.API_URL}/api/panit/login`,
-        formData,
-      )
+      let response
 
-      setLocalStorage(response.data.token)
+      if(data.role === 'panitia'){
+        response = await axios.post(
+          `${process.env.API_URL}/api/panit/login`, 
+          formData
+        )
+      } else if(data.role === 'organisator'){
+        response = await axios.post(
+          `${process.env.API_URL}/api/org/login`, 
+          formData
+        )
+      }
+
+      setLocalStorage(response?.data?.token)
 
       router.push('/')
       
@@ -105,6 +116,14 @@ const signIn = () => {
                   <Input borderColor={'#CBD5E0'} {...register("password", { required: "Password harus diisi" })} placeholder="****" type="password" name="password" textColor={"black"} border={"solid"} _hover={{ border: "solid #CBD5E0" }}/>
                 </InputGroup>
                 {errors.password !== undefined && <Text textColor={"red"}>{errors.password.message}</Text>}
+                <FormLabel mt={"1em"} fontFamily="rubik" textColor={"black"}>
+                  Role
+                </FormLabel>
+                <Select borderColor={'#CBD5E0'} {...register("role", { required: "Role harus dipilih" })} placeholder="Pilih Role" name="role" textColor={"black"} border={"solid"}>
+                  <option value="panitia">Panitia</option>
+                  <option value="organisator">Organisator</option>
+                </Select>
+                {errors.role !== undefined && <Text textColor={"red"}>{errors.role.message}</Text>}
               </FormControl>
               <Flex w={"100%"} justifyContent={"center"} py={3} mt={"0.5em"}>
                 {isButtonLoading === true ? (
@@ -118,14 +137,20 @@ const signIn = () => {
                 )}
               </Flex>
             </form>
-            <Flex justifyContent={"center"} alignItems={"center"}>
+            <Stack justifyContent={"center"} alignItems={"center"}>
               <Text fontSize={"14px"} fontFamily="rubik" color={"gray.500"}>
-                Don't Have an Account?
+                Need an panitia account?
                 <Link href="/signUp" color={"#FF855F"} fontFamily="rubik">
                   <a> Register</a>
                 </Link>
               </Text>
-            </Flex>
+              <Text fontSize={"14px"} fontFamily="rubik" color={"gray.500"}>
+                Need an organisator account?
+                <Link href="/signUp" color={"#FF855F"} fontFamily="rubik">
+                  <a> Register</a>
+                </Link>
+              </Text>  
+            </Stack>
           </Box>
         </Flex>
       </Flex>
