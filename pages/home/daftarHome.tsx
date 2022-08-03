@@ -2,29 +2,56 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import { Box, Flex, Text, Button, CloseButton, HStack, Center } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
-import { TableCell, TableRow } from "@material-ui/core";
+import { TableCell } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { EditIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import axios from 'axios'
+
+interface DataHoME {
+  homeID: number,
+  search_key: string,
+  linkLogo: string,
+  name: string,
+  chapter: string,
+  shortDesc: string,
+  longDesc: string,
+  instagram: string,
+  lineID: string,
+  linkYoutube: string,
+  media: [
+    {
+      photoID: number,
+      linkMedia: string,
+    }
+  ]
+}
 
 const listHOME = () => {
-  interface DataHoME {
-    id: number,
-    name: String,
-    chapter: String,
-  }
+  const [dataHoME, setDataHoME] = useState<DataHoME[]>([])
 
-  const dataHoME: DataHoME[] = [
-    {id: 1, name: 'Home 1', chapter: 'Chapter 1'},
-    {id: 2, name: 'Home 2', chapter: 'Chapter 2'},
-    {id: 3, name: 'Home 3', chapter: 'Chapter 3'},
-    {id: 4, name: 'Home 4', chapter: 'Chapter 4'},
-    {id: 5, name: 'Home 5', chapter: 'Chapter 5'},
-    {id: 6, name: 'Home 6', chapter: 'Chapter 6'},
-  ]
+  useEffect(() => {
+    try {
+      const fetchHoME = async () => {
+        const response = await axios.get('https://maxima2022.herokuapp.com/api/homeInfo')
+        setDataHoME(response.data)
+      }
+      fetchHoME()
+    } catch(err: any) {
+      console.log(err)
+    }
+  })
 
   const columnsHoME: MUIDataTableColumn[] = [
+    {
+      label: "Home ID",
+      name: "homeID",
+      options: {
+        display: false
+      }
+    },
     {
       label: "Nama HoME",
       name: 'name',
@@ -64,14 +91,29 @@ const listHOME = () => {
             </TableCell>
           );
         },
-        customBodyRender: (value: any, tableMeta: any) => {
+        customBodyRender: (tableMeta: any) => {
           return (
-            <HStack spacing={2} w={'150px'} justify={['flex-start', 'flex-start', 'flex-start', 'center']}>
+            <HStack spacing={2} w={'200px'} justify={['flex-start', 'flex-start', 'flex-start', 'center']}>
+              <Link href={{
+                pathname: `editHome/information/${tableMeta.rowData[0]}`,
+                query: {
+                  ID: tableMeta.rowData[0],
+                }
+              }}>
+                <Button size={"xs"} color="white" bgColor={"#163161"} _hover={{ bgColor: "#1a4173" }}>
+                  <Center>
+                    <HStack spacing={2}>
+                      <EditIcon />
+                      <Text display={{ base: "none", sm: "block" }}>Information</Text>
+                    </HStack>
+                  </Center>
+                </Button>
+              </Link>
               <Button size={"xs"} bgColor="white" color={"#163161"} border={"1px"} borderColor={"#163161"}>
                 <Center>
                   <HStack spacing={2}>
                     <EditIcon />
-                    <Text display={{ base: "none", sm: "block" }}>Edit</Text>
+                    <Text display={{ base: "none", sm: "block" }}>Media</Text>
                   </HStack>
                 </Center>
               </Button>
