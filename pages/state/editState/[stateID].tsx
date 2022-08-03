@@ -1,6 +1,5 @@
 import Sidebar from "../../../components/Sidebar";
 import Navbar from "../../../components/Navbar";
-<<<<<<< Updated upstream:pages/state/editState/[stateID].tsx
 import { 
   Box, 
   Flex, 
@@ -12,9 +11,6 @@ import {
   Textarea, 
   Button 
 } from "@chakra-ui/react";
-=======
-import { Box, Flex, Text, Center, FormLabel, Input, Select, Textarea, Button } from "@chakra-ui/react";
->>>>>>> Stashed changes:pages/state/daftarState/editState/[stateID].tsx
 import MxmIconSVG from "../../../public/mxmIcon.svg";
 import Image from "next/image";
 import { useEffect, useState } from 'react'
@@ -326,13 +322,8 @@ const editState = ({ID}: {ID: number}) => {
 };
 
 editState.getInitialProps = async ({query}: any) => {
-<<<<<<< Updated upstream:pages/state/editState/[stateID].tsx
-  const {ID} = query
-  return{
-=======
   const { ID } = query;
   return {
->>>>>>> Stashed changes:pages/state/daftarState/editState/[stateID].tsx
     ID
   }
 }
