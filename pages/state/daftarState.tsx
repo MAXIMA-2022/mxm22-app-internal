@@ -22,19 +22,10 @@ interface StateInfo{
   coverPhoto: string,
   attendanceCode: string,
   registered: number,
+  stateID: number,
 }
 
-export const getStaticProps = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const data = await res.json();
-  return {
-    props: {
-      dataSTATE: data,
-    },
-  };
-};
-
-const listSTATE = ({ dataSTATE }: any) => {
+const listSTATE = () => {
   const jwt = useReadLocalStorage<string>("token");
   const [state, setstate] = useState<StateInfo[]>([]);
   useEffect(() => {
@@ -47,14 +38,22 @@ const listSTATE = ({ dataSTATE }: any) => {
         })
         
         setstate(response.data)
-        console.log(response.data)
+        // console.log(response.data)
       } catch(err: any){
         console.log(err)
       }
     }
     fetchstate()
   }, [])
+
   const columnsSTATE: MUIDataTableColumn[] = [
+    {
+      label: "STATE ID",
+      name: "stateID",
+      options:{
+        display: false
+      }
+    },
     {
       label: "Nama STATE",
       name: "name",
@@ -69,7 +68,7 @@ const listSTATE = ({ dataSTATE }: any) => {
       },
     },
     {
-      label: "kuota",
+      label: "Kuota",
       name: "quota",
       options: {
         display: false,
@@ -104,7 +103,7 @@ const listSTATE = ({ dataSTATE }: any) => {
     },
     {
       label: "Kode Presensi",
-      name: "kodePresensi",
+      name: "attendanceCode",
       options: {
         customHeadRender: ({ index, ...column }) => {
           return (
@@ -175,7 +174,7 @@ const listSTATE = ({ dataSTATE }: any) => {
             <MUIDataTable
               title=""
               columns={columnsSTATE}
-              data={dataSTATE}
+              data={state}
               options={{
                 rowsPerPage: 5,
                 selectableRows: "none",

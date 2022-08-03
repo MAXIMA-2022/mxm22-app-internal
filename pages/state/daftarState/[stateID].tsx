@@ -13,73 +13,124 @@ import Image from "next/image";
 import { TableCell } from "@material-ui/core";
 import { EditIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from 'react'
+import axios from "axios";
+import { useReadLocalStorage } from "usehooks-ts";
+import { useParams } from "react-router-dom";
 
-
-export const getStaticPaths = async () => {
-  const res = await fetch('https://jsonplaceholder.typicode.com/users');
-  const data = await res.json();
-
-  const paths = data.map((stateID: any) => {
-    return {
-      params: {
-        stateID: stateID.name.toString()
-      },
-    }
-  })
-
-  return {
-    paths,
-    fallback: false
-  }
+interface StateInfo{
+  id: number,
+  name: string,
+  quota: number,
+  day: string,
+  category: string,
+  identifier: string,
+  stateLogo: string,
+  coverPhoto: string,
+  attendanceCode: string,
+  registered: number,
+  stateID: number,
 }
 
-export const getStaticProps = async ({ params }: any) => {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/users?name=${params.stateID}`);
-  const data = await res.json();
-  return {
-    props: {
-      dataSTATE: data
-    }
-  }
-}
+
+// export const getStaticPaths = async () => {
+//   const res = await fetch('https://jsonplaceholder.typicode.com/users');
+//   const data = await res.json();
+
+//   const paths = data.map((stateID: any) => {
+//     return {
+//       params: {
+//         stateID: stateID.name.toString()
+//       },
+//     }
+//   })
+
+//   return {
+//     paths,
+//     fallback: false
+//   }
+// }
+
+// export const getStaticProps = async ({ params }: any) => {
+//   const res = await fetch(`https://jsonplaceholder.typicode.com/users?name=${params.stateID}`);
+//   const data = await res.json();
+//   return {
+//     props: {
+//       dataSTATE: data
+//     }
+//   }
+// }
 
 const detailSTATE = ({dataSTATE}: any) => {
-  console.log(dataSTATE);
-  interface DataDetailSTATE {
-    name: String;
-    nim: String;
-    kehadiran: Boolean;
-  }
+  const { stateID }: any = useParams();
+  const jwt = useReadLocalStorage<string>("token");
+  const [state, setstate] = useState<StateInfo[]>([]);
+  const [dataKehadiranMhs, setDataKehadiranMhs] = useState<any>([]);
+  useEffect(() => {
+    const fetchstate = async () => {
+      try{
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct/:stateID`,{
+          headers:{
+            "x-access-token": jwt!
+          }
+        })
+        // const paths = state.map((stateID: any) => {
+        //   return {
+        //     params: {
+        //       stateID: stateID.name.toString()
+        //     },
+        //   }
+        // })
+        // return {
+        //   paths,
+        //   fallback: false
+        // }
+        setstate(response.data[0])
+        console.log(response.data[0])
+      } catch(err: any){
+        console.log(err)
+      }
+    }
+    fetchstate()
+    
+  }, [])
+  
+
+  // console.log(dataSTATE);
+  // interface DataDetailSTATE {
+  //   name: String;
+  //   nim: String;
+  //   kehadiran: Boolean;
+  // }
 
   const svgSize = "16px";
 
-  const dataDetailSTATE: DataDetailSTATE[] = [
-    {
-      name: "William",
-      nim: "34995",
-      kehadiran: false,
-    },
-    {
-      name: "Doodles",
-      nim: "34995",
-      kehadiran: true,
-    },
-    {
-      name: "Bruce",
-      nim: "34995",
-      kehadiran: false,
-    },
-    {
-      name: "Uzumaki Naruto",
-      nim: "34995",
-      kehadiran: false,
-    },
-    {
-      name: "Terra Luna",
-      nim: "34995",
-      kehadiran: true,
-    },
-  ];
+  // const dataDetailSTATE: DataDetailSTATE[] = [
+  //   {
+  //     name: "William",
+  //     nim: "34995",
+  //     kehadiran: false,
+  //   },
+  //   {
+  //     name: "Doodles",
+  //     nim: "34995",
+  //     kehadiran: true,
+  //   },
+  //   {
+  //     name: "Bruce",
+  //     nim: "34995",
+  //     kehadiran: false,
+  //   },
+  //   {
+  //     name: "Uzumaki Naruto",
+  //     nim: "34995",
+  //     kehadiran: false,
+  //   },
+  //   {
+  //     name: "Terra Luna",
+  //     nim: "34995",
+  //     kehadiran: true,
+  //   },
+  // ];
 
   const columnDetailSTATE: MUIDataTableColumn[] = [
     {
@@ -152,23 +203,23 @@ const detailSTATE = ({dataSTATE}: any) => {
       <Box width={"100%"} py={["0", "2em"]}>
           <Box ps={["0", "1.5em"]}>
             <Heading pb={"0.5em"} fontSize={["2xl", "4xl"]} fontFamily="rubik" fontWeight={"extrabold"}>
-              {dataSTATE[0].name}
+              {state[0].name}
             </Heading>
             <VStack spacing={[2, 5]} align="stretch">
               <HStack spacing={5}>
                 <Image src={JadwalSVG} />
                 <Text fontFamily="rubik">
-                  Hari ke-{dataSTATE[0].email} ({dataSTATE[0].website})
+                  Hari ke-{state[0].day} ({state[0].day})
                 </Text>
               </HStack>
               <HStack spacing={5}>
                 <Image src={ParticipantSVG} />
-                <Text fontFamily="rubik">{dataSTATE[0].address.city}</Text>
+                <Text fontFamily="rubik">{state[0].registered}</Text>
               </HStack>
-              <HStack spacing={5}>
+              {/* <HStack spacing={5}>
                   <Image src={KeySVG} />
-                  <Text fontFamily="rubik">{dataSTATE[0].address.street}</Text>
-                </HStack>
+                  <Text fontFamily="rubik">{state[0].shortDesc}</Text>
+              </HStack> */}
             </VStack>
           </Box>
       </Box>
@@ -177,7 +228,7 @@ const detailSTATE = ({dataSTATE}: any) => {
             <MUIDataTable
               title=""
               columns={columnDetailSTATE}
-              data={dataDetailSTATE}
+              data={state}
               options={{
                 rowsPerPage: 5,
                 selectableRows: "none",

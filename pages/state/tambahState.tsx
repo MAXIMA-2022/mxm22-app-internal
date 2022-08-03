@@ -18,7 +18,7 @@ interface StateInfo{
   quota: number,
   day: string,
   category: string,
-  identifier: string,
+  shortDesc: string,
   stateLogo: string,
   coverPhoto: string,
   stateID: number,
@@ -120,13 +120,13 @@ const tambahState = () => {
         formData.append("quota", data.quota)
         formData.append("day", data.day)
         formData.append("category", data.category)
-        formData.append("identifier", data.identifier)
+        formData.append("shortDesc", data.shortDesc)
         formData.append("stateLogo", filesstateLogo[0])
         formData.append("coverPhoto", filesSampul[0])
-      await axios.post(
-        `${process.env.API_URL}/api/stateAct/createState`, 
-        formData,
-      )
+      // await axios.post(
+      //   `${process.env.API_URL}/api/stateAct/createState`, 
+      //   formData,
+      // )
       toast.success('Pendaftaran berhasil!', {
         position: "bottom-left",
         autoClose: 5000,
@@ -215,8 +215,8 @@ const tambahState = () => {
               </Flex>
               <Box width={"100%"} px={2} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Deskripsi Singkat</FormLabel>
-                <Textarea {...register("identifier", { required: "Deskripsi singkat harap diisi" })} name="identifier" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
-                {errors.identifier !== undefined && <Text textColor={"red"}>{errors.identifier.message}</Text>}
+                <Textarea {...register("shortDesc", { required: "Deskripsi singkat harap diisi" })} name="shortDesc" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
+                {errors.shortDesc !== undefined && <Text textColor={"red"}>{errors.shortDesc.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
                 <FormLabel textColor={"black"}>Logo</FormLabel>
