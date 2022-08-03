@@ -7,6 +7,22 @@ import { useDropzone } from "react-dropzone";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import { useReadLocalStorage } from "usehooks-ts";
+import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+interface StateInfo{
+  id: number,
+  name: string,
+  quota: number,
+  day: string,
+  category: string,
+  identifier: string,
+  stateLogo: string,
+  coverPhoto: string,
+  stateID: number,
+}
 
 const Previews = (props: any) => {
   const [files, setFiles] = useState([]);
@@ -69,29 +85,60 @@ const tambahState = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [filesLogo, setFilesLogo] = useState([])
+  const [filesstateLogo, setFilesstateLogo] = useState([])
   const [filesSampul, setFilesSampul] = useState([])
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
+  const [state, setstate] = useState<StateInfo[]>([]);
+  const jwt = useReadLocalStorage<string>("token");
+  
+  useEffect(() => {
+    const fetchstate = async () => {
+      try{
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{
+          headers:{
+            "x-access-token": jwt!
+          }
+        })
+        
+        setstate(response.data)
+      } catch(err: any){
+        console.log(err)
+      }
+    }
+    fetchstate()
+  }, [])
 
   const onSubmit = async (data: any) => {
     console.log(data);
-    console.log(filesLogo[0])
+    console.log(filesstateLogo[0])
     console.log(filesSampul[0])
     try {
-      const formData = new FormData()
-        formData.append("nama_state", data.nama_state)
-        formData.append("kuota", data.kuota)
-        formData.append("hari_state", data.hari_state)
-        formData.append("kategori", data.kategori)
-        formData.append("deskripsi_singkat", data.deskripsi_singkat)
-        formData.append("logo", filesLogo[0])
-        formData.append("foto_sampul", filesSampul[0])
       setIsButtonLoading(true);
-      setTimeout(async () => {
-        setIsButtonLoading(false);
-      }, 3000);
+      const formData = new FormData()
+        formData.append("name", data.name)
+        formData.append("quota", data.quota)
+        formData.append("day", data.day)
+        formData.append("category", data.category)
+        formData.append("identifier", data.identifier)
+        formData.append("stateLogo", filesstateLogo[0])
+        formData.append("coverPhoto", filesSampul[0])
+      await axios.post(
+        `${process.env.API_URL}/api/stateAct/createState`, 
+        formData,
+      )
+      toast.success('Pendaftaran berhasil!', {
+        position: "bottom-left",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      setIsButtonLoading(false);
     } catch (err: any) {
+      toast.error(err.response.data.message)
       console.log(err.response.data.message);
       setError(err.response.data.message);
       setTimeout(async () => {
@@ -119,23 +166,23 @@ const tambahState = () => {
               <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                 <Box width={"100%"} px={2}>
                   <FormLabel textColor={"black"}>Nama STATE</FormLabel>
-                  <Input {...register("nama_state", { required: "Nama STATE harap diisi" })} type={"text"} name="nama_state" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
-                  {errors.nama_state !== undefined && <Text textColor={"red"}>{errors.nama_state.message}</Text>}
+                  <Input {...register("name", { required: "Nama STATE harap diisi" })} type={"text"} name="name" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
+                  {errors.name !== undefined && <Text textColor={"red"}>{errors.name.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"}>Kuota</FormLabel>
                   <Input
-                    {...register("kuota", { required: "Kuota harap diisi", min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
-                    //max: { value: 100, message: "Kuota tidak boleh lebih dari 100" } 
+                    {...register("quota", { required: "quota harap diisi", min: { value: 1, message: "quota tidak boleh ≤ 0" },
+                    //max: { value: 100, message: "quota tidak boleh lebih dari 100" } 
                     })}
                     type={"number"}
-                    name="kuota"
+                    name="quota"
                     textColor={"black"}
                     border={"solid"}
                     borderColor={"#CBD5E0"}
                     _hover={{ border: "solid #CBD5E0" }}
                   />
-                  {errors.kuota !== undefined && <Text textColor={"red"}>{errors.kuota.message}</Text>}
+                  {errors.quota !== undefined && <Text textColor={"red"}>{errors.quota.message}</Text>}
                 </Box>
               </Flex>
               <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
@@ -143,43 +190,47 @@ const tambahState = () => {
                   <FormLabel textColor={"black"} placeholder="Pilih Hari Pelaksanaan STATE">
                     Hari Kegiatan
                   </FormLabel>
-                  <Select {...register("hari_state", { required: "Hari kegiatan harap dipilih" })} name="hari_state" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
-                    <option value='option1'>Option 1</option>
-                    <option value='option2'>Option 2</option>
-                    <option value='option3'>Option 3</option>
+                  <Select {...register("day", { required: "Hari kegiatan harap dipilih" })} name="day" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
+                    {state.map((item: any, index: number) => {
+                      return (
+                        <option key={index} value={item.day}>{item.day}</option>
+                      )
+                    })}
                   </Select>
-                  {errors.hari_state !== undefined && <Text textColor={"red"}>{errors.hari_state.message}</Text>}
+                  {errors.day !== undefined && <Text textColor={"red"}>{errors.day.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
-                  <FormLabel textColor={"black"} placeholder="Pilih Kategori STATE">
+                  <FormLabel textColor={"black"} placeholder="Pilih category STATE">
                     Kategori
                   </FormLabel>
-                  <Select {...register("kategori", { required: "Kategori harap dipilih" })} name="kategori" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
-                    <option value='option1'>Option 1</option>
-                    <option value='option2'>Option 2</option>
-                    <option value='option3'>Option 3</option>
+                  <Select {...register("category", { required: "category harap dipilih" })} name="category" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
+                  {state.map((item: any, index: number) => {
+                      return (
+                        <option key={index} value={item.category}>{item.category}</option>
+                      )
+                    })}
                   </Select>
-                  {errors.kategori !== undefined && <Text textColor={"red"}>{errors.kategori.message}</Text>}
+                  {errors.category !== undefined && <Text textColor={"red"}>{errors.category.message}</Text>}
                 </Box>
               </Flex>
               <Box width={"100%"} px={2} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Deskripsi Singkat</FormLabel>
-                <Textarea {...register("deskripsi_singkat", { required: "Deskripsi singkat harap diisi" })} name="deskripsi_singkat" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
-                {errors.deskripsi_singkat !== undefined && <Text textColor={"red"}>{errors.deskripsi_singkat.message}</Text>}
+                <Textarea {...register("identifier", { required: "Deskripsi singkat harap diisi" })} name="identifier" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} />
+                {errors.identifier !== undefined && <Text textColor={"red"}>{errors.identifier.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
                 <FormLabel textColor={"black"}>Logo</FormLabel>
                 <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
-                  <Previews name="logo" setFiles={setFilesLogo}/>
+                  <Previews name="stateLogo" setFiles={setFilesstateLogo}/>
                 </Box>
-                {errors.logo !== undefined && <Text textColor={"red"}>{errors.logo.message}</Text>}
+                {errors.stateLogo !== undefined && <Text textColor={"red"}>{errors.stateLogo.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                 <FormLabel textColor={"black"}>Foto Sampul</FormLabel>
                 <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
-                  <Previews name="foto_sampul" setFiles={setFilesSampul}/>
+                  <Previews name="coverPhoto" setFiles={setFilesSampul}/>
                 </Box>
-                {errors.foto_sampul !== undefined && <Text textColor={"red"}>{errors.foto_sampul.message}</Text>}
+                {errors.coverPhoto !== undefined && <Text textColor={"red"}>{errors.coverPhoto.message}</Text>}
               </Box>
               <Flex width={"100%"} px={2} mt={2} justifyContent={"right"}>
                 {isButtonLoading === true ? (
@@ -196,6 +247,17 @@ const tambahState = () => {
           </Box>
         </Box>
       </Flex>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };

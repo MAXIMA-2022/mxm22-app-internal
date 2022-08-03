@@ -7,6 +7,22 @@ import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { EditIcon, InfoOutlineIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useReadLocalStorage } from "usehooks-ts";
+
+interface StateInfo{
+  id: number,
+  name: string,
+  quota: number,
+  day: string,
+  category: string,
+  identifier: string,
+  stateLogo: string,
+  coverPhoto: string,
+  attendanceCode: string,
+  registered: number,
+}
 
 export const getStaticProps = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
@@ -19,6 +35,25 @@ export const getStaticProps = async () => {
 };
 
 const listSTATE = ({ dataSTATE }: any) => {
+  const jwt = useReadLocalStorage<string>("token");
+  const [state, setstate] = useState<StateInfo[]>([]);
+  useEffect(() => {
+    const fetchstate = async () => {
+      try{
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{
+          headers:{
+            "x-access-token": jwt!
+          }
+        })
+        
+        setstate(response.data)
+        console.log(response.data)
+      } catch(err: any){
+        console.log(err)
+      }
+    }
+    fetchstate()
+  }, [])
   const columnsSTATE: MUIDataTableColumn[] = [
     {
       label: "Nama STATE",
