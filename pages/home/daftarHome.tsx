@@ -91,7 +91,7 @@ const listHOME = () => {
             </TableCell>
           );
         },
-        customBodyRender: (tableMeta: any) => {
+        customBodyRender: (value: any, tableMeta: any) => {
           return (
             <HStack spacing={2} w={'200px'} justify={['flex-start', 'flex-start', 'flex-start', 'center']}>
               <Link href={{
