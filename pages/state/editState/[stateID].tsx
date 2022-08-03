@@ -1,5 +1,6 @@
 import Sidebar from "../../../components/Sidebar";
 import Navbar from "../../../components/Navbar";
+<<<<<<< Updated upstream:pages/state/editState/[stateID].tsx
 import { 
   Box, 
   Flex, 
@@ -11,6 +12,9 @@ import {
   Textarea, 
   Button 
 } from "@chakra-ui/react";
+=======
+import { Box, Flex, Text, Center, FormLabel, Input, Select, Textarea, Button } from "@chakra-ui/react";
+>>>>>>> Stashed changes:pages/state/daftarState/editState/[stateID].tsx
 import MxmIconSVG from "../../../public/mxmIcon.svg";
 import Image from "next/image";
 import { useEffect, useState } from 'react'
@@ -164,7 +168,7 @@ const editState = ({ID}: {ID: number}) => {
             <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
               <Box width={"100%"} px={2}>
                 <FormLabel textColor={"black"}>Nama STATE</FormLabel>
-                <Input {...register("name", { required: "Nama STATE harap diisi" })} type={"text"} name="name" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} value={data.name}/>
+                <Input {...register("name", { required: "Nama STATE harap diisi" })} type={"text"} name="name" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} defaultValue={data.name}/>
                 {errors.name !== undefined && <Text textColor={"red"}>{errors.name.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
@@ -179,7 +183,7 @@ const editState = ({ID}: {ID: number}) => {
                   border={"solid"}
                   borderColor={"#CBD5E0"}
                   _hover={{ border: "solid #CBD5E0" }}
-                  value={data.quota}
+                  defaultValue={data.quota}
                 />
                 {errors.quota !== undefined && <Text textColor={"red"}>{errors.quota.message}</Text>}
               </Box>
@@ -189,7 +193,7 @@ const editState = ({ID}: {ID: number}) => {
                 <FormLabel textColor={"black"} placeholder="Pilih Hari Pelaksanaan STATE">
                   Hari Kegiatan
                 </FormLabel>
-                <Select {...register("day", { required: "Hari kegiatan harap dipilih" })} name="day" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} value={data.day}>
+                <Select {...register("day", { required: "Hari kegiatan harap dipilih" })} name="day" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
                   {state.map((item: any, index: number) => {
                     return (
                       <option key={index} value={item.day}>{item.day}</option>
@@ -202,19 +206,19 @@ const editState = ({ID}: {ID: number}) => {
                 <FormLabel textColor={"black"} placeholder="Pilih category STATE">
                   Kategori
                 </FormLabel>
-                <Select {...register("category", { required: "category harap dipilih" })} name="category" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} value={data.category}>
+                <Select {...register("category", { required: "category harap dipilih" })} name="category" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
                 {state.map((item: any, index: number) => {
                     return (
                       <option key={index} value={item.category}>{item.category}</option>
                     )
-                  })}
+                })}
                 </Select>
                 {errors.category !== undefined && <Text textColor={"red"}>{errors.category.message}</Text>}
               </Box>
             </Flex>
             <Box width={"100%"} px={2} mb={"0.8em"}>
               <FormLabel textColor={"black"}>Deskripsi Singkat</FormLabel>
-              <Textarea {...register("shortDesc", { required: "Deskripsi singkat harap diisi" })} name="shortDesc" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} value={data.shortDesc}/>
+              <Textarea {...register("shortDesc", { required: "Deskripsi singkat harap diisi" })} name="shortDesc" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} defaultValue={data.shortDesc}/>
               {errors.shortDesc !== undefined && <Text textColor={"red"}>{errors.shortDesc.message}</Text>}
             </Box>
             <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
@@ -322,8 +326,13 @@ const editState = ({ID}: {ID: number}) => {
 };
 
 editState.getInitialProps = async ({query}: any) => {
+<<<<<<< Updated upstream:pages/state/editState/[stateID].tsx
   const {ID} = query
   return{
+=======
+  const { ID } = query;
+  return {
+>>>>>>> Stashed changes:pages/state/daftarState/editState/[stateID].tsx
     ID
   }
 }
