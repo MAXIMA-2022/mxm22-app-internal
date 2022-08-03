@@ -90,7 +90,7 @@ const tambahState = () => {
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
   const [state, setstate] = useState<StateInfo[]>([]);
-  const jwt = useReadLocalStorage<string>("token");
+  const jwt = useReadLocalStorage<string | undefined>("token");
   
   useEffect(() => {
     const fetchstate = async () => {
@@ -110,9 +110,6 @@ const tambahState = () => {
   }, [])
 
   const onSubmit = async (data: any) => {
-    console.log(data);
-    console.log(filesstateLogo[0])
-    console.log(filesSampul[0])
     try {
       setIsButtonLoading(true);
       const formData = new FormData()
@@ -123,27 +120,21 @@ const tambahState = () => {
         formData.append("shortDesc", data.shortDesc)
         formData.append("stateLogo", filesstateLogo[0])
         formData.append("coverPhoto", filesSampul[0])
-      // await axios.post(
-      //   `${process.env.API_URL}/api/stateAct/createState`, 
-      //   formData,
-      // )
-      toast.success('Pendaftaran berhasil!', {
-        position: "bottom-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      const response = await axios.post(
+        `${process.env.API_URL}/api/stateAct/createState`, 
+        formData, {
+          headers: {
+            'x-access-token': jwt!
+          }
+        }
+      )
+      toast.success(response.data.message);
       setIsButtonLoading(false);
     } catch (err: any) {
       toast.error(err.response.data.message)
       console.log(err.response.data.message);
       setError(err.response.data.message);
-      setTimeout(async () => {
-        setIsButtonLoading(false);
-      }, 3000);
+      setIsButtonLoading(false);
     }
   };
 

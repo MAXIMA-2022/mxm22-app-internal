@@ -17,7 +17,7 @@ interface StateInfo{
   quota: number,
   day: string,
   category: string,
-  identifier: string,
+  shortDesc: string,
   stateLogo: string,
   coverPhoto: string,
   attendanceCode: string,
@@ -29,22 +29,20 @@ const listSTATE = () => {
   const jwt = useReadLocalStorage<string>("token");
   const [state, setstate] = useState<StateInfo[]>([]);
   useEffect(() => {
-    const fetchstate = async () => {
-      try{
+    try {
+      const fetchstate = async () => {
         const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{
           headers:{
             "x-access-token": jwt!
           }
         })
-        
         setstate(response.data)
-        // console.log(response.data)
-      } catch(err: any){
-        console.log(err)
       }
+      fetchstate()
+    } catch(err: any) {
+      console.log(err)
     }
-    fetchstate()
-  }, [])
+  },[])
 
   const columnsSTATE: MUIDataTableColumn[] = [
     {
@@ -95,7 +93,7 @@ const listSTATE = () => {
         customBodyRender: (value: any, tableMeta: any) => {
           return (
             <Text>
-              {value} / {tableMeta.rowData[1]}
+              {value} / {tableMeta.rowData[2]}
             </Text>
           );
         },
@@ -130,7 +128,12 @@ const listSTATE = () => {
         customBodyRender: (value: any, tableMeta: any) => {
           return (
             <HStack spacing={2}>
-              <Link href={"daftarState/" + tableMeta.rowData[0]}>
+              <Link href={{
+                pathname: `daftarState/editState/${tableMeta.rowData[0]}`,
+                query: {
+                  ID: tableMeta.rowData[0],
+                }
+              }}>
                 <Button size="xs" color="white" bgColor={"#163161"} _hover={{ bgColor: "#1a4173" }}>
                   <Center>
                     <HStack spacing={2}>
@@ -140,16 +143,24 @@ const listSTATE = () => {
                   </Center>
                 </Button>
               </Link>
-              <Button size={"xs"} bgColor="white" color={"#163161"} border={"1px"} borderColor={"#163161"}>
-                <Center>
-                  <HStack spacing={2}>
-                    <EditIcon />
-                    <Text display={{ base: "none", sm: "block" }}>Edit</Text>
-                  </HStack>
-                </Center>
-              </Button>
+              <Link href={{
+                pathname: `daftarState/editState/${tableMeta.rowData[0]}`,
+                query: {
+                  ID: tableMeta.rowData[0],
+                }
+              }}>
+                <Button size={"xs"} bgColor="white" color={"#163161"} border={"1px"} borderColor={"#163161"}>
+                  <Center>
+                    <HStack spacing={2}>
+                      <EditIcon />
+                      <Text display={{ base: "none", sm: "block" }}>Edit</Text>
+                    </HStack>
+                  </Center>
+                </Button>
+              </Link>
               <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} />
             </HStack>
+            
           );
         },
       },
