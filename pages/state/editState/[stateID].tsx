@@ -1,21 +1,21 @@
-import Sidebar from "../../../../components/Sidebar";
-import Navbar from "../../../../components/Navbar";
-import { Box, Flex, HStack, VStack, Switch, Text, Center, Heading, FormLabel, Input, Select, Textarea, Button } from "@chakra-ui/react";
-import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
-import MxmIconSVG from "../../../../public/mxmIcon.svg";
-import CheckIconSVG from "../../../public/checkIcon.svg";
-import CrossIconSVG from "../../../public/crossIcon.svg";
-import JadwalSVG from "../../../public/jadwal.svg";
-import ParticipantSVG from "../../../public/participant.svg";
-import KeySVG from "../../../public/key.svg";
-import UltimagzPNG from "../../../public/ultimagz.png";
+import Sidebar from "../../../components/Sidebar";
+import Navbar from "../../../components/Navbar";
+import { 
+  Box, 
+  Flex, 
+  Text, 
+  Center, 
+  FormLabel, 
+  Input, 
+  Select, 
+  Textarea, 
+  Button 
+} from "@chakra-ui/react";
+import MxmIconSVG from "../../../public/mxmIcon.svg";
 import Image from "next/image";
-import { TableCell } from "@material-ui/core";
-import { EditIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from 'react'
 import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
-import { useParams } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
@@ -87,6 +87,7 @@ const Previews = (props: any) => {
 };
 
 const editState = ({ID}: {ID: number}) => {
+  console.log(ID)
   const {
     register,
     handleSubmit,
@@ -319,5 +320,12 @@ const editState = ({ID}: {ID: number}) => {
   //   </>
   // );
 };
+
+editState.getInitialProps = async ({query}: any) => {
+  const {ID} = query
+  return{
+    ID
+  }
+}
 
 export default editState;

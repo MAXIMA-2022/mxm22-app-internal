@@ -1,8 +1,16 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Button, CloseButton, HStack, Center } from "@chakra-ui/react";
+import { 
+  Box, 
+  Flex, 
+  Text, 
+  Button, 
+  CloseButton, 
+  HStack, 
+  Center 
+} from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
-import { TableCell, TableRow } from "@material-ui/core";
+import { TableCell } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
 import Link from "next/link";
@@ -129,7 +137,7 @@ const listSTATE = () => {
           return (
             <HStack spacing={2}>
               <Link href={{
-                pathname: `daftarState/editState/${tableMeta.rowData[0]}`,
+                pathname: `detailState/${tableMeta.rowData[0]}`,
                 query: {
                   ID: tableMeta.rowData[0],
                 }
@@ -144,7 +152,7 @@ const listSTATE = () => {
                 </Button>
               </Link>
               <Link href={{
-                pathname: `daftarState/editState/${tableMeta.rowData[0]}`,
+                pathname: `editState/${tableMeta.rowData[0]}`,
                 query: {
                   ID: tableMeta.rowData[0],
                 }
@@ -160,7 +168,6 @@ const listSTATE = () => {
               </Link>
               <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} />
             </HStack>
-            
           );
         },
       },

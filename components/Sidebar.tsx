@@ -179,12 +179,6 @@ const Accor = ({pathName, role, divisiName}: AccorProps) => {
           role: ['panitia'],
           divisi: []
         },
-        // {
-        //   name: 'Daftar Organisator HoME',
-        //   link: '/home/Organisator',
-        //   role: ['panitia'],
-        //   divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
-        // },
         {
           name: 'Daftar Organisator',
           link: '/account/organisator',
@@ -226,16 +220,16 @@ const Accor = ({pathName, role, divisiName}: AccorProps) => {
       role: ['panitia', 'organisator'],
       accor: [
         {
-          name: 'Tambah STATE',
-          link: '/state/tambahState',
-          role: ['panitia'],
-          divisi: ['SuperAdmin', 'Rocuta', 'Griffin'],
-        },
-        {
           name: 'Daftar STATE',
           link: '/state/daftarState',
           role: ['panitia', 'organisator'],
           divisi: []
+        },
+        {
+          name: 'Tambah STATE',
+          link: '/state/tambahState',
+          role: ['panitia'],
+          divisi: ['SuperAdmin', 'Rocuta', 'Griffin'],
         },
         {
           name: 'Tambah PIC Organisator',

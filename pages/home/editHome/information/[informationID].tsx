@@ -20,7 +20,6 @@ import axios from "axios";
 import { ToastContainer ,toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useReadLocalStorage } from "usehooks-ts";
-import { withRouter } from "next/router";
 
 interface DataHoME{
   name: string,
