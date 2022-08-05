@@ -31,60 +31,60 @@ interface StateInfo{
   shortDesc: string,
 }
 
-const Previews = (props: any) => {
-  const [files, setFiles] = useState([]);
-  const { getRootProps, getInputProps } = useDropzone({
-    maxFiles: 1,
-    accept: {
-      "image/jpg": [],
-      "image/jpeg": [],
-      "image/png": [],
-    },
-    onDrop: (acceptedFiles: any) => {
-      setFiles(
-        acceptedFiles.map((file: any) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
-    },
-  });
-  if(files.length !== 0){
-    props.setFiles(files)
-  }
-  const thumbs = files.map((file: any) => (
-    <Box display={"inline-flex"} borderRadius={4} border={"2px solid #eaeaea"} mt={"16px"} mx={1} w={"auto"} h={"auto"} p={1} boxSizing={"border-box"} key={file.name}>
-      <Box display={"flex"} w={"auto"} h={"100%"}>
-        <img
-          src={file.preview}
-          style={{ display: "block", width: "auto", height: "100%" }}
-          onLoad={() => {
-            URL.revokeObjectURL(file.preview);
-          }}
-        />
-      </Box>
-    </Box>
-  ));
+// const Previews = (props: any) => {
+//   const [files, setFiles] = useState([]);
+//   const { getRootProps, getInputProps } = useDropzone({
+//     maxFiles: 1,
+//     accept: {
+//       "image/jpg": [],
+//       "image/jpeg": [],
+//       "image/png": [],
+//     },
+//     onDrop: (acceptedFiles: any) => {
+//       setFiles(
+//         acceptedFiles.map((file: any) =>
+//           Object.assign(file, {
+//             preview: URL.createObjectURL(file),
+//           })
+//         )
+//       );
+//     },
+//   });
+//   if(files.length !== 0){
+//     props.setFiles(files)
+//   }
+//   const thumbs = files.map((file: any) => (
+//     <Box display={"inline-flex"} borderRadius={4} border={"2px solid #eaeaea"} mt={"16px"} mx={1} w={"auto"} h={"auto"} p={1} boxSizing={"border-box"} key={file.name}>
+//       <Box display={"flex"} w={"auto"} h={"100%"}>
+//         <img
+//           src={file.preview}
+//           style={{ display: "block", width: "auto", height: "100%" }}
+//           onLoad={() => {
+//             URL.revokeObjectURL(file.preview);
+//           }}
+//         />
+//       </Box>
+//     </Box>
+//   ));
 
-  useEffect(() => {
-    return () => files.forEach((file: any) => URL.revokeObjectURL(file.preview));
-  }, []);
+//   useEffect(() => {
+//     return () => files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+//   }, []);
 
-  return (
-    <>
-      <Center p={"0.8em"} border={"dashed #e2e8f0"} width={"100%"} height={"5em"} borderRadius={10} {...getRootProps({ className: "dropzone" })} transition={"0.1s ease-in-out"} _hover={{ border: "dashed #CBD5E0", cursor: "pointer" }}>
-        <input {...getInputProps()} />
-        <Text color={"#A6A8AC"} userSelect={"none"} align={"center"}>
-          Seret dan taruh file di sini, atau klik untuk memilih file
-        </Text>
-      </Center>
-      <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"}>
-        {thumbs}
-      </Box>
-    </>
-  );
-};
+//   return (
+//     <>
+//       <Center p={"0.8em"} border={"dashed #e2e8f0"} width={"100%"} height={"5em"} borderRadius={10} {...getRootProps({ className: "dropzone" })} transition={"0.1s ease-in-out"} _hover={{ border: "dashed #CBD5E0", cursor: "pointer" }}>
+//         <input {...getInputProps()} />
+//         <Text color={"#A6A8AC"} userSelect={"none"} align={"center"}>
+//           Seret dan taruh file di sini, atau klik untuk memilih file
+//         </Text>
+//       </Center>
+//       <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"}>
+//         {thumbs}
+//       </Box>
+//     </>
+//   );
+// };
 
 const editState = ({ID}: {ID: number}) => {
   console.log(ID)
@@ -93,8 +93,8 @@ const editState = ({ID}: {ID: number}) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [filesstateLogo, setFilesstateLogo] = useState([])
-  const [filesSampul, setFilesSampul] = useState([])
+  // const [filesstateLogo, setFilesstateLogo] = useState([])
+  // const [filesSampul, setFilesSampul] = useState([])
   const [error, setError] = useState(undefined);
   const jwt = useReadLocalStorage<string | undefined>("token");
   const [state, setstate] = useState<string[] | number[]>([]);
@@ -124,8 +124,8 @@ const editState = ({ID}: {ID: number}) => {
         formData.append("day", data.day)
         formData.append("category", data.category)
         formData.append("shortDesc", data.shortDesc)
-        formData.append("stateLogo", filesstateLogo[0])
-        formData.append("coverPhoto", filesSampul[0])
+        formData.append("stateLogo", data.stateLogo[0])
+        formData.append("coverPhoto", data.coverPhoto[0])
       const response = await axios.put(
         `${process.env.API_URL}/api/stateAct/update/${ID}`, 
         formData, {
@@ -219,15 +219,15 @@ const editState = ({ID}: {ID: number}) => {
             </Box>
             <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
               <FormLabel textColor={"black"}>Logo</FormLabel>
-              <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
-                <Previews name="stateLogo" setFiles={setFilesstateLogo}/>
+              <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>\
+                <Input {...register('stateLogo')} type={'file'} pt={1} name='stateLogo' _placeholder={{color: 'darkgray'}} bgColor={'gray.200'} textColor={'black'}/>
               </Box>
               {errors.stateLogo !== undefined && <Text textColor={"red"}>{errors.stateLogo.message}</Text>}
             </Box>
             <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
               <FormLabel textColor={"black"}>Foto Sampul</FormLabel>
               <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
-                <Previews name="coverPhoto" setFiles={setFilesSampul}/>
+                <Input {...register('coverPhoto')} type={'file'} pt={1} name='coverPhoto' _placeholder={{color: 'darkgray'}} bgColor={'gray.200'} textColor={'black'}/>
               </Box>
               {errors.coverPhoto !== undefined && <Text textColor={"red"}>{errors.coverPhoto.message}</Text>}
             </Box>
@@ -260,65 +260,6 @@ const editState = ({ID}: {ID: number}) => {
       />
     </>
   )
-
-  // return (
-  //   <>
-  //     <Navbar />
-  //     <Sidebar />
-  //     <Flex minH="100vh" bg={"#dee1e6"} ml={{ base: 0, lg: "240px" }} px={5} pt={"75px"} direction={"column"} alignItems={"center"} justifyContent={"center"}>
-  //       <Box w={"full"} bgColor={"white"} borderRadius={20} mb={4}>
-  //         <Flex justifyContent={"space-between"} alignItems={"center"} mx={4} borderBottom={"solid black"}>
-  //           <Text fontSize={["15px", "25px", "25px", "25px"]} fontFamily="rubik" fontWeight={600} textColor={"black"}>
-  //             Detail STATE
-  //           </Text>
-  //           <Flex p={"10px"}>
-  //             <Image src={MxmIconSVG} width={"50px"} height={"50px"} />
-  //           </Flex>
-  //         </Flex>
-  //         <Box display={["block", "flex"]} justifyContent={"space-between"} mx={4} minHeight={"15em"}>
-  //     <Center width={["100%", "60%"]} py={["1em", "0"]}>
-  //       <Image src={UltimagzPNG} />
-  //     </Center>
-  //     <Box width={"100%"} py={["0", "2em"]}>
-  //         <Box ps={["0", "1.5em"]}>
-  //           {/* <Heading pb={"0.5em"} fontSize={["2xl", "4xl"]} fontFamily="rubik" fontWeight={"extrabold"}>
-  //             {state[0].name}
-  //           </Heading>
-  //           <VStack spacing={[2, 5]} align="stretch">
-  //             <HStack spacing={5}>
-  //               <Image src={JadwalSVG} />
-  //               <Text fontFamily="rubik">
-  //                 Hari ke-{state[0].day} ({state[0].day})
-  //               </Text>
-  //             </HStack>
-  //             <HStack spacing={5}>
-  //               <Image src={ParticipantSVG} />
-  //               <Text fontFamily="rubik">{state[0].registered}</Text>
-  //             </HStack>
-  //             <HStack spacing={5}>
-  //                 <Image src={KeySVG} />
-  //                 <Text fontFamily="rubik">{state[0].shortDesc}</Text>
-  //             </HStack>
-  //           </VStack> */}
-  //         </Box>
-  //     </Box>
-  //   </Box>
-  //         <Box py={4} mx={4}>
-  //           {/* <MUIDataTable
-  //             title=""
-  //             columns={columneditState}
-  //             data={state}
-  //             options={{
-  //               rowsPerPage: 5,
-  //               selectableRows: "none",
-  //               elevation: 0,
-  //             }}
-  //           /> */}
-  //         </Box>
-  //       </Box>
-  //     </Flex>
-  //   </>
-  // );
 };
 
 editState.getInitialProps = async ({query}: any) => {
