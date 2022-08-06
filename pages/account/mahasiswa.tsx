@@ -83,6 +83,45 @@ const DaftarMHS = () => {
       }
     },
     {
+      label: "Nomor HP",
+      name: 'whatsapp',
+      options:{
+        customHeadRender: ({index, ...column}) => {
+          return(
+            <TableCell key={index} style={{zIndex: -1}}>
+              <b>{column.label}</b>
+            </TableCell>
+          )
+        }
+      }
+    },
+    {
+      label: "ID Line",
+      name: 'idLine',
+      options:{
+        customHeadRender: ({index, ...column}) => {
+          return(
+            <TableCell key={index} style={{zIndex: -1}}>
+              <b>{column.label}</b>
+            </TableCell>
+          )
+        }
+      }
+    },
+    {
+      label: "Instagram",
+      name: 'idInstagram',
+      options:{
+        customHeadRender: ({index, ...column}) => {
+          return(
+            <TableCell key={index} style={{zIndex: -1}}>
+              <b>{column.label}</b>
+            </TableCell>
+          )
+        }
+      }
+    },
+    {
       label: "Pengaturan",
       name: 'action',
       options:{

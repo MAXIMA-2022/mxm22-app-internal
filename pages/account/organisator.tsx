@@ -86,7 +86,7 @@ const listAkun = () => {
     },
     {
       label: "Kegiatan STATE",
-      name: "state",
+      name: "stateName",
       options:{
         filter: true,
         customHeadRender: ({index, ...column}) => {

@@ -86,7 +86,7 @@ const DaftarPanit = () => {
     },
     {
       label: "Divisi",
-      name: "divisi",
+      name: "divisiName",
       options:{
         filter: true,
         customHeadRender: ({index, ...column}) => {
