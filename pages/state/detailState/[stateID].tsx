@@ -126,37 +126,51 @@ const detailSTATE = ({ID}: {ID: number}) => {
           </Flex>
           {state.map((data: any, index: number)=>{
             return(
-                <div key={index}>
-                <Box display={["block", "flex"]} justifyContent={"space-between"} mx={4} minHeight={"15em"}>
-      <Center width={["100%", "60%"]} py={["1em", "0"]}>
-        <Image src={UltimagzPNG} />
-      </Center>
-      <Box width={"100%"} py={["0", "2em"]}>
-          <Box ps={["0", "1.5em"]}>
-            <Heading pb={"0.5em"} fontSize={["2xl", "4xl"]} fontFamily="rubik" fontWeight={"extrabold"} textColor={"black"}>
-              {data.name}
-            </Heading>
-            <VStack spacing={[2, 5]} align="stretch">
-              <HStack spacing={5}>
-                <Image src={JadwalSVG} />
-                <Text fontFamily="rubik" textColor={"black"}>
-                  Hari ke-{data.day} ({data.quota})
-                </Text>
-              </HStack>
-              <HStack spacing={5}>
-                <Image src={ParticipantSVG} />
-                <Text fontFamily="rubik" textColor={"black"}>{data.registered}/{data.quota}</Text>
-              </HStack>
-              <HStack spacing={5}>
-                  <Image src={KeySVG} />
-                  <Text fontFamily="rubik" textColor={"black"}>{data.attendanceCode}</Text>
-                </HStack>
-            </VStack>
-          </Box>
-          
-      </Box>
-    </Box>
-                </div>
+              <div key={index}>
+              <Box
+                display={["block", "flex"]}
+                justifyContent={"space-between"}
+                mx={4}
+                minHeight={"15em"}
+              >
+                <Center width={["100%", "60%"]} py={["1em", "0"]}>
+                  <Image src={data.stateLogo} width={"250px"} height={"100%"} />
+                </Center>
+                <Box width={"100%"} py={["0", "2em"]}>
+                  <Box ps={["0", "1.5em"]}>
+                    <Heading
+                      pb={"0.5em"}
+                      fontSize={["2xl", "4xl"]}
+                      fontFamily="rubik"
+                      fontWeight={"extrabold"}
+                      textColor={"black"}
+                    >
+                      {data.name}
+                    </Heading>
+                    <VStack spacing={[2, 5]} align="stretch">
+                      <HStack spacing={5}>
+                        <Image src={JadwalSVG} />
+                        <Text fontFamily="rubik" textColor={"black"}>
+                          Hari ke-{data.day} ({data.date})
+                        </Text>
+                      </HStack>
+                      <HStack spacing={5}>
+                        <Image src={ParticipantSVG} />
+                        <Text fontFamily="rubik" textColor={"black"}>
+                          {data.registered}/{data.quota}
+                        </Text>
+                      </HStack>
+                      <HStack spacing={5}>
+                        <Image src={KeySVG} />
+                        <Text fontFamily="rubik" textColor={"black"}>
+                          {data.attendanceCode}
+                        </Text>
+                      </HStack>
+                    </VStack>
+                  </Box>
+                </Box>
+              </Box>
+            </div>
             )
           })}
           <Box py={4} mx={4}>

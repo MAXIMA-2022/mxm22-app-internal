@@ -12,6 +12,9 @@ import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
 import { TableCell } from '@material-ui/core'
 import { CheckCircleIcon } from '@chakra-ui/icons'
+import axios from 'axios'
+import { useReadLocalStorage } from 'usehooks-ts'
+import { useState, useEffect } from 'react'
 
 const listAkun = () => {
   interface DataAkunOrg {
@@ -21,38 +24,25 @@ const listAkun = () => {
     verifikasi: Boolean
   }
 
-  const dataAkunOrg: DataAkunOrg[] = [
-    {
-      name: "William",
-      nim: "34995",
-      state: "Bank Sampah",
-      verifikasi: false
-    },
-    {
-      name: "Doodles",
-      nim: "34995",
-      state: "Duta Anti Narkoba",
-      verifikasi: true
-    },
-    {
-      name: "Bruce",
-      nim: "34995",
-      state: "Kompas Corner",
-      verifikasi: false
-    },
-    {
-      name: "Uzumaki Naruto",
-      nim: "34995",
-      state: "Teater Katak",
-      verifikasi: false
-    },
-    {
-      name: "Terra Luna",
-      nim: "34995",
-      state: "Game Development Club",
-      verifikasi: true
+  const jwt = useReadLocalStorage<string | undefined>("token")
+  const [org, setOrg] = useState<DataAkunOrg[]>([])
+
+  useEffect(() => {
+    try{
+      const fetchOrg = async () => {
+        const res = await axios.get(`${process.env.API_URL}/api/org`,{
+          headers:{
+            "x-access-token": jwt!
+          }
+        })
+        setOrg(res.data)
+        console.log(res.data)
+      }
+      fetchOrg()
+    } catch(err: any){
+      console.log(err)
     }
-  ]
+  }, [])
 
   const columnAkunORG: MUIDataTableColumn[] = [
     {
@@ -192,7 +182,7 @@ const listAkun = () => {
             <MUIDataTable
               title=""
               columns={columnAkunORG}
-              data={dataAkunOrg}
+              data={org}
               options={{
                 rowsPerPage: 5,
                 selectableRows: 'none',

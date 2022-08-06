@@ -14,8 +14,13 @@ import { TableCell } from '@material-ui/core'
 import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
 import { EditIcon } from '@chakra-ui/icons'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { useReadLocalStorage } from 'usehooks-ts'
 
 const DaftarPanit = () => {
+  const jwt = useReadLocalStorage<string | undefined>('token')
+  const [panit, setPanit] = useState<DataPanit[]>([])
   interface DataPanit {
     name: String,
     nim: String,
@@ -23,44 +28,22 @@ const DaftarPanit = () => {
     verifikasi: Boolean
   }
 
-  const dataPanit: DataPanit[] = [
-    {
-      name: "William Chandra",
-      nim: "34995",
-      divisi: "Rocuta",
-      verifikasi: true
-    },
-    {
-      name: "Naufal Syarif",
-      nim: "55788",
-      divisi: "Rocuta",
-      verifikasi: true
-    },
-    {
-      name: "Atanasius Raditya",
-      nim: "44898",
-      divisi: "Rocuta",
-      verifikasi: true
-    },
-    {
-      name: "Tesalonika Abigail",
-      nim: "44503",
-      divisi: "Rocuta",
-      verifikasi: true
-    },
-    {
-      name: "Felix Ferdianto",
-      nim: "45398",
-      divisi: "Rocuta",
-      verifikasi: true
-    },
-    {
-      name: "Fareza",
-      nim: "34444",
-      divisi: "Griffin",
-      verifikasi: false
+  useEffect(() => {
+    try{
+      const fetchOrg = async () => {
+        const res = await axios.get(`${process.env.API_URL}/api/panit`,{
+          headers:{
+            "x-access-token": jwt!
+          }
+        })
+        setPanit(res.data)
+        console.log(res.data)
+      }
+      fetchOrg()
+    } catch(err: any){
+      console.log(err)
     }
-  ]
+  }, [])
 
   const columnsPanit: MUIDataTableColumn[] = [
     {
@@ -199,7 +182,7 @@ const DaftarPanit = () => {
             <MUIDataTable
               title=""
               columns={columnsPanit}
-              data={dataPanit}
+              data={panit}
               options={{
                 rowsPerPage: 5,
                 selectableRows: 'none',

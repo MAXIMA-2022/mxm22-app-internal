@@ -12,6 +12,9 @@ import { TableCell } from '@material-ui/core'
 import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
 import { EditIcon } from '@chakra-ui/icons'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { useReadLocalStorage } from 'usehooks-ts'
 
 const DaftarMHS = () => {
   interface DataMHS {
@@ -19,39 +22,25 @@ const DaftarMHS = () => {
     nim: String,
     email: String
   }
-  
-  const dataMHS: DataMHS[] = [
-    {
-      name: "William Chandra",
-      nim: "34995",
-      email: "william.chandra@student.umn.ac.id"
-    },
-    {
-      name: "William Chandra",
-      nim: "34995",
-      email: "william.chandra@student.umn.ac.id"
-    },
-    {
-      name: "William Chandra",
-      nim: "34995",
-      email: "william.chandra@student.umn.ac.id"
-    },
-    {
-      name: "William Chandra",
-      nim: "34995",
-      email: "william.chandra@student.umn.ac.id"
-    },
-    {
-      name: "William Chandra",
-      nim: "34995",
-      email: "william.chandra@student.umn.ac.id"
-    },
-    {
-      name: "William Chandra",
-      nim: "34995",
-      email: "william.chandra@student.umn.ac.id"
+  const jwt = useReadLocalStorage<string | undefined>("token")
+  const [mhs, setMhs] = useState<DataMHS[]>([])
+
+  useEffect(() => {
+    try{
+      const fetchMhs = async () => {
+        const res = await axios.get(`${process.env.API_URL}/api/mhs`,{
+          headers:{
+            "x-access-token": jwt!
+          }
+        })
+        setMhs(res.data)
+        console.log(res.data)
+      }
+      fetchMhs()
+    } catch(err: any){
+      console.log(err)
     }
-  ]
+  }, [])
 
   const columnsMHS: MUIDataTableColumn[] = [
     {
@@ -170,7 +159,7 @@ const DaftarMHS = () => {
             <MUIDataTable
               title=""
               columns={columnsMHS}
-              data={dataMHS}
+              data={mhs}
               options={{
                 rowsPerPage: 5,
                 selectableRows: 'none',
