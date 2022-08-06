@@ -27,12 +27,11 @@ const DaftarMHS = () => {
 
   useEffect(() => {
     try{
+      const headers = {
+        'x-access-token': jwt!
+      }
       const fetchMhs = async () => {
-        const res = await axios.get(`${process.env.API_URL}/api/mhs`,{
-          headers:{
-            "x-access-token": jwt!
-          }
-        })
+        const res = await axios.get(`${process.env.API_URL}/api/mhs`,{headers})
         setMhs(res.data)
         console.log(res.data)
       }

@@ -29,12 +29,11 @@ const listAkun = () => {
 
   useEffect(() => {
     try{
+      const headers = {
+        'x-access-token': jwt!
+      }
       const fetchOrg = async () => {
-        const res = await axios.get(`${process.env.API_URL}/api/org`,{
-          headers:{
-            "x-access-token": jwt!
-          }
-        })
+        const res = await axios.get(`${process.env.API_URL}/api/org`,{headers})
         setOrg(res.data)
         console.log(res.data)
       }

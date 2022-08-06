@@ -30,16 +30,15 @@ const DaftarPanit = () => {
 
   useEffect(() => {
     try{
-      const fetchOrg = async () => {
-        const res = await axios.get(`${process.env.API_URL}/api/panit`,{
-          headers:{
-            "x-access-token": jwt!
-          }
-        })
+      const headers = {
+        'x-access-token': jwt!
+      }
+      const fetchPanit = async () => {
+        const res = await axios.get(`${process.env.API_URL}/api/panit`,{headers})
         setPanit(res.data)
         console.log(res.data)
       }
-      fetchOrg()
+      fetchPanit()
     } catch(err: any){
       console.log(err)
     }

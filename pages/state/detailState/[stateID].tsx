@@ -31,23 +31,18 @@ const detailSTATE = ({ID}: {ID: number}) => {
   const jwt = useReadLocalStorage<string | undefined>("token");
   const [state, setstate] = useState<StateInfo[]>([]);
   const [participant, setParticipant] = useState([])
+  const headers = {
+    'x-access-token': jwt!
+  }
   useEffect(() => {
     try {
       const fetchstate = async () => {
-        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${ID}`,{
-          headers:{
-            "x-access-token": jwt!
-          }
-        })
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${ID}`,{headers})
         setstate(response.data)
         console.log(response.data)
       }
       const fetchparticipants = async () => {
-        const res = await axios.get(`${process.env.API_URL}/api/stateReg`,{
-            headers:{
-                'x-access-token': jwt!
-            }
-        })
+        const res = await axios.get(`${process.env.API_URL}/api/stateReg`,{headers})
         setParticipant(res.data)
         console.log(res.data)
       }

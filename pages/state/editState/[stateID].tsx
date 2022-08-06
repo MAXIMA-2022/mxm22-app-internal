@@ -16,7 +16,6 @@ import Image from "next/image";
 import { useEffect, useState } from 'react'
 import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
-import { useDropzone } from "react-dropzone";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,82 +30,23 @@ interface StateInfo{
   shortDesc: string,
 }
 
-// const Previews = (props: any) => {
-//   const [files, setFiles] = useState([]);
-//   const { getRootProps, getInputProps } = useDropzone({
-//     maxFiles: 1,
-//     accept: {
-//       "image/jpg": [],
-//       "image/jpeg": [],
-//       "image/png": [],
-//     },
-//     onDrop: (acceptedFiles: any) => {
-//       setFiles(
-//         acceptedFiles.map((file: any) =>
-//           Object.assign(file, {
-//             preview: URL.createObjectURL(file),
-//           })
-//         )
-//       );
-//     },
-//   });
-//   if(files.length !== 0){
-//     props.setFiles(files)
-//   }
-//   const thumbs = files.map((file: any) => (
-//     <Box display={"inline-flex"} borderRadius={4} border={"2px solid #eaeaea"} mt={"16px"} mx={1} w={"auto"} h={"auto"} p={1} boxSizing={"border-box"} key={file.name}>
-//       <Box display={"flex"} w={"auto"} h={"100%"}>
-//         <img
-//           src={file.preview}
-//           style={{ display: "block", width: "auto", height: "100%" }}
-//           onLoad={() => {
-//             URL.revokeObjectURL(file.preview);
-//           }}
-//         />
-//       </Box>
-//     </Box>
-//   ));
-
-//   useEffect(() => {
-//     return () => files.forEach((file: any) => URL.revokeObjectURL(file.preview));
-//   }, []);
-
-//   return (
-//     <>
-//       <Center p={"0.8em"} border={"dashed #e2e8f0"} width={"100%"} height={"5em"} borderRadius={10} {...getRootProps({ className: "dropzone" })} transition={"0.1s ease-in-out"} _hover={{ border: "dashed #CBD5E0", cursor: "pointer" }}>
-//         <input {...getInputProps()} />
-//         <Text color={"#A6A8AC"} userSelect={"none"} align={"center"}>
-//           Seret dan taruh file di sini, atau klik untuk memilih file
-//         </Text>
-//       </Center>
-//       <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"}>
-//         {thumbs}
-//       </Box>
-//     </>
-//   );
-// };
-
 const editState = ({ID}: {ID: number}) => {
-  console.log(ID)
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  // const [filesstateLogo, setFilesstateLogo] = useState([])
-  // const [filesSampul, setFilesSampul] = useState([])
   const [error, setError] = useState(undefined);
   const jwt = useReadLocalStorage<string | undefined>("token");
   const [state, setstate] = useState<string[] | number[]>([]);
   const [isButtonLoading, setIsButtonLoading] = useState(false);
+  const headers = {
+    'x-access-token': jwt!
+  }
   useEffect(() => {
     try {
       const fetchstate = async () => {
-        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${ID}`,{
-          headers:{
-            "x-access-token": jwt!
-          }
-        })
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${ID}`,{headers})
         setstate(response.data)
       }
       fetchstate()
@@ -128,11 +68,7 @@ const editState = ({ID}: {ID: number}) => {
         formData.append("coverPhoto", data.coverPhoto[0])
       const response = await axios.put(
         `${process.env.API_URL}/api/stateAct/update/${ID}`, 
-        formData, {
-          headers: {
-            'x-access-token': jwt!
-          }
-        }
+        formData, {headers}
       )
       toast.success(response.data.message);
       setIsButtonLoading(false);

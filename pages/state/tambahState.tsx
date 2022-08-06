@@ -91,16 +91,14 @@ const tambahState = () => {
   const [error, setError] = useState(undefined);
   const [state, setstate] = useState<StateInfo[]>([]);
   const jwt = useReadLocalStorage<string | undefined>("token");
+  const headers = {
+    'x-access-token': jwt!
+  }
   
   useEffect(() => {
     const fetchstate = async () => {
       try{
-        const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{
-          headers:{
-            "x-access-token": jwt!
-          }
-        })
-        
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{headers})
         setstate(response.data)
       } catch(err: any){
         console.log(err)
@@ -122,11 +120,7 @@ const tambahState = () => {
         formData.append("coverPhoto", filesSampul[0])
       const response = await axios.post(
         `${process.env.API_URL}/api/stateAct/createState`, 
-        formData, {
-          headers: {
-            'x-access-token': jwt!
-          }
-        }
+        formData, {headers}
       )
       toast.success(response.data.message);
       setIsButtonLoading(false);

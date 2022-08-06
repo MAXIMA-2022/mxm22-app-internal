@@ -18,6 +18,8 @@ import { EditIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface StateInfo{
   id: number,
@@ -33,17 +35,17 @@ interface StateInfo{
   stateID: number,
 }
 
-const listSTATE = () => {
+const listSTATE = ({ID}: {ID: number}) => {
   const jwt = useReadLocalStorage<string>("token");
   const [state, setstate] = useState<StateInfo[]>([]);
+  const [error, setError] = useState(undefined);
+  const headers = {
+    'x-access-token': jwt!
+  }
   useEffect(() => {
     try {
       const fetchstate = async () => {
-        const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{
-          headers:{
-            "x-access-token": jwt!
-          }
-        })
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct`,{headers})
         setstate(response.data)
       }
       fetchstate()
@@ -51,6 +53,19 @@ const listSTATE = () => {
       console.log(err)
     }
   },[])
+
+  const handleRemove = async (data: any) => {
+    try {
+      const response = await axios.delete(
+        `${process.env.API_URL}/api/stateAct/delete/${ID}`, {headers}
+      )
+      toast.success(response.data.message);
+    } catch (err: any) {
+      toast.error(err.response.data.message)
+      console.log(err.response.data.message);
+      setError(err.response.data.message);
+    }
+  };
 
   const columnsSTATE: MUIDataTableColumn[] = [
     {
@@ -166,7 +181,7 @@ const listSTATE = () => {
                   </Center>
                 </Button>
               </Link>
-              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} />
+              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} onClick={handleRemove}/>
             </HStack>
           );
         },
@@ -202,8 +217,26 @@ const listSTATE = () => {
           </Box>
         </Box>
       </Flex>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 };
+
+listSTATE.getInitialProps = async ({query}: any) => {
+  const { ID } = query;
+  return {
+    ID
+  }
+}
 
 export default listSTATE;
