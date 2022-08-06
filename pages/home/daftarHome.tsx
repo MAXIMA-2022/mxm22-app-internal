@@ -95,10 +95,7 @@ const listHOME = () => {
           return (
             <HStack spacing={2} w={'200px'} justify={['flex-start', 'flex-start', 'flex-start', 'center']}>
               <Link href={{
-                pathname: `editHome/information/${tableMeta.rowData[0]}`,
-                query: {
-                  ID: tableMeta.rowData[0],
-                }
+                pathname: `editHome/information/${tableMeta.rowData[0]}`
               }}>
                 <Button size={"xs"} color="white" bgColor={"#163161"} _hover={{ bgColor: "#1a4173" }}>
                   <Center>

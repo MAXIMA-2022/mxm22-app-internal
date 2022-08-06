@@ -86,22 +86,30 @@ const Previews = (props: any) => {
   );
 };
 
-const editHomeInfo = ({ID}: {ID: number}) => {
+const editHomeInfo = ({ informationID }: {informationID: number}) => {
   const jwt = useReadLocalStorage<string | undefined>('token')
   const [files, setFiles] = useState([])
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
-  const [dataHoME, setDataHoME] = useState<string[] | number[]>([])
+  const [dataHoME, setDataHoME] = useState<DataHoME[]>([])
+  const [chapter, setChapter] = useState<string[]>([])
 
   useEffect(() => {
     try{
       const fetchHoME = async () => {
-        const res = await axios.get(`${process.env.API_URL}/api/homeInfo/homeID/${ID}`, {
+        const res = await axios.get(`${process.env.API_URL}/api/homeInfo/homeID/${informationID}`, {
+          headers: {
+            'x-access-token': jwt!
+          }
+        })
+
+        const chap = await axios.get(`${process.env.API_URL}/api/chapter`, {
           headers: {
             'x-access-token': jwt!
           }
         })
         setDataHoME(res.data)
+        setChapter(chap.data)
       }
       fetchHoME()
     } catch(err){
@@ -122,7 +130,7 @@ const editHomeInfo = ({ID}: {ID: number}) => {
       formData.append("instagram", data.instagram)
       formData.append("linkLogo", files[0])
 
-      const response = await axios.put(`${process.env.API_URL}/api/home/updateHomeInfo/${ID}`, formData, {
+      const response = await axios.put(`${process.env.API_URL}/api/home/updateHomeInfo/${informationID}`, formData, {
         headers: {
           'x-access-token': jwt!
         }
@@ -158,7 +166,7 @@ const editHomeInfo = ({ID}: {ID: number}) => {
             </Flex>
           </Flex>
           <Box py={4} mx={4}>
-            {dataHoME.map((data: any, index) => (
+            {dataHoME.map((data: DataHoME, index) => (
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                   <Box width={"100%"} px={2}>
@@ -168,9 +176,10 @@ const editHomeInfo = ({ID}: {ID: number}) => {
                   </Box>
                   <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                     <FormLabel textColor={"black"}>Chapter</FormLabel>
-                    <Select {...register("chapter", { required: "chapter harap dipilih" })} name="chapter" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} value={data.chapter}>
-                      <option value='1'>Option 1</option>
-                      <option value='2'>Option 2</option>
+                    <Select {...register("chapter", { required: "chapter harap dipilih" })} name="chapter" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.chapter}>
+                      {chapter.map((chap: any) => (
+                        <option value={chap.id}>{chap.name}</option>
+                      ))}                      
                     </Select>
                     {errors.chapter !== undefined && <Text textColor={"red"}>{errors.chapter.message}</Text>}
                   </Box>
@@ -245,9 +254,9 @@ const editHomeInfo = ({ID}: {ID: number}) => {
 };
 
 editHomeInfo.getInitialProps = async ({query}: any) => {
-  const { ID } = query;
+  const { informationID } = query;
   return {
-    ID
+    informationID
   }
 }
 

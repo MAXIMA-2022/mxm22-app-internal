@@ -91,7 +91,24 @@ const tambahHomeInfo = () => {
   const [files, setFiles] = useState([])
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const [error, setError] = useState(undefined);
-  
+  const [chapter, setChapter] = useState<string[]>([])
+
+  useEffect(() => {
+    try{
+      const fetchChap = async () => {
+        const chap = await axios.get(`${process.env.API_URL}/api/chapter`, {
+          headers: {
+            'x-access-token': jwt!
+          }
+        })
+        setChapter(chap.data)
+      }
+      fetchChap()
+    } catch(err){
+      console.log(err)
+    }
+  }, [])
+
   const onSubmit: SubmitHandler<any> = async (data: DataHoME) => {
     try {
       setIsButtonLoading(true);
@@ -151,8 +168,9 @@ const tambahHomeInfo = () => {
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                   <FormLabel textColor={"black"}>Chapter</FormLabel>
                   <Select {...register("chapter", { required: "chapter harap dipilih" })} name="chapter" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} >
-                    <option value='1'>Option 1</option>
-                    <option value='2'>Option 2</option>
+                    {chapter.map((chap: any) => (
+                      <option value={chap.id}>{chap.name}</option>
+                    ))}     
                   </Select>
                   {errors.chapter !== undefined && <Text textColor={"red"}>{errors.chapter.message}</Text>}
                 </Box>
