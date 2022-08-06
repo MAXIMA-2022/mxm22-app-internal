@@ -5,23 +5,34 @@ import {
   Flex,
   Text,
   Button,
-  HStack
+  HStack,
+  Center
 } from '@chakra-ui/react'
 import MUIDataTable, {MUIDataTableColumn} from "mui-datatables"
 import { TableCell } from '@material-ui/core'
 import MxmIconSVG from '../../public/mxmIcon.svg'
 import Image from 'next/image'
-import { EditIcon } from '@chakra-ui/icons'
+import { EditIcon, InfoOutlineIcon } from '@chakra-ui/icons'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useReadLocalStorage } from 'usehooks-ts'
+import Link from 'next/link'
 
 const DaftarMHS = () => {
   interface DataMHS {
-    name: String,
-    nim: String,
-    email: String
+    name: string,
+    nim: number,
+    password: string,
+    whatsapp: string,
+    email: string,
+    idInstagram: string,
+    idLine: string,
+    tanggalLahir: string,
+    tempatLahir: string,
+    jenisKelamin: string,
+    prodi: string
   }
+  
   const jwt = useReadLocalStorage<string | undefined>("token")
   const [mhs, setMhs] = useState<DataMHS[]>([])
 
@@ -43,9 +54,10 @@ const DaftarMHS = () => {
 
   const columnsMHS: MUIDataTableColumn[] = [
     {
-      label: "Nama Mahasiswa",
-      name: 'name',
+      label: "NIM",
+      name: 'nim',
       options:{
+        display: false,
         customHeadRender: ({index, ...column}) => {
           return(
             <TableCell key={index} style={{zIndex: -1}}>
@@ -56,10 +68,9 @@ const DaftarMHS = () => {
       }
     },
     {
-      label: "NIM",
-      name: 'nim',
+      label: "Nama Mahasiswa",
+      name: 'name',
       options:{
-        display: false,
         customHeadRender: ({index, ...column}) => {
           return(
             <TableCell key={index} style={{zIndex: -1}}>
@@ -132,19 +143,21 @@ const DaftarMHS = () => {
             </TableCell>
           )
         },
-        customBodyRender: (value) => {
+        customBodyRender: (value:any, tableMeta:any) => {
           return(
             <HStack spacing={2}>
-              <Button
-                size={'xs'}
-                leftIcon={<EditIcon/>}
-                bgColor="white"
-                color={'#163161'}
-                border={'1px'}
-                borderColor={'#163161'}
-              >
-                Edit
-              </Button>
+              <Link href={{
+                pathname: `detailMahasiswa/${tableMeta.rowData[0]}`,
+              }}>
+                <Button size="xs" color="white" bgColor={"#163161"} _hover={{ bgColor: "#1a4173" }}>
+                  <Center>
+                    <HStack spacing={2}>
+                      <InfoOutlineIcon />
+                      <Text display={{ base: "none", sm: "block" }}>Detail</Text>
+                    </HStack>
+                  </Center>
+                </Button>
+              </Link>
             </HStack>
           )
         }
