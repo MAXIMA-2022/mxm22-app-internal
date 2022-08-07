@@ -25,6 +25,7 @@ interface DataHoME {
   instagram: string,
   lineID: string,
   linkYoutube: string,
+  chapterName: string,
   media: [
     {
       photoID: number,
@@ -91,7 +92,7 @@ const listHOME = () => {
     },
     {
       label: "Chapter",
-      name: 'chapter',
+      name: 'chapterName',
       options: {
         customHeadRender: ({index, ...column}) => {
           return(
