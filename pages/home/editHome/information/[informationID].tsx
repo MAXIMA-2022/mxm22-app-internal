@@ -8,10 +8,9 @@ import {
   Input, 
   Button, 
   Select, 
-  Textarea, 
-  Center 
+  Textarea,
+  Img
 } from "@chakra-ui/react";
-import { useDropzone } from "react-dropzone";
 import MxmIconSVG from "../../../../public/mxmIcon.svg";
 import Image from "next/image";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -20,6 +19,7 @@ import axios from "axios";
 import { ToastContainer ,toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import { useReadLocalStorage } from "usehooks-ts";
+import { useRouter } from "next/router";
 
 interface DataHoME{
   name: string,
@@ -29,64 +29,11 @@ interface DataHoME{
   linkYoutube: string,
   lineID: string,
   instagram: string,
+  linkLogo: string
 }
 
-const Previews = (props: any) => {
-  const [files, setFiles] = useState([]);
-  const { getRootProps, getInputProps } = useDropzone({
-    maxFiles: 1,
-    accept: {
-      "image/jpg": [],
-      "image/jpeg": [],
-      "image/png": [],
-    },
-    onDrop: (acceptedFiles: any) => {
-      setFiles(
-        acceptedFiles.map((file: any) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
-    },
-  });
-  if(files.length !== 0){
-    props.setFiles(files)
-  }
-  const thumbs = files.map((file: any) => (
-    <Box display={"inline-flex"} borderRadius={4} border={"2px solid #eaeaea"} mt={"16px"} mx={1} w={"auto"} h={"auto"} p={1} boxSizing={"border-box"} key={file.name}>
-      <Box display={"flex"} w={"auto"} h={"100%"}>
-        <img
-          src={file.preview}
-          style={{ display: "block", width: "auto", height: "100%" }}
-          onLoad={() => {
-            URL.revokeObjectURL(file.preview);
-          }}
-        />
-      </Box>
-    </Box>
-  ));
-
-  useEffect(() => {
-    return () => files.forEach((file: any) => URL.revokeObjectURL(file.preview));
-  }, []);
-
-  return (
-    <>
-      <Center p={"0.8em"} border={"dashed #e2e8f0"} width={"100%"} height={"5em"} borderRadius={10} {...getRootProps({ className: "dropzone" })} transition={"0.1s ease-in-out"} _hover={{ border: "dashed #CBD5E0", cursor: "pointer" }}>
-        <input {...getInputProps()} />
-        <Text color={"#A6A8AC"} userSelect={"none"} align={"center"}>
-          Seret dan taruh file di sini, atau klik untuk memilih file
-        </Text>
-      </Center>
-      <Box display={"flex"} flexDirection={"row"} flexWrap={"wrap"}>
-        {thumbs}
-      </Box>
-    </>
-  );
-};
-
 const editHomeInfo = ({ informationID }: {informationID: number}) => {
+  const router = useRouter();
   const jwt = useReadLocalStorage<string | undefined>('token')
   const [files, setFiles] = useState([])
   const [isButtonLoading, setIsButtonLoading] = useState(false);
@@ -128,7 +75,7 @@ const editHomeInfo = ({ informationID }: {informationID: number}) => {
       formData.append("linkYoutube", data.linkYoutube)
       formData.append("lineID", data.lineID)
       formData.append("instagram", data.instagram)
-      formData.append("linkLogo", files[0])
+      formData.append("linkLogo", data.linkLogo[0])
 
       const response = await axios.put(`${process.env.API_URL}/api/home/updateHomeInfo/${informationID}`, formData, {
         headers: {
@@ -137,6 +84,8 @@ const editHomeInfo = ({ informationID }: {informationID: number}) => {
       })
 
       toast.success(response.data.message)
+
+      router.reload()
 
       setIsButtonLoading(false);
     } catch (err: any) {
@@ -171,15 +120,15 @@ const editHomeInfo = ({ informationID }: {informationID: number}) => {
                 <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                   <Box width={"100%"} px={2}>
                     <FormLabel textColor={"black"}>Nama HoME</FormLabel>
-                    <Input {...register("name", { required: "Nama HoME harap diisi" })} type={"text"} name="name" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} value={data.name}/>
+                    <Input {...register("name", { required: "Nama HoME harap diisi" })} type={"text"} name="name" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.name}/>
                     {errors.name !== undefined && <Text textColor={"red"}>{errors.name.message}</Text>}
                   </Box>
                   <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                     <FormLabel textColor={"black"}>Chapter</FormLabel>
-                    <Select {...register("chapter", { required: "chapter harap dipilih" })} name="chapter" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.chapter}>
+                    <Select {...register("chapter", { required: "chapter harap dipilih" })} name="chapter" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} placeholder={"Pilih Ulang Chapter"}>
                       {chapter.map((chap: any) => (
-                        <option value={chap.id}>{chap.name}</option>
-                      ))}                      
+                        <option value={chap.homeChapterID}>{chap.name}</option>
+                      ))}                     
                     </Select>
                     {errors.chapter !== undefined && <Text textColor={"red"}>{errors.chapter.message}</Text>}
                   </Box>
@@ -188,37 +137,37 @@ const editHomeInfo = ({ informationID }: {informationID: number}) => {
                   <FormLabel textColor={"black"}>
                       Narasi Pendek
                   </FormLabel>
-                  <Input {...register("shortDesc", { required: "Narasi pendek harap diisi" })} name="shortDesc" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} value={data.shortDesc}/>
+                  <Input {...register("shortDesc", { required: "Narasi pendek harap diisi" })} name="shortDesc" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.shortDesc}/>
                   {errors.shortDesc !== undefined && <Text textColor={"red"}>{errors.shortDesc.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                   <FormLabel textColor={"black"} htmlFor="no_hp">
                     Narasi Panjang
                   </FormLabel>
-                  <Textarea {...register("longDesc", { required: "Narasi panjang harap diisi" })} name="longDesc" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} value={data.longDesc}/>
+                  <Textarea {...register("longDesc", { required: "Narasi panjang harap diisi" })} name="longDesc" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.longDesc}/>
                   {errors.longDesc !== undefined && <Text textColor={"red"}>{errors.longDesc.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
                   <FormLabel textColor={"black"}>Logo</FormLabel>
                   <Box padding={"1em"} border={"solid #CBD5E0"} width={"100%"} height={"100%"} borderRadius={10} transition={"0.1s ease-in-out"} _hover={{ border: "solid #CBD5E0" }}>
-                    <Previews name="linkLogo" setFiles={setFiles}/>
+                    <Input {...register('linkLogo')} type={'file'} pt={1} name='linkLogo' _placeholder={{color: 'darkgray'}} bgColor={'gray.200'} textColor={'black'}/>
                   </Box>
                   {errors.linkLogo !== undefined && <Text textColor={"red"}>{errors.linkLogo.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                   <FormLabel textColor={"black"}>Link Video YouTube</FormLabel>
-                  <Input {...register("linkYoutube", { required: "Link video YouTube harap diisi" })} name="linkYoutube" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} value={data.linkYoutube}/>
+                  <Input {...register("linkYoutube", { required: "Link video YouTube harap diisi" })} name="linkYoutube" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.linkYoutube}/>
                   {errors.linkYoutube !== undefined && <Text textColor={"red"}>{errors.linkYoutube.message}</Text>}
                 </Box>
                 <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                   <Box width={"100%"} px={2}>
                     <FormLabel textColor={"black"}>Media Sosial (LINE)</FormLabel>
-                    <Input {...register("lineID", { required: "Media sosial (Line) harap diisi" })} name="lineID" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} value={data.lineID}/>
+                    <Input {...register("lineID", { required: "Media sosial (Line) harap diisi" })} name="lineID" textColor={"black"} border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.lineID}/>
                     {errors.lineID !== undefined && <Text textColor={"red"}>{errors.lineID.message}</Text>}
                   </Box>
                   <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                     <FormLabel textColor={"black"}>Media Sosial (Instagram)</FormLabel>
-                    <Input {...register("instagram", { required: "Media sosial (Instagram) harap diisi" })} name="instagram" textColor={"black"} placeholder="Tidak Perlu Menggunakan @" border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} value={data.instagram}/>
+                    <Input {...register("instagram", { required: "Media sosial (Instagram) harap diisi" })} name="instagram" textColor={"black"} placeholder="Tidak Perlu Menggunakan @" border={"solid"} borderColor={'#CBD5E0'} _hover={{border: 'solid #CBD5E0'}} defaultValue={data.instagram}/>
                     {errors.instagram !== undefined && <Text textColor={"red"}>{errors.instagram.message}</Text>}
                   </Box>
                 </Flex>
