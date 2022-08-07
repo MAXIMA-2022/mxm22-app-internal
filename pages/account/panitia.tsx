@@ -85,6 +85,20 @@ const DaftarPanit = () => {
       }
     },
     {
+      label: "Email",
+      name: "email",
+      options:{
+        filter: true,
+        customHeadRender: ({index, ...column}) => {
+          return(
+            <TableCell key={index} style={{zIndex: -1}}>
+              <b>{column.label}</b>
+            </TableCell>
+          )
+        }
+      }
+    },
+    {
       label: "Divisi",
       name: "divisiName",
       options:{
