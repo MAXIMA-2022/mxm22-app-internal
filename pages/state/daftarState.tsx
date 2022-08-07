@@ -20,6 +20,7 @@ import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/router";
 
 interface StateInfo{
   id: number,
@@ -35,13 +36,14 @@ interface StateInfo{
   stateID: number,
 }
 
-const listSTATE = ({ID}: {ID: number}) => {
+const listSTATE = () => {
   const jwt = useReadLocalStorage<string>("token");
   const [state, setstate] = useState<StateInfo[]>([]);
   const [error, setError] = useState(undefined);
   const headers = {
     'x-access-token': jwt!
   }
+  const router = useRouter()
   useEffect(() => {
     try {
       const fetchstate = async () => {
@@ -57,9 +59,10 @@ const listSTATE = ({ID}: {ID: number}) => {
   const handleRemove = async (data: any) => {
     try {
       const response = await axios.delete(
-        `${process.env.API_URL}/api/stateAct/delete/${ID}`, {headers}
+        `${process.env.API_URL}/api/stateAct/delete/${data}`, {headers}
       )
       toast.success(response.data.message);
+      router.reload()
     } catch (err: any) {
       toast.error(err.response.data.message)
       console.log(err.response.data.message);
@@ -153,10 +156,7 @@ const listSTATE = ({ID}: {ID: number}) => {
             <HStack spacing={2}>
               <Link href={{
                 pathname: `detailState/${tableMeta.rowData[0]}`,
-                query: {
-                  ID: tableMeta.rowData[0],
-                }
-              }}>
+                }}>
                 <Button size="xs" color="white" bgColor={"#163161"} _hover={{ bgColor: "#1a4173" }}>
                   <Center>
                     <HStack spacing={2}>
@@ -168,9 +168,6 @@ const listSTATE = ({ID}: {ID: number}) => {
               </Link>
               <Link href={{
                 pathname: `editState/${tableMeta.rowData[0]}`,
-                query: {
-                  ID: tableMeta.rowData[0],
-                }
               }}>
                 <Button size={"xs"} bgColor="white" color={"#163161"} border={"1px"} borderColor={"#163161"}>
                   <Center>
@@ -181,7 +178,7 @@ const listSTATE = ({ID}: {ID: number}) => {
                   </Center>
                 </Button>
               </Link>
-              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} onClick={handleRemove}/>
+              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} onClick={()=>handleRemove(tableMeta.rowData[0])}/>
             </HStack>
           );
         },
@@ -231,12 +228,5 @@ const listSTATE = ({ID}: {ID: number}) => {
     </>
   );
 };
-
-listSTATE.getInitialProps = async ({query}: any) => {
-  const { ID } = query;
-  return {
-    ID
-  }
-}
 
 export default listSTATE;

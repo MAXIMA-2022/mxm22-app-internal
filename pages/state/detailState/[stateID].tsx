@@ -27,7 +27,7 @@ interface StateInfo{
     registered: number,
 }
 
-const detailSTATE = ({ID}: {ID: number}) => {
+const detailSTATE = ({stateID}: {stateID: number}) => {
   const jwt = useReadLocalStorage<string | undefined>("token");
   const [state, setstate] = useState<StateInfo[]>([]);
   const [participant, setParticipant] = useState([])
@@ -37,7 +37,7 @@ const detailSTATE = ({ID}: {ID: number}) => {
   useEffect(() => {
     try {
       const fetchstate = async () => {
-        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${ID}`,{headers})
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`,{headers})
         setstate(response.data)
         console.log(response.data)
       }
@@ -188,9 +188,9 @@ const detailSTATE = ({ID}: {ID: number}) => {
 };
 
 detailSTATE.getInitialProps = async ({query}: any) => {
-    const { ID } = query;
+    const { stateID } = query;
     return {
-      ID
+      stateID
     }
 }
 

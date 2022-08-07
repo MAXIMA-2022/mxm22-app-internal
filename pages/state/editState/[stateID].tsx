@@ -19,6 +19,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/router";
 
 interface StateInfo{
   name: string,
@@ -30,15 +31,17 @@ interface StateInfo{
   shortDesc: string,
 }
 
-const editState = ({ID}: {ID: number}) => {
+const editState = ({stateID}: {stateID: number}) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const [error, setError] = useState(undefined);
+  const router = useRouter()
   const jwt = useReadLocalStorage<string | undefined>("token");
   const [state, setstate] = useState<string[] | number[]>([]);
+  const [dataState, setDataState] = useState<StateInfo[]>([])
   const [isButtonLoading, setIsButtonLoading] = useState(false);
   const headers = {
     'x-access-token': jwt!
@@ -46,10 +49,15 @@ const editState = ({ID}: {ID: number}) => {
   useEffect(() => {
     try {
       const fetchstate = async () => {
-        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${ID}`,{headers})
+        const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`,{headers})
         setstate(response.data)
       }
+      const ambildata = async () => {
+        const res = await axios.get(`${process.env.API_URL}/api/stateAct/`,{headers})
+        setDataState(res.data)
+      }
       fetchstate()
+      ambildata()
     } catch(err: any) {
       console.log(err)
     }
@@ -67,11 +75,12 @@ const editState = ({ID}: {ID: number}) => {
         formData.append("stateLogo", data.stateLogo[0])
         formData.append("coverPhoto", data.coverPhoto[0])
       const response = await axios.put(
-        `${process.env.API_URL}/api/stateAct/update/${ID}`, 
+        `${process.env.API_URL}/api/stateAct/update/${stateID}`, 
         formData, {headers}
       )
       toast.success(response.data.message);
       setIsButtonLoading(false);
+      router.reload()
     } catch (err: any) {
       toast.error(err.response.data.message)
       console.log(err.response.data.message);
@@ -122,26 +131,26 @@ const editState = ({ID}: {ID: number}) => {
             </Flex>
             <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
               <Box width={"100%"} px={2}>
-                <FormLabel textColor={"black"} placeholder="Pilih Hari Pelaksanaan STATE">
+                <FormLabel textColor={"black"}>
                   Hari Kegiatan
                 </FormLabel>
-                <Select {...register("day", { required: "Hari kegiatan harap dipilih" })} name="day" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
-                  {state.map((item: any, index: number) => {
+                <Select {...register("day", { required: "Hari kegiatan harap dipilih" })} placeholder="Pilih Hari Pelaksanaan STATE" name="day" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} defaultValue={data.day}>
+                  {dataState.map((hari: any) => {
                     return (
-                      <option key={index} value={item.day}>{item.day}</option>
+                      <option defaultValue={data.day} value={hari.day}>{hari.day}</option>
                     )
                   })}
                 </Select>
                 {errors.day !== undefined && <Text textColor={"red"}>{errors.day.message}</Text>}
               </Box>
               <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
-                <FormLabel textColor={"black"} placeholder="Pilih category STATE">
+                <FormLabel textColor={"black"}>
                   Kategori
                 </FormLabel>
-                <Select {...register("category", { required: "category harap dipilih" })} name="category" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
-                {state.map((item: any, index: number) => {
+                <Select {...register("category", { required: "category harap dipilih" })} placeholder="Pilih Kategori STATE" name="category" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }} defaultValue={data.category}>
+                {dataState.map((cat: any) => {
                     return (
-                      <option key={index} value={item.category}>{item.category}</option>
+                      <option value={cat.category}>{cat.category}</option>
                     )
                 })}
                 </Select>
@@ -199,10 +208,10 @@ const editState = ({ID}: {ID: number}) => {
 };
 
 editState.getInitialProps = async ({query}: any) => {
-  const { ID } = query;
-  return {
-    ID
-  }
+  const { stateID } = query;
+    return {
+      stateID
+    }
 }
 
 export default editState;

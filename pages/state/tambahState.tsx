@@ -172,10 +172,10 @@ const tambahState = () => {
               </Flex>
               <Flex justifyContent={"space-between"} mt={2} mb={"0.8em"} flexDirection={["column", "column", "row", "row"]}>
                 <Box width={"100%"} px={2}>
-                  <FormLabel textColor={"black"} placeholder="Pilih Hari Pelaksanaan STATE">
+                  <FormLabel textColor={"black"}>
                     Hari Kegiatan
                   </FormLabel>
-                  <Select {...register("day", { required: "Hari kegiatan harap dipilih" })} name="day" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
+                  <Select {...register("day", { required: "Hari kegiatan harap dipilih" })} placeholder="Pilih Hari Pelaksanaan STATE" name="day" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
                     {state.map((item: any, index: number) => {
                       return (
                         <option key={index} value={item.day}>{item.day}</option>
@@ -185,10 +185,10 @@ const tambahState = () => {
                   {errors.day !== undefined && <Text textColor={"red"}>{errors.day.message}</Text>}
                 </Box>
                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
-                  <FormLabel textColor={"black"} placeholder="Pilih category STATE">
+                  <FormLabel textColor={"black"}>
                     Kategori
                   </FormLabel>
-                  <Select {...register("category", { required: "category harap dipilih" })} name="category" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
+                  <Select {...register("category", { required: "category harap dipilih" })} placeholder="Pilih category STATE" name="category" textColor={"black"} border={"solid"} borderColor={"#CBD5E0"} _hover={{ border: "solid #CBD5E0" }}>
                   {state.map((item: any, index: number) => {
                       return (
                         <option key={index} value={item.category}>{item.category}</option>

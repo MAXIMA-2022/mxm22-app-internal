@@ -9,6 +9,10 @@ import Link from "next/link";
 import { EditIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useReadLocalStorage } from "usehooks-ts";
+import { useRouter } from "next/router";
 
 interface DataHoME {
   homeID: number,
@@ -31,6 +35,12 @@ interface DataHoME {
 
 const listHOME = () => {
   const [dataHoME, setDataHoME] = useState<DataHoME[]>([])
+  const jwt = useReadLocalStorage<string>("token");
+  const [error, setError] = useState(undefined);
+  const headers = {
+    'x-access-token': jwt!
+  }
+  const router = useRouter()
 
   useEffect(() => {
     try {
@@ -43,6 +53,20 @@ const listHOME = () => {
       console.log(err)
     }
   })
+
+  const handleRemove = async (data: any) => {
+    try {
+      const response = await axios.delete(
+        `${process.env.API_URL}/api/home/deleteHomeInfo/${data}`, {headers}
+      )
+      toast.success(response.data.message);
+      router.reload()
+    } catch (err: any) {
+      toast.error(err.response.data.message)
+      console.log(err.response.data.message);
+      setError(err.response.data.message);
+    }
+  };
 
   const columnsHoME: MUIDataTableColumn[] = [
     {
@@ -114,7 +138,7 @@ const listHOME = () => {
                   </HStack>
                 </Center>
               </Button>
-              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }}/>
+              <CloseButton size="sm" color="white" bgColor={"#bd0017"} _hover={{ bgColor: "#d01c1f" }} onClick={()=>handleRemove(tableMeta.rowData[0])}/>
             </HStack>
           );
         },
@@ -177,6 +201,17 @@ const listHOME = () => {
           </Box>
         </Box>
       </Flex>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }
