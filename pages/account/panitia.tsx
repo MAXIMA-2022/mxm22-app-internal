@@ -13,26 +13,26 @@ import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+interface DataPanit {
+    name: String;
+    nim: String;
+    divisi: String;
+    verified: number;
+}
+
 const DaftarPanit = () => {
     const jwt = useReadLocalStorage<string | undefined>("token")
     const [panit, setPanit] = useState<DataPanit[]>([])
-    const [error, setError] = useState(undefined)
-    interface DataPanit {
-        name: String;
-        nim: String;
-        divisi: String;
-        verified: number;
-    }
-    const router = useRouter()
+
     const headers = {
         "x-access-token": jwt!,
     };
+
     useEffect(() => {
         try {
             const fetchPanit = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/panit`, { headers });
                 setPanit(res.data);
-                console.log(res.data);
             };
             fetchPanit();
         } catch (err: any) {
@@ -54,11 +54,14 @@ const DaftarPanit = () => {
                     } 
                 }
             );
+            
+            const res = await axios.get(`${process.env.API_URL}/api/panit`, { headers });
+            setPanit(res.data);
+
             toast.success(response.data.message);
         } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);
-            setError(err.response.data.message);
         }
     };
 
