@@ -55,10 +55,9 @@ const editState = ({ stateID }: { stateID: number }) => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, { headers });
                 const res = await axios.get(`${process.env.API_URL}/api/stateAct/`, { headers });
                 setDataState(res.data);
-                setstate(response.data);
                 setCat(res.data[0].category)
                 setHari(res.data[0].day)
-                console.log(response.data)
+                setstate(response.data)
             };
             fetchstate();
         } catch (err: any) {

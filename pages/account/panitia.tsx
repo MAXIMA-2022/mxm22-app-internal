@@ -6,26 +6,29 @@ import { CheckCircleIcon } from "@chakra-ui/icons";
 import { TableCell } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
-import { EditIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
+import { useRouter } from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DaftarPanit = () => {
-    const jwt = useReadLocalStorage<string | undefined>("token");
-    const [panit, setPanit] = useState<DataPanit[]>([]);
+    const jwt = useReadLocalStorage<string | undefined>("token")
+    const [panit, setPanit] = useState<DataPanit[]>([])
+    const [error, setError] = useState(undefined)
     interface DataPanit {
         name: String;
         nim: String;
         divisi: String;
-        verifikasi: Boolean;
+        verified: number;
     }
-
+    const router = useRouter()
+    const headers = {
+        "x-access-token": jwt!,
+    };
     useEffect(() => {
         try {
-            const headers = {
-                "x-access-token": jwt!,
-            };
             const fetchPanit = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/panit`, { headers });
                 setPanit(res.data);
@@ -34,8 +37,29 @@ const DaftarPanit = () => {
             fetchPanit();
         } catch (err: any) {
             console.log(err);
+            toast.error(err.response.data.message);
         }
     }, []);
+    
+    const verifyData = async (data: any) => {
+        try {
+            // const formData = new FormData();
+            // formData.append("verified", data.);
+            // const response = await axios.put(
+            //     `${process.env.API_URL}/api/panit/updateVerified/${nim}`,
+            //     { headers: {
+            //         'x-access-token': jwt!
+            //     } }
+            // );
+            // toast.success(response.data.message);
+            // router.reload();
+            console.log(data)
+        } catch (err: any) {
+            toast.error(err.response.data.message);
+            console.log(err.response.data.message);
+            setError(err.response.data.message);
+        }
+    };
 
     const columnsPanit: MUIDataTableColumn[] = [
         {
@@ -107,7 +131,7 @@ const DaftarPanit = () => {
         },
         {
             label: "Verifikasi",
-            name: "verifikasi",
+            name: "verified",
             options: {
                 filter: true,
                 customHeadRender: ({ index, ...column }) => {
@@ -121,18 +145,20 @@ const DaftarPanit = () => {
                     return (
                         <Flex w={"60px"} justifyContent={{ base: "none", lg: "center" }}>
                             <form>
-                                {value === true ? (
+                                {value === 1 ? (
                                     <Switch
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
                                         isChecked
+                                        onChange={() => verifyData(tableMeta.rowData[1], 0)}
                                     />
                                 ) : (
                                     <Switch
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
+                                        onChange={() => verifyData(tableMeta.rowData[1], 1)}
                                     />
                                 )}
                             </form>
@@ -190,6 +216,17 @@ const DaftarPanit = () => {
                     </Box>
                 </Box>
             </Flex>
+            <ToastContainer
+                position="bottom-left"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     );
 };
