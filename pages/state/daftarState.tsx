@@ -12,7 +12,7 @@ import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 
 interface StateInfo {
     id: number;
@@ -36,7 +36,6 @@ const listSTATE = () => {
     const headers = {
         "x-access-token": jwt!,
     };
-    const router = useRouter();
     useEffect(() => {
         try {
             setIsSkeletonLoading(false)
@@ -52,16 +51,24 @@ const listSTATE = () => {
             console.log(err);
             setIsSkeletonLoading(true);
         }
-    }, []);
+    });
 
     const handleRemove = async (data: any) => {
         try {
-            const response = await axios.delete(
-                `${process.env.API_URL}/api/stateAct/delete/${data}`,
-                { headers }
-            );
-            toast.success(response.data.message);
-            router.reload();
+            Swal.fire({
+                title: "Apakah anda ingin menghapus STATE?",
+                showDenyButton: true,
+                confirmButtonText: "Ya",
+                denyButtonText: "Tidak",
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const response = await axios.delete(
+                        `${process.env.API_URL}/api/stateAct/delete/${data}`,
+                        { headers }
+                    );
+                    toast.success(response.data.message);
+                }
+            });
         } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);

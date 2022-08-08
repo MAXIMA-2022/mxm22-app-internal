@@ -1,6 +1,6 @@
 import Sidebar from "../../../components/Sidebar";
 import Navbar from "../../../components/Navbar";
-import { Box, Flex, HStack, VStack, Switch, Text, Center, Heading } from "@chakra-ui/react";
+import { Box, Flex, HStack, VStack, Switch, Text, Center, Heading, Skeleton } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import MxmIconSVG from "../../../public/mxmIcon.svg";
 import CheckIconSVG from "../../../public/checkIcon.svg";
@@ -8,7 +8,6 @@ import CrossIconSVG from "../../../public/crossIcon.svg";
 import JadwalSVG from "../../../public/jadwal.svg";
 import ParticipantSVG from "../../../public/participant.svg";
 import KeySVG from "../../../public/key.svg";
-import UltimagzPNG from "../../../public/ultimagz.png";
 import Image from "next/image";
 import { TableCell } from "@material-ui/core";
 import { EditIcon, CheckCircleIcon } from "@chakra-ui/icons";
@@ -31,11 +30,13 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [state, setstate] = useState<StateInfo[]>([]);
     const [participant, setParticipant] = useState([]);
+    const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
     const headers = {
         "x-access-token": jwt!,
     };
     useEffect(() => {
         try {
+            setIsSkeletonLoading(false)
             const fetchstate = async () => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, {
                     headers,
@@ -50,10 +51,12 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
             };
             fetchparticipants();
             fetchstate();
+            setIsSkeletonLoading(true)
         } catch (err: any) {
             console.log(err);
+            setIsSkeletonLoading(true)
         }
-    }, []);
+    });
 
     const svgSize = "16px";
 
@@ -246,16 +249,18 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                         <Text fontFamily="rubik" textColor={"black"} fontWeight={"extrabold"}>
                             Peserta Registrasi STATE
                         </Text>
-                        <MUIDataTable
-                            title=""
-                            columns={columnDetailSTATE}
-                            data={participant}
-                            options={{
-                                rowsPerPage: 5,
-                                selectableRows: "none",
-                                elevation: 0,
-                            }}
-                        />
+                        <Skeleton isLoaded={isSkeletonLoading}>
+                            <MUIDataTable
+                                title=""
+                                columns={columnDetailSTATE}
+                                data={participant}
+                                options={{
+                                    rowsPerPage: 5,
+                                    selectableRows: "none",
+                                    elevation: 0,
+                                }}
+                            />
+                        </Skeleton>
                     </Box>
                 </Box>
             </Flex>

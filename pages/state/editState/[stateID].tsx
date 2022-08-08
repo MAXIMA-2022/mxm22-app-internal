@@ -191,8 +191,8 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            value={hari}
                                             onChange={(e) => setHari(e.target.value)}
+                                            value={hari}
                                         >
                                             {dataState.map((data: any) => {
                                                 return (
@@ -218,8 +218,8 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            value={cat}
                                             onChange={(e) => setCat(e.target.value)}
+                                            value={cat}
                                         >
                                             {dataState.map((data: any) => {
                                                 return (
