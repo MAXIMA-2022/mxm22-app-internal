@@ -180,6 +180,7 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
                                         <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                                             <FormLabel textColor={"black"}>Chapter</FormLabel>
                                             <Select
+                                                placeholder="Pilih Chapter"
                                                 {...register("chapter", {
                                                     required: "chapter harap dipilih",
                                                 })}
@@ -188,11 +189,11 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
                                                 border={"solid"}
                                                 borderColor={"#CBD5E0"}
                                                 _hover={{ border: "solid #CBD5E0" }}
-                                                value={chapterID}
                                                 onChange={(e) => setChapterID(e.target.value)}
+                                                value={chapterID}
                                             >
                                                 {chapter.map((chap: any) => (
-                                                    <option value={chap.homeChapterID}>
+                                                    <option value={chap.homeChapterID as string}>
                                                         {chap.name}
                                                     </option>
                                                 ))}
