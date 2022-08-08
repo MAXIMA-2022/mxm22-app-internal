@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Button, CloseButton, HStack, Center } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, CloseButton, HStack, Center, Skeleton } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import { TableCell } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
@@ -32,12 +32,14 @@ const listSTATE = () => {
     const jwt = useReadLocalStorage<string>("token");
     const [state, setstate] = useState<StateInfo[]>([]);
     const [error, setError] = useState(undefined);
+    const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
     const headers = {
         "x-access-token": jwt!,
     };
     const router = useRouter();
     useEffect(() => {
         try {
+            setIsSkeletonLoading(false)
             const fetchstate = async () => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct`, {
                     headers,
@@ -45,8 +47,10 @@ const listSTATE = () => {
                 setstate(response.data);
             };
             fetchstate();
+            setIsSkeletonLoading(true);
         } catch (err: any) {
             console.log(err);
+            setIsSkeletonLoading(true);
         }
     }, []);
 
@@ -240,16 +244,18 @@ const listSTATE = () => {
                         </Flex>
                     </Flex>
                     <Box py={4} mx={4}>
-                        <MUIDataTable
-                            title=""
-                            columns={columnsSTATE}
-                            data={state}
-                            options={{
-                                rowsPerPage: 5,
-                                selectableRows: "none",
-                                elevation: 1,
-                            }}
-                        />
+                        <Skeleton isLoaded={isSkeletonLoading}>
+                            <MUIDataTable
+                                title=""
+                                columns={columnsSTATE}
+                                data={state}
+                                options={{
+                                    rowsPerPage: 5,
+                                    selectableRows: "none",
+                                    elevation: 1,
+                                }}
+                            />
+                        </Skeleton>
                     </Box>
                 </Box>
             </Flex>

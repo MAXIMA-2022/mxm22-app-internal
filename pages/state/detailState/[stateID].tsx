@@ -87,8 +87,22 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
             },
         },
         {
-            label: "Kehadiran",
-            name: "kehadiran",
+            label: "AbsenAwal",
+            name: "inEventAttendance",
+            options: {
+                display: false,
+            },
+        },
+        {
+            label: "AbsenAkhir",
+            name: "exitAttendance",
+            options: {
+                display: false,
+            },
+        },
+        {
+            label: "Absensi Awal",
+            name: "inEventAttendance",
             options: {
                 filter: true,
                 customHeadRender: ({ index, ...column }) => {
@@ -103,7 +117,34 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                 customBodyRender: (value: any, tableMeta: any) => {
                     return (
                         <Flex justifyContent={{ base: "none", lg: "center" }}>
-                            {tableMeta.rowData[2] === true ? (
+                            {tableMeta.rowData[2] === 1 ? (
+                                <Image src={CheckIconSVG} width={svgSize} height={svgSize} />
+                            ) : (
+                                <Image src={CrossIconSVG} width={svgSize} height={svgSize} />
+                            )}
+                        </Flex>
+                    );
+                },
+            },
+        },
+        {
+            label: "Absensi Akhir",
+            name: "exitAttendance",
+            options: {
+                filter: true,
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <Flex justifyContent={{ base: "none", lg: "center" }}>
+                                <b>{column.label}</b>
+                            </Flex>
+                        </TableCell>
+                    );
+                },
+                customBodyRender: (value: any, tableMeta: any) => {
+                    return (
+                        <Flex justifyContent={{ base: "none", lg: "center" }}>
+                            {tableMeta.rowData[3] === 1 ? (
                                 <Image src={CheckIconSVG} width={svgSize} height={svgSize} />
                             ) : (
                                 <Image src={CrossIconSVG} width={svgSize} height={svgSize} />
