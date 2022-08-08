@@ -41,19 +41,20 @@ const DaftarPanit = () => {
         }
     }, []);
     
-    const verifyData = async (data: any) => {
+    const verifyData = async (nim: number, verified: string) => {
         try {
-            // const formData = new FormData();
-            // formData.append("verified", data.);
-            // const response = await axios.put(
-            //     `${process.env.API_URL}/api/panit/updateVerified/${nim}`,
-            //     { headers: {
-            //         'x-access-token': jwt!
-            //     } }
-            // );
-            // toast.success(response.data.message);
-            // router.reload();
-            console.log(data)
+            const formData = new FormData();
+            formData.append("verified", verified);
+            const response = await axios.put(
+                `${process.env.API_URL}/api/panit/updateVerified/${nim}`,
+                formData,
+                { 
+                    headers: {
+                        'x-access-token': jwt!
+                    } 
+                }
+            );
+            toast.success(response.data.message);
         } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);
@@ -151,14 +152,14 @@ const DaftarPanit = () => {
                                         borderRadius={"full"}
                                         bg={"gray.500"}
                                         isChecked
-                                        onChange={() => verifyData(tableMeta.rowData[1], 0)}
+                                        onChange={() => verifyData(tableMeta.rowData[1], "0")}
                                     />
                                 ) : (
                                     <Switch
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
-                                        onChange={() => verifyData(tableMeta.rowData[1], 1)}
+                                        onChange={() => verifyData(tableMeta.rowData[1], "1")}
                                     />
                                 )}
                             </form>
