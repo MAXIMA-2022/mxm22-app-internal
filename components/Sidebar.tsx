@@ -102,14 +102,6 @@ const Links = ({ pathName, role, divisiName }: LinksProps) => {
             role: ["panitia"],
             divisi: ["SuperAdmin", "Rocuta"],
         },
-        // {
-        //   name: "Daftar Panitia",
-        //   link: "/panitia/daftarPanit",
-        //   logo: DaftarPanitSVG,
-        //   logo2: DaftarPanitBlueSVG,
-        //   role: ['panitia'],
-        //   divisi: ['SuperAdmin', 'Rocuta', 'Griffin']
-        // }
     ];
     return (
         <>

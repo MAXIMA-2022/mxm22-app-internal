@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
-import Swal from "sweetalert2"
+import Swal from "sweetalert2";
 
 interface DataHoME {
     homeID: number;
@@ -67,15 +67,15 @@ const listHOME = () => {
                 showDenyButton: true,
                 confirmButtonText: "Ya",
                 denyButtonText: "Tidak",
-            }).then( async (result) => {
-                if(result.isConfirmed){
+            }).then(async (result) => {
+                if (result.isConfirmed) {
                     const response = await axios.delete(
                         `${process.env.API_URL}/api/home/deleteHomeInfo/${data}`,
                         { headers }
                     );
                     toast.success(response.data.message);
                 }
-            })
+            });
         } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);
