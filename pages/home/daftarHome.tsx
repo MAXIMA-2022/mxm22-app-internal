@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Button, CloseButton, HStack, Center } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, CloseButton, HStack, Center, Skeleton } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import { TableCell } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
@@ -37,6 +37,7 @@ interface DataHoME {
 const listHOME = () => {
     const [dataHoME, setDataHoME] = useState<DataHoME[]>([]);
     const jwt = useReadLocalStorage<string>("token");
+    const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
     const [error, setError] = useState(undefined);
     const headers = {
         "x-access-token": jwt!,
@@ -45,13 +46,16 @@ const listHOME = () => {
 
     useEffect(() => {
         try {
+            setIsSkeletonLoading(false);
             const fetchHoME = async () => {
                 const response = await axios.get("https://maxima2022.herokuapp.com/api/homeInfo");
                 setDataHoME(response.data);
             };
             fetchHoME();
+            setIsSkeletonLoading(true);
         } catch (err: any) {
             console.log(err);
+            setIsSkeletonLoading(true);
         }
     });
 
@@ -145,20 +149,26 @@ const listHOME = () => {
                                     </Center>
                                 </Button>
                             </Link>
-                            <Button
-                                size={"xs"}
-                                bgColor="white"
-                                color={"#163161"}
-                                border={"1px"}
-                                borderColor={"#163161"}
+                            <Link
+                                href={{
+                                    pathname: `editHome/media/${tableMeta.rowData[0]}`,
+                                }}
                             >
-                                <Center>
-                                    <HStack spacing={2}>
-                                        <EditIcon />
-                                        <Text display={{ base: "none", sm: "block" }}>Media</Text>
-                                    </HStack>
-                                </Center>
-                            </Button>
+                                <Button
+                                    size={"xs"}
+                                    bgColor="white"
+                                    color={"#163161"}
+                                    border={"1px"}
+                                    borderColor={"#163161"}
+                                >
+                                    <Center>
+                                        <HStack spacing={2}>
+                                            <EditIcon />
+                                            <Text display={{ base: "none", sm: "block" }}>Media</Text>
+                                        </HStack>
+                                    </Center>
+                                </Button>
+                            </Link>
                             <CloseButton
                                 size="sm"
                                 color="white"
@@ -207,16 +217,18 @@ const listHOME = () => {
                         </Flex>
                     </Flex>
                     <Box py={4} mx={4}>
-                        <MUIDataTable
-                            title=""
-                            columns={columnsHoME}
-                            data={dataHoME}
-                            options={{
-                                rowsPerPage: 5,
-                                selectableRows: "none",
-                                elevation: 1,
-                            }}
-                        />
+                        <Skeleton isLoaded={isSkeletonLoading}>
+                            <MUIDataTable
+                                title=""
+                                columns={columnsHoME}
+                                data={dataHoME}
+                                options={{
+                                    rowsPerPage: 5,
+                                    selectableRows: "none",
+                                    elevation: 1,
+                                }}
+                            />
+                        </Skeleton>
                     </Box>
                 </Box>
             </Flex>

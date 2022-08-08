@@ -1,67 +1,50 @@
-import Sidebar from "../../components/Sidebar";
-import Navbar from "../../components/Navbar";
-import { Box, Button, CloseButton, Flex, HStack, Text, UnorderedList } from "@chakra-ui/react";
+import Sidebar from "../../../../components/Sidebar";
+import Navbar from "../../../../components/Navbar";
+import { Box, Button, CloseButton, Flex, HStack, Text} from "@chakra-ui/react";
 import { Image as ChakraImage } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
-import MxmIconSVG from "../../public/mxmIcon.svg";
+import MxmIconSVG from "../../../../public/mxmIcon.svg";
 import Image from "next/image";
 import { TableCell } from "@material-ui/core";
-import { EditIcon, DeleteIcon } from "@chakra-ui/icons";
-import { useDropzone } from "react-dropzone";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import { useReadLocalStorage } from "usehooks-ts";
+import axios from "axios";
+import Link from "next/link";
 
-const edit = () => {
-    const DragAndDropFiles = () => {
-        const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+interface DataMedia {
+    photoID: number,
+    homeID: number,
+    linkMedia: string,
+    homeName: string
+}
 
-        const files = acceptedFiles.map((file) => (
-            <li key={file.name}>
-                {file.name} - {file.size} bytes
-            </li>
-        ));
-        return (
-            <Box>
-                <Button
-                    size={"xs"}
-                    borderRadius={4}
-                    {...getRootProps({ className: "dropzone" })}
-                    p={"1em"}
-                >
-                    Browse
-                    <input {...getInputProps()} />
-                </Button>
-                <aside>
-                    <UnorderedList>{files}</UnorderedList>
-                </aside>
-            </Box>
-        );
-    };
+const editMedia = ({mediaID}: {mediaID: number}) => {
+    const [dataMedia, setDataMedia] = useState<DataMedia[]>([]);
+    const jwt = useReadLocalStorage<string | undefined>("token");
+    const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
 
-    interface edit {
-        img: any;
-    }
-
-    const dataEdit: edit[] = [
-        {
-            img: (
-                <ChakraImage src={"https://bit.ly/dan-abramov"} width={"250px"} height={"150px"} />
-            ),
-        },
-        {
-            img: (
-                <ChakraImage src={"https://bit.ly/dan-abramov"} width={"250px"} height={"150px"} />
-            ),
-        },
-        {
-            img: (
-                <ChakraImage src={"https://bit.ly/dan-abramov"} width={"250px"} height={"150px"} />
-            ),
-        },
-    ];
+    // useEffect(() => {
+    //     try{
+    //         setIsSkeletonLoading(false);
+    //         const fetchMedia = async () => {
+    //             const res = await axios.get(
+    //                 `${process.env.API_URL}/api/homeMedia/${mediaID}`
+    //             )
+    //             setDataMedia(res.data);
+    //         }
+    //         fetchMedia()
+    //         setIsSkeletonLoading(true);
+    //     } catch(err) {
+    //         console.log(err)
+    //         setIsSkeletonLoading(true);
+    //     }
+    // })
 
     const columnEdit: MUIDataTableColumn[] = [
         {
             label: "Media",
-            name: "img",
+            name: "linkMedia",
             options: {
                 filter: true,
                 customHeadRender: ({ index, ...column }) => {
@@ -70,23 +53,6 @@ const edit = () => {
                             <b>{column.label}</b>
                         </TableCell>
                     );
-                },
-            },
-        },
-        {
-            label: "Replace Image",
-            name: "replaceImg",
-            options: {
-                filter: true,
-                customHeadRender: ({ index, ...column }) => {
-                    return (
-                        <TableCell key={index} style={{ zIndex: -1 }}>
-                            <b>{column.label}</b>
-                        </TableCell>
-                    );
-                },
-                customBodyRender: (value, tableMeta, updateValue) => {
-                    return <DragAndDropFiles />;
                 },
             },
         },
@@ -105,11 +71,11 @@ const edit = () => {
                 },
                 customBodyRender: (value) => {
                     return (
-                        <DeleteIcon
-                            w={5}
-                            h={5}
-                            color={"#bd0017"}
-                            _hover={{ color: "#d01c1f", cursor: "pointer" }}
+                        <CloseButton
+                            size="sm"
+                            color="white"
+                            bgColor={"#bd0017"}
+                            _hover={{ bgColor: "#d01c1f" }}
                         />
                     );
                 },
@@ -151,7 +117,7 @@ const edit = () => {
                         </Flex>
                     </Flex>
                     <Box py={4} mx={4}>
-                        <MUIDataTable
+                        {/* <MUIDataTable
                             title=""
                             columns={columnEdit}
                             data={dataEdit}
@@ -169,24 +135,47 @@ const edit = () => {
                                 filter: false,
                                 pagination: false,
                             }}
-                        />
+                        /> */}
                     </Box>
-                    <Flex width={"100%"} px={10} my={6} justifyContent={"right"}>
-                        <Button
-                            w={100}
-                            borderRadius={"999px"}
-                            type="submit"
-                            textColor="black"
-                            bgColor={"green.200"}
-                            _hover={{ bgColor: "yellow.200" }}
+                    <HStack width={"100%"} px={10} my={6} justifyContent={"right"}>
+                        <Link
+                            href="/home/daftarHome"
                         >
-                            SUBMIT
-                        </Button>
-                    </Flex>
+                            <Button
+                                w={100}
+                                borderRadius={"999px"}
+                                textColor="white"
+                                colorScheme={"facebook"}
+                            >
+                                BACK
+                            </Button>
+                        </Link>
+                        <Link
+                            href="/home/tambahMediaHome"
+                        >
+                            <Button
+                                w={100}
+                                borderRadius={"999px"}
+                                type="submit"
+                                textColor="black"
+                                bgColor={"green.200"}
+                                _hover={{ bgColor: "yellow.200" }}
+                            >
+                                TAMBAH 
+                            </Button>
+                        </Link>
+                    </HStack>
                 </Box>
             </Flex>
         </>
     );
 };
 
-export default edit;
+editMedia.getInitialProps = async ({ query }: any) => {
+    const { mediaID } = query;
+    return {
+        mediaID,
+    };
+};
+
+export default editMedia;
