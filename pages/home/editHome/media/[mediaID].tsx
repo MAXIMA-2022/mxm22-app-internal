@@ -1,6 +1,6 @@
 import Sidebar from "../../../../components/Sidebar";
 import Navbar from "../../../../components/Navbar";
-import { Box, Button, CloseButton, Flex, HStack, Text} from "@chakra-ui/react";
+import { Box, Button, CloseButton, Flex, HStack, Text } from "@chakra-ui/react";
 import { Image as ChakraImage } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import MxmIconSVG from "../../../../public/mxmIcon.svg";
@@ -13,13 +13,13 @@ import axios from "axios";
 import Link from "next/link";
 
 interface DataMedia {
-    photoID: number,
-    homeID: number,
-    linkMedia: string,
-    homeName: string
+    photoID: number;
+    homeID: number;
+    linkMedia: string;
+    homeName: string;
 }
 
-const editMedia = ({mediaID}: {mediaID: number}) => {
+const editMedia = ({ mediaID }: { mediaID: number }) => {
     const [dataMedia, setDataMedia] = useState<DataMedia[]>([]);
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
@@ -138,9 +138,7 @@ const editMedia = ({mediaID}: {mediaID: number}) => {
                         /> */}
                     </Box>
                     <HStack width={"100%"} px={10} my={6} justifyContent={"right"}>
-                        <Link
-                            href="/home/daftarHome"
-                        >
+                        <Link href="/home/daftarHome">
                             <Button
                                 w={100}
                                 borderRadius={"999px"}
@@ -150,9 +148,7 @@ const editMedia = ({mediaID}: {mediaID: number}) => {
                                 BACK
                             </Button>
                         </Link>
-                        <Link
-                            href="/home/tambahMediaHome"
-                        >
+                        <Link href="/home/tambahMediaHome">
                             <Button
                                 w={100}
                                 borderRadius={"999px"}
@@ -161,7 +157,7 @@ const editMedia = ({mediaID}: {mediaID: number}) => {
                                 bgColor={"green.200"}
                                 _hover={{ bgColor: "yellow.200" }}
                             >
-                                TAMBAH 
+                                TAMBAH
                             </Button>
                         </Link>
                     </HStack>

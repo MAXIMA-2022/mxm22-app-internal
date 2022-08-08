@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2"
 
 interface DataHoME {
     homeID: number;
@@ -61,12 +62,20 @@ const listHOME = () => {
 
     const handleRemove = async (data: any) => {
         try {
-            const response = await axios.delete(
-                `${process.env.API_URL}/api/home/deleteHomeInfo/${data}`,
-                { headers }
-            );
-            toast.success(response.data.message);
-            router.reload();
+            Swal.fire({
+                title: "Apakah anda ingin menghapus HoME?",
+                showDenyButton: true,
+                confirmButtonText: "Ya",
+                denyButtonText: "Tidak",
+            }).then( async (result) => {
+                if(result.isConfirmed){
+                    const response = await axios.delete(
+                        `${process.env.API_URL}/api/home/deleteHomeInfo/${data}`,
+                        { headers }
+                    );
+                    toast.success(response.data.message);
+                }
+            })
         } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);
@@ -164,7 +173,9 @@ const listHOME = () => {
                                     <Center>
                                         <HStack spacing={2}>
                                             <EditIcon />
-                                            <Text display={{ base: "none", sm: "block" }}>Media</Text>
+                                            <Text display={{ base: "none", sm: "block" }}>
+                                                Media
+                                            </Text>
                                         </HStack>
                                     </Center>
                                 </Button>
