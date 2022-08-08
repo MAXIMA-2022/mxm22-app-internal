@@ -10,6 +10,7 @@ import {
     Select,
     Textarea,
     Button,
+    Img,
 } from "@chakra-ui/react";
 import MxmIconSVG from "../../../public/mxmIcon.svg";
 import Image from "next/image";
@@ -43,23 +44,23 @@ const editState = ({ stateID }: { stateID: number }) => {
     const [state, setstate] = useState<string[] | number[]>([]);
     const [dataState, setDataState] = useState<StateInfo[]>([]);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const [cat, setCat] = useState<string>("0")
+    const [hari, setHari] = useState<string>("0")
     const headers = {
         "x-access-token": jwt!,
     };
     useEffect(() => {
         try {
             const fetchstate = async () => {
-                const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, {
-                    headers,
-                });
-                setstate(response.data);
-            };
-            const ambildata = async () => {
+                const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, { headers });
                 const res = await axios.get(`${process.env.API_URL}/api/stateAct/`, { headers });
                 setDataState(res.data);
+                setstate(response.data);
+                setCat(res.data[0].category)
+                setHari(res.data[0].day)
+                console.log(response.data)
             };
             fetchstate();
-            ambildata();
         } catch (err: any) {
             console.log(err);
         }
@@ -191,15 +192,13 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            defaultValue={data.day}
+                                            value={hari}
+                                            onChange={(e) => setHari(e.target.value)}
                                         >
-                                            {dataState.map((hari: any) => {
+                                            {dataState.map((data: any) => {
                                                 return (
-                                                    <option
-                                                        defaultValue={data.day}
-                                                        value={hari.day}
-                                                    >
-                                                        {hari.day}
+                                                    <option value={data.day}>
+                                                        {data.day}
                                                     </option>
                                                 );
                                             })}
@@ -220,12 +219,13 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            defaultValue={data.category}
+                                            value={cat}
+                                            onChange={(e) => setCat(e.target.value)}
                                         >
-                                            {dataState.map((cat: any) => {
+                                            {dataState.map((data: any) => {
                                                 return (
-                                                    <option value={cat.category}>
-                                                        {cat.category}
+                                                    <option value={data.category}>
+                                                        {data.category}
                                                     </option>
                                                 );
                                             })}
@@ -273,6 +273,7 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             bgColor={"gray.200"}
                                             textColor={"black"}
                                         />
+                                        <Img src={data.stateLogo} width={"auto"} height={"100%"} />
                                     </Box>
                                     {errors.stateLogo !== undefined && (
                                         <Text textColor={"red"}>{errors.stateLogo.message}</Text>
@@ -298,6 +299,7 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             bgColor={"gray.200"}
                                             textColor={"black"}
                                         />
+                                        <Img src={data.coverPhoto} width={"auto"} height={"100%"} />
                                     </Box>
                                     {errors.coverPhoto !== undefined && (
                                         <Text textColor={"red"}>{errors.coverPhoto.message}</Text>
