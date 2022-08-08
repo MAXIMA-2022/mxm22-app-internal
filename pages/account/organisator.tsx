@@ -9,23 +9,24 @@ import { CheckCircleIcon } from "@chakra-ui/icons";
 import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
 import { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const listAkun = () => {
     interface DataAkunOrg {
         name: String;
         nim: String;
         state: String;
-        verifikasi: Boolean;
+        verified: number;
     }
 
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [org, setOrg] = useState<DataAkunOrg[]>([]);
-
+    const headers = {
+        "x-access-token": jwt!,
+    };
     useEffect(() => {
         try {
-            const headers = {
-                "x-access-token": jwt!,
-            };
             const fetchOrg = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/org`, { headers });
                 setOrg(res.data);
@@ -36,6 +37,30 @@ const listAkun = () => {
             console.log(err);
         }
     }, []);
+
+    const verifyData = async (nim: number, verified: string) => {
+        try {
+            const formData = new FormData();
+            formData.append("verified", verified);
+            const response = await axios.put(
+                `${process.env.API_URL}/api/org/updateVerified/${nim}`,
+                formData,
+                { 
+                    headers: {
+                        'x-access-token': jwt!
+                    } 
+                }
+            );
+            
+            const res = await axios.get(`${process.env.API_URL}/api/org`, { headers });
+            setOrg(res.data);
+
+            toast.success(response.data.message);
+        } catch (err: any) {
+            toast.error(err.response.data.message);
+            console.log(err.response.data.message);
+        }
+    };
 
     const columnAkunORG: MUIDataTableColumn[] = [
         {
@@ -108,7 +133,7 @@ const listAkun = () => {
         },
         {
             label: "Verifikasi",
-            name: "verifikasi",
+            name: "verified",
             options: {
                 filter: true,
                 customHeadRender: ({ index, ...column }) => {
@@ -122,18 +147,20 @@ const listAkun = () => {
                     return (
                         <Flex w={"60px"} justifyContent={{ base: "none", lg: "center" }}>
                             <form>
-                                {value === true ? (
+                                {value === 1 ? (
                                     <Switch
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
                                         isChecked
+                                        onChange={() => verifyData(tableMeta.rowData[1], "0")}
                                     />
                                 ) : (
                                     <Switch
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
+                                        onChange={() => verifyData(tableMeta.rowData[1], "1")}
                                     />
                                 )}
                             </form>
@@ -191,6 +218,17 @@ const listAkun = () => {
                     </Box>
                 </Box>
             </Flex>
+            <ToastContainer
+                position="bottom-left"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     );
 };
