@@ -96,7 +96,7 @@ const Links = ({ pathName, role, divisiName }: LinksProps) => {
         },
         {
             name: "Toggle",
-            link: "/",
+            link: "/toggle",
             logo: DaftarMhsSVG,
             logo2: DaftarMhsBlueSVG,
             role: ["panitia"],
