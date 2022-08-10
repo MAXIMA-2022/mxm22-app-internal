@@ -5,22 +5,15 @@ import {
     Box,
     Flex,
     Text,
-    Avatar,
-    FormControl,
     FormLabel,
     Input,
     Button,
     Select,
     Textarea,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
-    UnorderedList,
     Center,
+    HStack,
+    Link,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useDropzone } from "react-dropzone";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
@@ -29,18 +22,6 @@ import { useReadLocalStorage } from "usehooks-ts";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-interface StateInfo {
-    id: number;
-    name: string;
-    quota: number;
-    day: string;
-    category: string;
-    shortDesc: string;
-    stateLogo: string;
-    coverPhoto: string;
-    stateID: number;
-}
 
 const Previews = (props: any) => {
     const [files, setFiles] = useState([]);
@@ -122,13 +103,13 @@ const tambahState = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm();
-    const [filesstateLogo, setFilesstateLogo] = useState([]);
-    const [filesSampul, setFilesSampul] = useState([]);
-    const [isButtonLoading, setIsButtonLoading] = useState(false);
-    const [error, setError] = useState(undefined);
-    const [state, setstate] = useState<StateInfo[]>([]);
-    const jwt = useReadLocalStorage<string | undefined>("token");
+    } = useForm()
+    const [filesstateLogo, setFilesstateLogo] = useState([])
+    const [filesSampul, setFilesSampul] = useState([])
+    const [isButtonLoading, setIsButtonLoading] = useState(false)
+    const [error, setError] = useState(undefined)
+    const [date, setDate] = useState([])
+    const jwt = useReadLocalStorage<string | undefined>("token")
     const headers = {
         "x-access-token": jwt!,
     };
@@ -136,10 +117,10 @@ const tambahState = () => {
     useEffect(() => {
         const fetchstate = async () => {
             try {
-                const response = await axios.get(`${process.env.API_URL}/api/stateAct`, {
+                const res = await axios.get(`${process.env.API_URL}/api/dayManagement`, {
                     headers,
-                });
-                setstate(response.data);
+                })
+                setDate(res.data)
             } catch (err: any) {
                 console.log(err);
             }
@@ -235,9 +216,9 @@ const tambahState = () => {
                                     <FormLabel textColor={"black"}>Kuota</FormLabel>
                                     <Input
                                         {...register("quota", {
-                                            required: "quota harap diisi",
-                                            min: { value: 1, message: "quota tidak boleh ≤ 0" },
-                                            //max: { value: 100, message: "quota tidak boleh lebih dari 100" }
+                                            required: "Kuota harap diisi",
+                                            min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
+                                            max: { value: 100, message: "Kuota tidak boleh lebih dari 100" }
                                         })}
                                         type={"number"}
                                         name="quota"
@@ -270,10 +251,10 @@ const tambahState = () => {
                                         borderColor={"#CBD5E0"}
                                         _hover={{ border: "solid #CBD5E0" }}
                                     >
-                                        {state.map((item: any, index: number) => {
+                                        {date.map((item: any, index: number) => {
                                             return (
                                                 <option key={index} value={item.day}>
-                                                    {item.day}
+                                                    {item.date}
                                                 </option>
                                             );
                                         })}
@@ -286,7 +267,7 @@ const tambahState = () => {
                                     <FormLabel textColor={"black"}>Kategori</FormLabel>
                                     <Select
                                         {...register("category", {
-                                            required: "category harap dipilih",
+                                            required: "Kategori harap dipilih",
                                         })}
                                         placeholder="Pilih category STATE"
                                         name="category"
@@ -295,13 +276,10 @@ const tambahState = () => {
                                         borderColor={"#CBD5E0"}
                                         _hover={{ border: "solid #CBD5E0" }}
                                     >
-                                        {state.map((item: any, index: number) => {
-                                            return (
-                                                <option key={index} value={item.category}>
-                                                    {item.category}
-                                                </option>
-                                            );
-                                        })}
+                                        <option value='Media Kampus'>Media Kampus</option>
+                                        <option value='UKM Olahraga'>UKM Olahraga</option>
+                                        <option value='UKM Sains dan Sosial'>UKM Sains dan Sosial</option>
+                                        <option value='UKM Seni dan Budaya'>UKM Seni dan Budaya</option>
                                     </Select>
                                     {errors.category !== undefined && (
                                         <Text textColor={"red"}>{errors.category.message}</Text>
@@ -358,32 +336,48 @@ const tambahState = () => {
                                     <Text textColor={"red"}>{errors.coverPhoto.message}</Text>
                                 )}
                             </Box>
-                            <Flex width={"100%"} px={2} mt={2} justifyContent={"right"}>
-                                {isButtonLoading === true ? (
-                                    <Button
-                                        isLoading
-                                        w={100}
-                                        borderRadius={"999px"}
-                                        type="submit"
-                                        textColor="black"
-                                        bgColor={"green.200"}
-                                        _hover={{ bgColor: "yellow.200" }}
-                                    >
-                                        SUBMIT
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        w={100}
-                                        borderRadius={"999px"}
-                                        type="submit"
-                                        textColor="black"
-                                        bgColor={"green.200"}
-                                        _hover={{ bgColor: "yellow.200" }}
-                                    >
-                                        SUBMIT
-                                    </Button>
-                                )}
-                            </Flex>
+                            <HStack
+                                    width={"100%"}
+                                    px={2}
+                                    mt={2}
+                                    mb={"0.8em"}
+                                    justifyContent={"right"}
+                                >
+                                    <Link href={"/state/daftarState"}>
+                                        <Button
+                                            w={100}
+                                            borderRadius={"999px"}
+                                            textColor="white"
+                                            colorScheme={"facebook"}
+                                        >
+                                            BACK
+                                        </Button>
+                                    </Link>
+                                    {isButtonLoading === true ? (
+                                        <Button
+                                            isLoading
+                                            w={100}
+                                            borderRadius={"999px"}
+                                            type="submit"
+                                            textColor="black"
+                                            bgColor={"green.200"}
+                                            _hover={{ bgColor: "yellow.200" }}
+                                        >
+                                            SUBMIT
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            w={100}
+                                            borderRadius={"999px"}
+                                            type="submit"
+                                            textColor="black"
+                                            bgColor={"green.200"}
+                                            _hover={{ bgColor: "yellow.200" }}
+                                        >
+                                            SUBMIT
+                                        </Button>
+                                    )}
+                                </HStack>
                         </form>
                     </Box>
                 </Box>

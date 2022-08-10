@@ -31,8 +31,7 @@ const DaftarPanit = () => {
             setIsSkeletonLoading(false)
             const fetchToggle = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/toggle`, { headers });
-                setToggle(res.data);
-                console.log(res.data)
+                setToggle(res.data)
             };
             fetchToggle();
             setIsSkeletonLoading(true)
@@ -41,7 +40,7 @@ const DaftarPanit = () => {
             toast.error(err.response.data.message);
             setIsSkeletonLoading(true)
         }
-    });
+    },[]);
     
     const verifyData = async (id: number, toggle: string) => {
         try {

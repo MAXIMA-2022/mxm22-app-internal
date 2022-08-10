@@ -4,13 +4,14 @@ import {
     Box,
     Flex,
     Text,
-    Center,
     FormLabel,
     Input,
     Select,
     Textarea,
     Button,
     Img,
+    HStack,
+    Link,
 } from "@chakra-ui/react";
 import MxmIconSVG from "../../../public/mxmIcon.svg";
 import Image from "next/image";
@@ -41,11 +42,9 @@ const editState = ({ stateID }: { stateID: number }) => {
     const [error, setError] = useState(undefined);
     const router = useRouter();
     const jwt = useReadLocalStorage<string | undefined>("token");
-    const [state, setstate] = useState<string[] | number[]>([]);
-    const [dataState, setDataState] = useState<StateInfo[]>([]);
+    const [state, setstate] = useState<StateInfo[]>([]);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
-    const [cat, setCat] = useState<string>("0")
-    const [hari, setHari] = useState<string>("0")
+    const [date, setDate] = useState([])
     const headers = {
         "x-access-token": jwt!,
     };
@@ -53,10 +52,10 @@ const editState = ({ stateID }: { stateID: number }) => {
         try {
             const fetchstate = async () => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, { headers });
-                const res = await axios.get(`${process.env.API_URL}/api/stateAct/`, { headers });
-                setDataState(res.data);
-                setCat(res.data[0].category)
-                setHari(res.data[0].day)
+                const res = await axios.get(`${process.env.API_URL}/api/dayManagement`, {
+                    headers,
+                })
+                setDate(res.data)
                 setstate(response.data)
             };
             fetchstate();
@@ -156,9 +155,9 @@ const editState = ({ stateID }: { stateID: number }) => {
                                         <FormLabel textColor={"black"}>Kuota</FormLabel>
                                         <Input
                                             {...register("quota", {
-                                                required: "quota harap diisi",
-                                                min: { value: 1, message: "quota tidak boleh ≤ 0" },
-                                                //max: { value: 100, message: "quota tidak boleh lebih dari 100" }
+                                                required: "Kuota harap diisi",
+                                                min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
+                                                max: { value: 100, message: "Kuota tidak boleh lebih dari 100" }
                                             })}
                                             type={"number"}
                                             name="quota"
@@ -191,16 +190,14 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            onChange={(e) => setHari(e.target.value)}
-                                            value={hari}
                                         >
-                                            {dataState.map((data: any) => {
-                                                return (
-                                                    <option value={data.day}>
-                                                        {data.day}
-                                                    </option>
-                                                );
-                                            })}
+                                            {date.map((item: any, index: number) => {
+                                            return (
+                                                <option key={index} value={item.day}>
+                                                    {item.date}
+                                                </option>
+                                            );
+                                        })}
                                         </Select>
                                         {errors.day !== undefined && (
                                             <Text textColor={"red"}>{errors.day.message}</Text>
@@ -210,7 +207,7 @@ const editState = ({ stateID }: { stateID: number }) => {
                                         <FormLabel textColor={"black"}>Kategori</FormLabel>
                                         <Select
                                             {...register("category", {
-                                                required: "category harap dipilih",
+                                                required: "Kategori harap dipilih",
                                             })}
                                             placeholder="Pilih Kategori STATE"
                                             name="category"
@@ -218,16 +215,11 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            onChange={(e) => setCat(e.target.value)}
-                                            value={cat}
                                         >
-                                            {dataState.map((data: any) => {
-                                                return (
-                                                    <option value={data.category}>
-                                                        {data.category}
-                                                    </option>
-                                                );
-                                            })}
+                                            <option value='Media Kampus'>Media Kampus</option>
+                                            <option value='UKM Olahraga'>UKM Olahraga</option>
+                                            <option value='UKM Sains dan Sosial'>UKM Sains dan Sosial</option>
+                                            <option value='UKM Seni dan Budaya'>UKM Seni dan Budaya</option>
                                         </Select>
                                         {errors.category !== undefined && (
                                             <Text textColor={"red"}>{errors.category.message}</Text>
@@ -262,7 +254,6 @@ const editState = ({ stateID }: { stateID: number }) => {
                                         transition={"0.1s ease-in-out"}
                                         _hover={{ border: "solid #CBD5E0" }}
                                     >
-                                        \
                                         <Input
                                             {...register("stateLogo")}
                                             type={"file"}
@@ -304,7 +295,23 @@ const editState = ({ stateID }: { stateID: number }) => {
                                         <Text textColor={"red"}>{errors.coverPhoto.message}</Text>
                                     )}
                                 </Box>
-                                <Flex width={"100%"} px={2} mt={2} justifyContent={"right"}>
+                                <HStack
+                                    width={"100%"}
+                                    px={2}
+                                    mt={2}
+                                    mb={"0.8em"}
+                                    justifyContent={"right"}
+                                >
+                                    <Link href={"/state/daftarState"}>
+                                        <Button
+                                            w={100}
+                                            borderRadius={"999px"}
+                                            textColor="white"
+                                            colorScheme={"facebook"}
+                                        >
+                                            BACK
+                                        </Button>
+                                    </Link>
                                     {isButtonLoading === true ? (
                                         <Button
                                             isLoading
@@ -329,7 +336,7 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             SUBMIT
                                         </Button>
                                     )}
-                                </Flex>
+                                </HStack>
                             </form>
                         ))}
                     </Box>

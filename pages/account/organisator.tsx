@@ -30,7 +30,6 @@ const listAkun = () => {
             const fetchOrg = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/org`, { headers });
                 setOrg(res.data);
-                console.log(res.data);
             };
             fetchOrg();
         } catch (err: any) {

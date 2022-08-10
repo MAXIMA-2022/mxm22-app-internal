@@ -37,7 +37,6 @@ const DaftarMHS = () => {
             const fetchMhs = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/mhs`, { headers });
                 setMhs(res.data);
-                console.log(res.data);
             };
             fetchMhs();
         } catch (err: any) {

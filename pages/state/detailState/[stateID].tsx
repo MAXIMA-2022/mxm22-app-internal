@@ -1,6 +1,6 @@
 import Sidebar from "../../../components/Sidebar";
 import Navbar from "../../../components/Navbar";
-import { Box, Flex, HStack, VStack, Switch, Text, Center, Heading, Skeleton } from "@chakra-ui/react";
+import { Box, Flex, HStack, VStack, Text, Center, Heading, Skeleton} from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import MxmIconSVG from "../../../public/mxmIcon.svg";
 import CheckIconSVG from "../../../public/checkIcon.svg";
@@ -10,7 +10,6 @@ import ParticipantSVG from "../../../public/participant.svg";
 import KeySVG from "../../../public/key.svg";
 import Image from "next/image";
 import { TableCell } from "@material-ui/core";
-import { EditIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
@@ -42,12 +41,10 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                     headers,
                 });
                 setstate(response.data);
-                console.log(response.data);
             };
             const fetchparticipants = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/stateReg`, { headers });
                 setParticipant(res.data);
-                console.log(res.data);
             };
             fetchparticipants();
             fetchstate();
@@ -56,7 +53,7 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
             console.log(err);
             setIsSkeletonLoading(true)
         }
-    });
+    },[]);
 
     const svgSize = "16px";
 

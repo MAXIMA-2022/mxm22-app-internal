@@ -24,22 +24,22 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
 
-    // useEffect(() => {
-    //     try{
-    //         setIsSkeletonLoading(false);
-    //         const fetchMedia = async () => {
-    //             const res = await axios.get(
-    //                 `${process.env.API_URL}/api/homeMedia/${mediaID}`
-    //             )
-    //             setDataMedia(res.data);
-    //         }
-    //         fetchMedia()
-    //         setIsSkeletonLoading(true);
-    //     } catch(err) {
-    //         console.log(err)
-    //         setIsSkeletonLoading(true);
-    //     }
-    // })
+    useEffect(() => {
+        try{
+            setIsSkeletonLoading(false);
+            const fetchMedia = async () => {
+                const res = await axios.get(
+                    `${process.env.API_URL}/api/homeMedia/${mediaID}`
+                )
+                setDataMedia(res.data);
+            }
+            fetchMedia()
+            setIsSkeletonLoading(true);
+        } catch(err) {
+            console.log(err)
+            setIsSkeletonLoading(true);
+        }
+    })
 
     const columnEdit: MUIDataTableColumn[] = [
         {
