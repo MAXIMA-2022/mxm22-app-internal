@@ -222,12 +222,6 @@ const Accor = ({ pathName, role, divisiName }: AccorProps) => {
                     role: ["panitia"],
                     divisi: ["SuperAdmin", "Rocuta", "Griffin"],
                 },
-                {
-                    name: "Tambah PIC Organisator",
-                    link: "/state/tambahPicOrg",
-                    role: ["panitia"],
-                    divisi: ["SuperAdmin", "Rocuta", "Griffin"],
-                },
             ],
         },
     ];
