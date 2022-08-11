@@ -22,6 +22,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { HamburgerIcon } from "@chakra-ui/icons";
 
 interface StateInfo {
     name: string;
@@ -44,7 +45,9 @@ const editState = ({ stateID }: { stateID: number }) => {
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [state, setstate] = useState<StateInfo[]>([]);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
-    const [date, setDate] = useState([])
+    const [date, setDate] = useState<string[]>([])
+    const [hari, setHari] = useState<string>("0");
+    const [cat, setCat] = useState<string>("0")
     const headers = {
         "x-access-token": jwt!,
     };
@@ -52,11 +55,12 @@ const editState = ({ stateID }: { stateID: number }) => {
         try {
             const fetchstate = async () => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, { headers });
-                const res = await axios.get(`${process.env.API_URL}/api/dayManagement`, {
-                    headers,
-                })
+                const res = await axios.get(`${process.env.API_URL}/api/dayManagement`, { headers })
                 setDate(res.data)
                 setstate(response.data)
+                
+                setHari(response.data[0].day)
+                setCat(response.data[0].category)
             };
             fetchstate();
         } catch (err: any) {
@@ -190,11 +194,13 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
+                                            onChange={(e) => setHari(e.target.value)}
+                                            value={hari}
                                         >
-                                            {date.map((item: any, index: number) => {
+                                            {date.map((res: any) => {
                                             return (
-                                                <option key={index} value={item.day}>
-                                                    {item.date}
+                                                <option value={res.day as string}>
+                                                    {res.date}
                                                 </option>
                                             );
                                         })}
@@ -215,6 +221,8 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
+                                            onChange={(e) => setCat(e.target.value)}
+                                            value={cat}
                                         >
                                             <option value='Media Kampus'>Media Kampus</option>
                                             <option value='UKM Olahraga'>UKM Olahraga</option>

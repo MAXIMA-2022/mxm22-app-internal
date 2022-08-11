@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Button, HStack, Switch, Skeleton } from "@chakra-ui/react";
+import { Box, Flex, Text, HStack, Switch, Skeleton } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { TableCell } from "@material-ui/core";
