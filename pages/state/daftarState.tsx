@@ -13,6 +13,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 
 interface StateInfo {
     id: number;
@@ -33,6 +34,7 @@ const listSTATE = () => {
     const [state, setstate] = useState<StateInfo[]>([]);
     const [error, setError] = useState(undefined);
     const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
+    const router = useRouter()
     const headers = {
         "x-access-token": jwt!,
     };
@@ -67,8 +69,9 @@ const listSTATE = () => {
                         { headers }
                     );
                     toast.success(response.data.message);
+                    router.reload()
                 }
-            });
+            })
         } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);

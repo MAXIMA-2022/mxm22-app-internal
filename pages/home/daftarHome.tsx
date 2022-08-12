@@ -49,7 +49,7 @@ const listHOME = () => {
         try {
             setIsSkeletonLoading(false);
             const fetchHoME = async () => {
-                const response = await axios.get("https://maxima2022.herokuapp.com/api/homeInfo");
+                const response = await axios.get(`${process.env.API_URL}/api/homeInfo`);
                 setDataHoME(response.data);
             };
             fetchHoME();
@@ -58,7 +58,7 @@ const listHOME = () => {
             console.log(err);
             setIsSkeletonLoading(true);
         }
-    });
+    },[]);
 
     const handleRemove = async (data: any) => {
         try {
@@ -74,6 +74,7 @@ const listHOME = () => {
                         { headers }
                     );
                     toast.success(response.data.message);
+                    router.reload()
                 }
             });
         } catch (err: any) {
