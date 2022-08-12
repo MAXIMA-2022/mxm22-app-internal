@@ -19,8 +19,8 @@ interface DataToggle {
 }
 
 const DaftarPanit = () => {
-    const jwt = useReadLocalStorage<string | undefined>("token")
-    const [toggle, setToggle] = useState<DataToggle[]>([])
+    const jwt = useReadLocalStorage<string | undefined>("token");
+    const [toggle, setToggle] = useState<DataToggle[]>([]);
     const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
     const headers = {
         "x-access-token": jwt!,
@@ -28,20 +28,20 @@ const DaftarPanit = () => {
 
     useEffect(() => {
         try {
-            setIsSkeletonLoading(false)
+            setIsSkeletonLoading(false);
             const fetchToggle = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/toggle`, { headers });
-                setToggle(res.data)
+                setToggle(res.data);
             };
             fetchToggle();
-            setIsSkeletonLoading(true)
+            setIsSkeletonLoading(true);
         } catch (err: any) {
             console.log(err);
             toast.error(err.response.data.message);
-            setIsSkeletonLoading(true)
+            setIsSkeletonLoading(true);
         }
-    },[]);
-    
+    }, []);
+
     const verifyData = async (id: number, toggle: string) => {
         try {
             const formData = new FormData();
@@ -49,13 +49,13 @@ const DaftarPanit = () => {
             const response = await axios.put(
                 `${process.env.API_URL}/api/toggle/updateToggle/${id}`,
                 formData,
-                { 
+                {
                     headers: {
-                        'x-access-token': jwt!
-                    } 
+                        "x-access-token": jwt!,
+                    },
                 }
             );
-            
+
             const res = await axios.get(`${process.env.API_URL}/api/toggle`, { headers });
             setToggle(res.data);
 
@@ -184,7 +184,7 @@ const DaftarPanit = () => {
                                     elevation: 1,
                                 }}
                             />
-                        </Skeleton>  
+                        </Skeleton>
                     </Box>
                 </Box>
             </Flex>

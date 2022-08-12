@@ -21,8 +21,8 @@ interface DataPanit {
 }
 
 const DaftarPanit = () => {
-    const jwt = useReadLocalStorage<string | undefined>("token")
-    const [panit, setPanit] = useState<DataPanit[]>([])
+    const jwt = useReadLocalStorage<string | undefined>("token");
+    const [panit, setPanit] = useState<DataPanit[]>([]);
 
     const headers = {
         "x-access-token": jwt!,
@@ -40,7 +40,7 @@ const DaftarPanit = () => {
             toast.error(err.response.data.message);
         }
     }, []);
-    
+
     const verifyData = async (nim: number, verified: string) => {
         try {
             const formData = new FormData();
@@ -48,13 +48,13 @@ const DaftarPanit = () => {
             const response = await axios.put(
                 `${process.env.API_URL}/api/panit/updateVerified/${nim}`,
                 formData,
-                { 
+                {
                     headers: {
-                        'x-access-token': jwt!
-                    } 
+                        "x-access-token": jwt!,
+                    },
                 }
             );
-            
+
             const res = await axios.get(`${process.env.API_URL}/api/panit`, { headers });
             setPanit(res.data);
 

@@ -1,6 +1,6 @@
 import Sidebar from "../../../../components/Sidebar";
 import Navbar from "../../../../components/Navbar";
-import { Box, Button, CloseButton, Flex, HStack, Text } from "@chakra-ui/react";
+import { Box, Button, CloseButton, Flex, HStack, Img, Text } from "@chakra-ui/react";
 import { Image as ChakraImage } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import MxmIconSVG from "../../../../public/mxmIcon.svg";
@@ -25,21 +25,19 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
     const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
 
     useEffect(() => {
-        try{
+        try {
             setIsSkeletonLoading(false);
             const fetchMedia = async () => {
-                const res = await axios.get(
-                    `${process.env.API_URL}/api/homeMedia/${mediaID}`
-                )
+                const res = await axios.get(`${process.env.API_URL}/api/homeMedia/${mediaID}`);
                 setDataMedia(res.data);
-            }
-            fetchMedia()
+            };
+            fetchMedia();
             setIsSkeletonLoading(true);
-        } catch(err) {
-            console.log(err)
+        } catch (err) {
+            console.log(err);
             setIsSkeletonLoading(true);
         }
-    })
+    });
 
     const columnEdit: MUIDataTableColumn[] = [
         {
@@ -50,7 +48,7 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                 customHeadRender: ({ index, ...column }) => {
                     return (
                         <TableCell key={index} style={{ zIndex: -1 }}>
-                            <b>{column.label}</b>
+                            <Img src={column.label} w={'auto'}/>
                         </TableCell>
                     );
                 },
@@ -117,10 +115,10 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                         </Flex>
                     </Flex>
                     <Box py={4} mx={4}>
-                        {/* <MUIDataTable
+                        <MUIDataTable
                             title=""
                             columns={columnEdit}
-                            data={dataEdit}
+                            data={dataMedia}
                             options={{
                                 rowsPerPage: 5,
                                 selectableRows: "none",
@@ -135,7 +133,7 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                                 filter: false,
                                 pagination: false,
                             }}
-                        /> */}
+                        />
                     </Box>
                     <HStack width={"100%"} px={10} my={6} justifyContent={"right"}>
                         <Link href="/home/daftarHome">

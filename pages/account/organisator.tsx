@@ -44,13 +44,13 @@ const listAkun = () => {
             const response = await axios.put(
                 `${process.env.API_URL}/api/org/updateVerified/${nim}`,
                 formData,
-                { 
+                {
                     headers: {
-                        'x-access-token': jwt!
-                    } 
+                        "x-access-token": jwt!,
+                    },
                 }
             );
-            
+
             const res = await axios.get(`${process.env.API_URL}/api/org`, { headers });
             setOrg(res.data);
 

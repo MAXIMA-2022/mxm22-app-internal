@@ -30,8 +30,12 @@ interface DataHoME {
     shortDesc: string;
     longDesc: string;
     linkYoutube: string;
-    lineID: string;
-    instagram: string;
+    linkLine: string;
+    linkInstagram: string;
+    linkFacebook: string;
+    linkTwitter: string;
+    linkTiktok: string;
+    linkLinkedIn: string;
     linkLogo: string;
 }
 
@@ -80,9 +84,13 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
             formData.append("chapter", data.chapter);
             formData.append("shortDesc", data.shortDesc);
             formData.append("longDesc", data.longDesc);
+            formData.append("linkInstagram", data.linkInstagram);
+            formData.append("linkLine", data.linkLine);
             formData.append("linkYoutube", data.linkYoutube);
-            formData.append("lineID", data.lineID);
-            formData.append("instagram", data.instagram);
+            formData.append("linkFacebook", data.linkFacebook);
+            formData.append("linkTwitter", data.linkTwitter);
+            formData.append("linkTiktok", data.linkTiktok);
+            formData.append("linkLinkedIn", data.linkLinkedIn);
             formData.append("linkLogo", data.linkLogo[0]);
 
             const response = await axios.put(
@@ -188,7 +196,7 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
                                             value={chapterID}
                                         >
                                             {chapter.map((chap: any) => (
-                                                <option value={chap.homeChapterID as string}>
+                                                <option value={chap.homeChapterID}>
                                                     {chap.name}
                                                 </option>
                                             ))}
@@ -263,9 +271,7 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
                                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                                     <FormLabel textColor={"black"}>Link Video YouTube</FormLabel>
                                     <Input
-                                        {...register("linkYoutube", {
-                                            required: "Link video YouTube harap diisi",
-                                        })}
+                                        {...register("linkYoutube")}
                                         name="linkYoutube"
                                         textColor={"black"}
                                         border={"solid"}
@@ -273,9 +279,6 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
                                         _hover={{ border: "solid #CBD5E0" }}
                                         defaultValue={data.linkYoutube}
                                     />
-                                    {errors.linkYoutube !== undefined && (
-                                        <Text textColor={"red"}>{errors.linkYoutube.message}</Text>
-                                    )}
                                 </Box>
                                 <Flex
                                     justifyContent={"space-between"}
@@ -288,41 +291,108 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
                                             Media Sosial (LINE)
                                         </FormLabel>
                                         <Input
-                                            {...register("lineID", {
-                                                required: "Media sosial (Line) harap diisi",
-                                            })}
-                                            name="lineID"
+                                            {...register("linkLine")}
+                                            name="linkLine"
                                             textColor={"black"}
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            defaultValue={data.lineID}
+                                            defaultValue={data.linkLine}
                                         />
-                                        {errors.lineID !== undefined && (
-                                            <Text textColor={"red"}>{errors.lineID.message}</Text>
-                                        )}
                                     </Box>
                                     <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
                                         <FormLabel textColor={"black"}>
                                             Media Sosial (Instagram)
                                         </FormLabel>
                                         <Input
-                                            {...register("instagram", {
-                                                required: "Media sosial (Instagram) harap diisi",
-                                            })}
-                                            name="instagram"
+                                            {...register("linkInstagram")}
+                                            name="linkInstagram"
                                             textColor={"black"}
-                                            placeholder="Tidak Perlu Menggunakan @"
+                                            placeholder={"https://www.instagram.com/"}
                                             border={"solid"}
                                             borderColor={"#CBD5E0"}
                                             _hover={{ border: "solid #CBD5E0" }}
-                                            defaultValue={data.instagram}
+                                            defaultValue={data.linkInstagram}
                                         />
                                         {errors.instagram !== undefined && (
                                             <Text textColor={"red"}>
                                                 {errors.instagram.message}
                                             </Text>
                                         )}
+                                    </Box>
+                                </Flex>
+                                <Flex
+                                    justifyContent={"space-between"}
+                                    mt={2}
+                                    mb={"0.8em"}
+                                    flexDirection={["column", "column", "row", "row"]}
+                                >
+                                    <Box width={"100%"} px={2}>
+                                        <FormLabel textColor={"black"}>
+                                            Media Sosial (Facebook)
+                                        </FormLabel>
+                                        <Input
+                                            {...register("linkFacebook")}
+                                            name="linkFacebook"
+                                            textColor={"black"}
+                                            placeholder={"https://www.facebook.com/"}
+                                            border={"solid"}
+                                            borderColor={"#CBD5E0"}
+                                            _hover={{ border: "solid #CBD5E0" }}
+                                            defaultValue={data.linkFacebook}
+                                        />
+                                    </Box>
+                                    <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
+                                        <FormLabel textColor={"black"}>
+                                            Media Sosial (Twitter)
+                                        </FormLabel>
+                                        <Input
+                                            {...register("linkTwitter")}
+                                            name="linkTwitter"
+                                            textColor={"black"}
+                                            placeholder={"https://www.twitter.com/"}
+                                            border={"solid"}
+                                            borderColor={"#CBD5E0"}
+                                            _hover={{ border: "solid #CBD5E0" }}
+                                            defaultValue={data.linkTwitter}
+                                        />
+                                    </Box>
+                                </Flex>
+                                <Flex
+                                    justifyContent={"space-between"}
+                                    mt={2}
+                                    mb={"0.8em"}
+                                    flexDirection={["column", "column", "row", "row"]}
+                                >
+                                    <Box width={"100%"} px={2}>
+                                        <FormLabel textColor={"black"}>
+                                            Media Sosial (Tiktok)
+                                        </FormLabel>
+                                        <Input
+                                            {...register("linkTiktok")}
+                                            name="linkTiktok"
+                                            textColor={"black"}
+                                            placeholder={"https://www.tiktok.com/"}
+                                            border={"solid"}
+                                            borderColor={"#CBD5E0"}
+                                            _hover={{ border: "solid #CBD5E0" }}
+                                            defaultValue={data.linkTiktok}
+                                        />
+                                    </Box>
+                                    <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
+                                        <FormLabel textColor={"black"}>
+                                            Media Sosial (LinkedIn)
+                                        </FormLabel>
+                                        <Input
+                                            {...register("linkLinkedIn")}
+                                            name="linkLinkedIn"
+                                            textColor={"black"}
+                                            placeholder={"https://www.linkedin.com/"}
+                                            border={"solid"}
+                                            borderColor={"#CBD5E0"}
+                                            _hover={{ border: "solid #CBD5E0" }}
+                                            defaultValue={data.linkLinkedIn}
+                                        />
                                     </Box>
                                 </Flex>
                                 <HStack
