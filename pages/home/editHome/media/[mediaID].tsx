@@ -1,16 +1,17 @@
 import Sidebar from "../../../../components/Sidebar";
 import Navbar from "../../../../components/Navbar";
 import { Box, Button, CloseButton, Flex, HStack, Img, Text } from "@chakra-ui/react";
-import { Image as ChakraImage } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import MxmIconSVG from "../../../../public/mxmIcon.svg";
 import Image from "next/image";
 import { TableCell } from "@material-ui/core";
-import { DeleteIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Link from "next/link";
+import Swal from "sweetalert2";
 
 interface DataMedia {
     photoID: number;
@@ -28,7 +29,15 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
         try {
             setIsSkeletonLoading(false);
             const fetchMedia = async () => {
-                const res = await axios.get(`${process.env.API_URL}/api/homeMedia/${mediaID}`);
+                const res = await axios.get(
+                    `${process.env.API_URL}/api/homeMedia/homeID/${mediaID}`,
+                    {
+                        headers: {
+                            'x-access-token': jwt!
+                        }
+                    }
+                );
+                
                 setDataMedia(res.data);
             };
             fetchMedia();
@@ -37,9 +46,45 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
             console.log(err);
             setIsSkeletonLoading(true);
         }
-    });
+    }, []);
+
+    const handleRemove = async (photoID: number) => {
+        try {
+            const res = await axios.delete(
+                `${process.env.API_URL}/api/home/deleteHomeMedia/${photoID}`,
+                {
+                    headers: {
+                        'x-access-token': jwt!
+                    }
+                }
+            )
+
+            toast.success(res.data.message)
+            
+            const res2 = await axios.get(
+                `${process.env.API_URL}/api/homeMedia/homeID/${mediaID}`,
+                {
+                    headers: {
+                        'x-access-token': jwt!
+                    }
+                }
+            );
+            
+            setDataMedia(res2.data);
+        } catch(err: any) {
+            toast.error(err.response.data.message);
+            console.log(err.response.data.message);
+        }
+    }
 
     const columnEdit: MUIDataTableColumn[] = [
+        {
+            label: "Photo",
+            name: "photoID",
+            options: {
+                display: false
+            }
+        },
         {
             label: "Media",
             name: "linkMedia",
@@ -48,10 +93,23 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                 customHeadRender: ({ index, ...column }) => {
                     return (
                         <TableCell key={index} style={{ zIndex: -1 }}>
-                            <Img src={column.label} w={'auto'}/>
+                            <b>{column.label}</b>
                         </TableCell>
                     );
                 },
+                customBodyRender: (value, tableMeta, updateValue) => {
+                    return (
+                        <Box>
+                            <Img
+                                src={value}
+                                alt="media"
+                                width={"auto"} 
+                                height={"100%"}
+                                objectFit="cover"
+                            />
+                        </Box>
+                    );
+                }
             },
         },
         {
@@ -67,13 +125,14 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                         </TableCell>
                     );
                 },
-                customBodyRender: (value) => {
+                customBodyRender: (value: any, tableMeta: any) => {
                     return (
                         <CloseButton
                             size="sm"
                             color="white"
                             bgColor={"#bd0017"}
                             _hover={{ bgColor: "#d01c1f" }}
+                            onClick={() => handleRemove(tableMeta.rowData[0])}
                         />
                     );
                 },
@@ -161,6 +220,17 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                     </HStack>
                 </Box>
             </Flex>
+            <ToastContainer
+                position="bottom-left"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </>
     );
 };
