@@ -12,7 +12,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useReadLocalStorage } from "usehooks-ts";
-import { useRouter } from "next/router";
 import Swal from "sweetalert2";
 
 interface DataHoME {
@@ -43,7 +42,6 @@ const listHOME = () => {
     const headers = {
         "x-access-token": jwt!,
     };
-    const router = useRouter();
 
     useEffect(() => {
         try {
@@ -74,7 +72,8 @@ const listHOME = () => {
                         { headers }
                     );
                     toast.success(response.data.message);
-                    router.reload()
+                    const res = await axios.get(`${process.env.API_URL}/api/homeInfo`);
+                    setDataHoME(res.data);
                 }
             });
         } catch (err: any) {
