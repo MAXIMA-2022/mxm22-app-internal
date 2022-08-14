@@ -1,48 +1,53 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, HStack, Switch, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, HStack, Switch, Skeleton } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
+import { CheckCircleIcon } from "@chakra-ui/icons";
+import { TableCell } from "@material-ui/core";
 import MxmIconSVG from "../../public/mxmIcon.svg";
 import Image from "next/image";
-import { TableCell } from "@material-ui/core";
-import { CheckCircleIcon } from "@chakra-ui/icons";
 import axios from "axios";
+import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const listAkun = () => {
-    interface DataAkunOrg {
-        name: String;
-        nim: String;
-        state: String;
-        verified: number;
-    }
+interface DataToggle {
+    name: String;
+    id: number;
+    toggle: number;
+}
 
+const DaftarPanit = () => {
     const jwt = useReadLocalStorage<string | undefined>("token");
-    const [org, setOrg] = useState<DataAkunOrg[]>([]);
+    const [toggle, setToggle] = useState<DataToggle[]>([]);
+    const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
     const headers = {
         "x-access-token": jwt!,
     };
+
     useEffect(() => {
         try {
-            const fetchOrg = async () => {
-                const res = await axios.get(`${process.env.API_URL}/api/org`, { headers });
-                setOrg(res.data);
+            setIsSkeletonLoading(false);
+            const fetchToggle = async () => {
+                const res = await axios.get(`${process.env.API_URL}/api/toggle`, { headers });
+                setToggle(res.data);
             };
-            fetchOrg();
+            fetchToggle();
+            setIsSkeletonLoading(true);
         } catch (err: any) {
             console.log(err);
+            toast.error(err.response.data.message);
+            setIsSkeletonLoading(true);
         }
     }, []);
 
-    const verifyData = async (nim: number, verified: string) => {
+    const verifyData = async (id: number, toggle: string) => {
         try {
             const formData = new FormData();
-            formData.append("verified", verified);
+            formData.append("toggle", toggle);
             const response = await axios.put(
-                `${process.env.API_URL}/api/org/updateVerified/${nim}`,
+                `${process.env.API_URL}/api/toggle/updateToggle/${id}`,
                 formData,
                 {
                     headers: {
@@ -51,8 +56,8 @@ const listAkun = () => {
                 }
             );
 
-            const res = await axios.get(`${process.env.API_URL}/api/org`, { headers });
-            setOrg(res.data);
+            const res = await axios.get(`${process.env.API_URL}/api/toggle`, { headers });
+            setToggle(res.data);
 
             toast.success(response.data.message);
         } catch (err: any) {
@@ -61,12 +66,18 @@ const listAkun = () => {
         }
     };
 
-    const columnAkunORG: MUIDataTableColumn[] = [
+    const columnsToggle: MUIDataTableColumn[] = [
         {
-            label: "Nama Mahasiswa",
+            label: "Toggle ID",
+            name: "id",
+            options: {
+                display: false,
+            },
+        },
+        {
+            label: "Nama Toggle",
             name: "name",
             options: {
-                filter: true,
                 customHeadRender: ({ index, ...column }) => {
                     return (
                         <TableCell key={index} style={{ zIndex: -1 }}>
@@ -89,50 +100,8 @@ const listAkun = () => {
             },
         },
         {
-            label: "NIM",
-            name: "nim",
-            options: {
-                filter: true,
-                customHeadRender: ({ index, ...column }) => {
-                    return (
-                        <TableCell key={index} style={{ zIndex: -1 }}>
-                            <b>{column.label}</b>
-                        </TableCell>
-                    );
-                },
-            },
-        },
-        {
-            label: "Email",
-            name: "email",
-            options: {
-                filter: true,
-                customHeadRender: ({ index, ...column }) => {
-                    return (
-                        <TableCell key={index} style={{ zIndex: -1 }}>
-                            <b>{column.label}</b>
-                        </TableCell>
-                    );
-                },
-            },
-        },
-        {
-            label: "Kegiatan STATE",
-            name: "stateName",
-            options: {
-                filter: true,
-                customHeadRender: ({ index, ...column }) => {
-                    return (
-                        <TableCell key={index} style={{ zIndex: -1 }}>
-                            <b>{column.label}</b>
-                        </TableCell>
-                    );
-                },
-            },
-        },
-        {
-            label: "Verifikasi",
-            name: "verified",
+            label: "Aksi",
+            name: "toggle",
             options: {
                 filter: true,
                 customHeadRender: ({ index, ...column }) => {
@@ -152,14 +121,14 @@ const listAkun = () => {
                                         borderRadius={"full"}
                                         bg={"gray.500"}
                                         isChecked
-                                        onChange={() => verifyData(tableMeta.rowData[1], "0")}
+                                        onChange={() => verifyData(tableMeta.rowData[0], "0")}
                                     />
                                 ) : (
                                     <Switch
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
-                                        onChange={() => verifyData(tableMeta.rowData[1], "1")}
+                                        onChange={() => verifyData(tableMeta.rowData[0], "1")}
                                     />
                                 )}
                             </form>
@@ -197,23 +166,25 @@ const listAkun = () => {
                             fontWeight={600}
                             textColor={"black"}
                         >
-                            Daftar Akun Organisator
+                            Toggle
                         </Text>
                         <Flex p={"10px"}>
                             <Image src={MxmIconSVG} width={"50px"} height={"50px"} />
                         </Flex>
                     </Flex>
                     <Box py={4} mx={4}>
-                        <MUIDataTable
-                            title=""
-                            columns={columnAkunORG}
-                            data={org}
-                            options={{
-                                rowsPerPage: 5,
-                                selectableRows: "none",
-                                elevation: 0,
-                            }}
-                        />
+                        <Skeleton isLoaded={isSkeletonLoading}>
+                            <MUIDataTable
+                                title=""
+                                columns={columnsToggle}
+                                data={toggle}
+                                options={{
+                                    rowsPerPage: 5,
+                                    selectableRows: "none",
+                                    elevation: 1,
+                                }}
+                            />
+                        </Skeleton>
                     </Box>
                 </Box>
             </Flex>
@@ -232,4 +203,4 @@ const listAkun = () => {
     );
 };
 
-export default listAkun;
+export default DaftarPanit;
