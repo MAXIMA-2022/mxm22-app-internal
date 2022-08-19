@@ -38,7 +38,7 @@ const listSTATE = () => {
     };
     useEffect(() => {
         try {
-            setIsSkeletonLoading(false)
+            setIsSkeletonLoading(false);
             const fetchstate = async () => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct`, {
                     headers,
@@ -70,7 +70,7 @@ const listSTATE = () => {
                     const res = await axios.get(`${process.env.API_URL}/api/stateAct`, { headers });
                     setstate(res.data);
                 }
-            })
+            });
         } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);

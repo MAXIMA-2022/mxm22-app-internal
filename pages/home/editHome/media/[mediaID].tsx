@@ -33,11 +33,11 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                     `${process.env.API_URL}/api/homeMedia/homeID/${mediaID}`,
                     {
                         headers: {
-                            'x-access-token': jwt!
-                        }
+                            "x-access-token": jwt!,
+                        },
                     }
                 );
-                
+
                 setDataMedia(res.data);
             };
             fetchMedia();
@@ -54,36 +54,33 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                 `${process.env.API_URL}/api/home/deleteHomeMedia/${photoID}`,
                 {
                     headers: {
-                        'x-access-token': jwt!
-                    }
-                }
-            )
-
-            toast.success(res.data.message)
-            
-            const res2 = await axios.get(
-                `${process.env.API_URL}/api/homeMedia/homeID/${mediaID}`,
-                {
-                    headers: {
-                        'x-access-token': jwt!
-                    }
+                        "x-access-token": jwt!,
+                    },
                 }
             );
-            
+
+            toast.success(res.data.message);
+
+            const res2 = await axios.get(`${process.env.API_URL}/api/homeMedia/homeID/${mediaID}`, {
+                headers: {
+                    "x-access-token": jwt!,
+                },
+            });
+
             setDataMedia(res2.data);
-        } catch(err: any) {
+        } catch (err: any) {
             toast.error(err.response.data.message);
             console.log(err.response.data.message);
         }
-    }
+    };
 
     const columnEdit: MUIDataTableColumn[] = [
         {
             label: "Photo",
             name: "photoID",
             options: {
-                display: false
-            }
+                display: false,
+            },
         },
         {
             label: "Media",
@@ -103,13 +100,13 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                             <Img
                                 src={value}
                                 alt="media"
-                                width={"auto"} 
+                                width={"auto"}
                                 height={"100%"}
                                 objectFit="cover"
                             />
                         </Box>
                     );
-                }
+                },
             },
         },
         {

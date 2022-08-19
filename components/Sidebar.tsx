@@ -100,7 +100,7 @@ const Links = ({ pathName, role, divisiName }: LinksProps) => {
             logo: DaftarMhsSVG,
             logo2: DaftarMhsBlueSVG,
             role: ["panitia"],
-            divisi: ["SuperAdmin", "Rocuta"],
+            divisi: ["SuperAdmin", "Rocuta", "Griffin"],
         },
     ];
     return (

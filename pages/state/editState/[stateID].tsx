@@ -7,7 +7,6 @@ import {
     FormLabel,
     Input,
     Select,
-    Textarea,
     Button,
     Img,
     HStack,
@@ -22,7 +21,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
-import { HamburgerIcon } from "@chakra-ui/icons";
 
 interface StateInfo {
     name: string;
@@ -45,22 +43,26 @@ const editState = ({ stateID }: { stateID: number }) => {
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [state, setstate] = useState<StateInfo[]>([]);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
-    const [date, setDate] = useState<string[]>([])
+    const [date, setDate] = useState<string[]>([]);
     const [hari, setHari] = useState<string>("0");
-    const [cat, setCat] = useState<string>("0")
+    const [cat, setCat] = useState<string>("0");
     const headers = {
         "x-access-token": jwt!,
     };
     useEffect(() => {
         try {
             const fetchstate = async () => {
-                const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, { headers });
-                const res = await axios.get(`${process.env.API_URL}/api/dayManagement`, { headers })
-                setDate(res.data)
-                setstate(response.data)
-                
-                setHari(response.data[0].day)
-                setCat(response.data[0].category)
+                const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, {
+                    headers,
+                });
+                const res = await axios.get(`${process.env.API_URL}/api/dayManagement`, {
+                    headers,
+                });
+                setDate(res.data);
+                setstate(response.data);
+
+                setHari(response.data[0].day);
+                setCat(response.data[0].category);
             };
             fetchstate();
         } catch (err: any) {
@@ -75,10 +77,7 @@ const editState = ({ stateID }: { stateID: number }) => {
             formData.append("name", data.name);
             formData.append("quota", data.quota);
             formData.append("day", data.day);
-            formData.append("category", data.category);
-            formData.append("shortDesc", data.shortDesc);
             formData.append("stateLogo", data.stateLogo[0]);
-            formData.append("coverPhoto", data.coverPhoto[0]);
             const response = await axios.put(
                 `${process.env.API_URL}/api/stateAct/update/${stateID}`,
                 formData,
@@ -161,7 +160,10 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             {...register("quota", {
                                                 required: "Kuota harap diisi",
                                                 min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
-                                                max: { value: 100, message: "Kuota tidak boleh lebih dari 100" }
+                                                max: {
+                                                    value: 100,
+                                                    message: "Kuota tidak boleh lebih dari 100",
+                                                },
                                             })}
                                             type={"number"}
                                             name="quota"
@@ -198,59 +200,18 @@ const editState = ({ stateID }: { stateID: number }) => {
                                             value={hari}
                                         >
                                             {date.map((res: any) => {
-                                            return (
-                                                <option value={res.day as string}>
-                                                    {res.date}
-                                                </option>
-                                            );
-                                        })}
+                                                return (
+                                                    <option value={res.day as string}>
+                                                        {res.date}
+                                                    </option>
+                                                );
+                                            })}
                                         </Select>
                                         {errors.day !== undefined && (
                                             <Text textColor={"red"}>{errors.day.message}</Text>
                                         )}
                                     </Box>
-                                    <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
-                                        <FormLabel textColor={"black"}>Kategori</FormLabel>
-                                        <Select
-                                            {...register("category", {
-                                                required: "Kategori harap dipilih",
-                                            })}
-                                            placeholder="Pilih Kategori STATE"
-                                            name="category"
-                                            textColor={"black"}
-                                            border={"solid"}
-                                            borderColor={"#CBD5E0"}
-                                            _hover={{ border: "solid #CBD5E0" }}
-                                            onChange={(e) => setCat(e.target.value)}
-                                            value={cat}
-                                        >
-                                            <option value='Media Kampus'>Media Kampus</option>
-                                            <option value='UKM Olahraga'>UKM Olahraga</option>
-                                            <option value='UKM Sains dan Sosial'>UKM Sains dan Sosial</option>
-                                            <option value='UKM Seni dan Budaya'>UKM Seni dan Budaya</option>
-                                        </Select>
-                                        {errors.category !== undefined && (
-                                            <Text textColor={"red"}>{errors.category.message}</Text>
-                                        )}
-                                    </Box>
                                 </Flex>
-                                <Box width={"100%"} px={2} mb={"0.8em"}>
-                                    <FormLabel textColor={"black"}>Deskripsi Singkat</FormLabel>
-                                    <Textarea
-                                        {...register("shortDesc", {
-                                            required: "Deskripsi singkat harap diisi",
-                                        })}
-                                        name="shortDesc"
-                                        textColor={"black"}
-                                        border={"solid"}
-                                        borderColor={"#CBD5E0"}
-                                        _hover={{ border: "solid #CBD5E0" }}
-                                        defaultValue={data.shortDesc}
-                                    />
-                                    {errors.shortDesc !== undefined && (
-                                        <Text textColor={"red"}>{errors.shortDesc.message}</Text>
-                                    )}
-                                </Box>
                                 <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
                                     <FormLabel textColor={"black"}>Logo</FormLabel>
                                     <Box
@@ -275,32 +236,6 @@ const editState = ({ stateID }: { stateID: number }) => {
                                     </Box>
                                     {errors.stateLogo !== undefined && (
                                         <Text textColor={"red"}>{errors.stateLogo.message}</Text>
-                                    )}
-                                </Box>
-                                <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
-                                    <FormLabel textColor={"black"}>Foto Sampul</FormLabel>
-                                    <Box
-                                        padding={"1em"}
-                                        border={"solid #CBD5E0"}
-                                        width={"100%"}
-                                        height={"100%"}
-                                        borderRadius={10}
-                                        transition={"0.1s ease-in-out"}
-                                        _hover={{ border: "solid #CBD5E0" }}
-                                    >
-                                        <Input
-                                            {...register("coverPhoto")}
-                                            type={"file"}
-                                            pt={1}
-                                            name="coverPhoto"
-                                            _placeholder={{ color: "darkgray" }}
-                                            bgColor={"gray.200"}
-                                            textColor={"black"}
-                                        />
-                                        <Img src={data.coverPhoto} width={"auto"} height={"100%"} />
-                                    </Box>
-                                    {errors.coverPhoto !== undefined && (
-                                        <Text textColor={"red"}>{errors.coverPhoto.message}</Text>
                                     )}
                                 </Box>
                                 <HStack

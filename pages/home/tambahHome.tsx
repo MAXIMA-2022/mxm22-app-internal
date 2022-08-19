@@ -24,7 +24,6 @@ import { useReadLocalStorage } from "usehooks-ts";
 interface DataHoME {
     name: string;
     chapter: string;
-    shortDesc: string;
     longDesc: string;
     linkYoutube: string;
     linkLine: string;
@@ -139,7 +138,6 @@ const tambahHomeInfo = () => {
             const formData = new FormData();
             formData.append("name", data.name);
             formData.append("chapter", data.chapter);
-            formData.append("shortDesc", data.shortDesc);
             formData.append("longDesc", data.longDesc);
             formData.append("linkInstagram", data.linkInstagram);
             formData.append("linkLine", data.linkLine);
@@ -255,22 +253,6 @@ const tambahHomeInfo = () => {
                                     )}
                                 </Box>
                             </Flex>
-                            <Box width={"100%"} px={2} mb={"0.8em"}>
-                                <FormLabel textColor={"black"}>Narasi Pendek</FormLabel>
-                                <Input
-                                    {...register("shortDesc", {
-                                        required: "Narasi pendek harap diisi",
-                                    })}
-                                    name="shortDesc"
-                                    textColor={"black"}
-                                    border={"solid"}
-                                    borderColor={"#CBD5E0"}
-                                    _hover={{ border: "solid #CBD5E0" }}
-                                />
-                                {errors.shortDesc !== undefined && (
-                                    <Text textColor={"red"}>{errors.shortDesc.message}</Text>
-                                )}
-                            </Box>
                             <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
                                 <FormLabel textColor={"black"} htmlFor="no_hp">
                                     Narasi Panjang
