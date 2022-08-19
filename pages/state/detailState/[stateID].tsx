@@ -1,6 +1,6 @@
 import Sidebar from "../../../components/Sidebar";
 import Navbar from "../../../components/Navbar";
-import { Box, Flex, HStack, VStack, Text, Center, Heading, Skeleton} from "@chakra-ui/react";
+import { Box, Flex, HStack, VStack, Text, Center, Heading, Skeleton, Img } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import MxmIconSVG from "../../../public/mxmIcon.svg";
 import CheckIconSVG from "../../../public/checkIcon.svg";
@@ -16,13 +16,16 @@ import { useReadLocalStorage } from "usehooks-ts";
 
 interface StateInfo {
     name: string;
-    quota: number;
     day: string;
-    category: string;
     stateLogo: string;
-    coverPhoto: string;
-    shortDesc: string;
+    quota: number;
     registered: number;
+    attendanceCode: string;
+    attendanceCode2: string;
+    category: string;
+    shortDesc: string;
+    coverPhoto: string;
+    date: string;
 }
 
 const detailSTATE = ({ stateID }: { stateID: number }) => {
@@ -35,7 +38,7 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
     };
     useEffect(() => {
         try {
-            setIsSkeletonLoading(false)
+            setIsSkeletonLoading(false);
             const fetchstate = async () => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, {
                     headers,
@@ -48,12 +51,12 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
             };
             fetchparticipants();
             fetchstate();
-            setIsSkeletonLoading(true)
+            setIsSkeletonLoading(true);
         } catch (err: any) {
             console.log(err);
-            setIsSkeletonLoading(true)
+            setIsSkeletonLoading(true);
         }
-    },[]);
+    }, []);
 
     const svgSize = "16px";
 
@@ -199,11 +202,7 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                                     minHeight={"15em"}
                                 >
                                     <Center width={["100%", "60%"]} py={["1em", "0"]}>
-                                        <Image
-                                            src={data.stateLogo}
-                                            width={"250px"}
-                                            height={"100%"}
-                                        />
+                                        <Img src={data.stateLogo} boxSize="200px" />
                                     </Center>
                                     <Box width={"100%"} py={["0", "2em"]}>
                                         <Box ps={["0", "1.5em"]}>
@@ -232,7 +231,14 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                                                 <HStack spacing={5}>
                                                     <Image src={KeySVG} />
                                                     <Text fontFamily="rubik" textColor={"black"}>
-                                                        {data.attendanceCode}
+                                                        <b>{data.attendanceCode}</b> (absensi awal)
+                                                    </Text>
+                                                </HStack>
+                                                <HStack spacing={5}>
+                                                    <Image src={KeySVG} />
+                                                    <Text fontFamily="rubik" textColor={"black"}>
+                                                        <b>{data.attendanceCode2}</b> (absensi
+                                                        akhir)
                                                     </Text>
                                                 </HStack>
                                             </VStack>

@@ -9,7 +9,6 @@ import {
     Input,
     Button,
     Select,
-    Textarea,
     Center,
     HStack,
     Link,
@@ -103,13 +102,13 @@ const tambahState = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm()
-    const [filesstateLogo, setFilesstateLogo] = useState([])
-    const [filesSampul, setFilesSampul] = useState([])
-    const [isButtonLoading, setIsButtonLoading] = useState(false)
-    const [error, setError] = useState(undefined)
-    const [date, setDate] = useState([])
-    const jwt = useReadLocalStorage<string | undefined>("token")
+    } = useForm();
+    const [filesstateLogo, setFilesstateLogo] = useState([]);
+    const [filesSampul, setFilesSampul] = useState([]);
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const [error, setError] = useState(undefined);
+    const [date, setDate] = useState([]);
+    const jwt = useReadLocalStorage<string | undefined>("token");
     const headers = {
         "x-access-token": jwt!,
     };
@@ -119,8 +118,9 @@ const tambahState = () => {
             try {
                 const res = await axios.get(`${process.env.API_URL}/api/dayManagement`, {
                     headers,
-                })
-                setDate(res.data)
+                });
+                console.log(res.data);
+                setDate(res.data);
             } catch (err: any) {
                 console.log(err);
             }
@@ -135,10 +135,7 @@ const tambahState = () => {
             formData.append("name", data.name);
             formData.append("quota", data.quota);
             formData.append("day", data.day);
-            formData.append("category", data.category);
-            formData.append("shortDesc", data.shortDesc);
             formData.append("stateLogo", filesstateLogo[0]);
-            formData.append("coverPhoto", filesSampul[0]);
             const response = await axios.post(
                 `${process.env.API_URL}/api/stateAct/createState`,
                 formData,
@@ -218,7 +215,10 @@ const tambahState = () => {
                                         {...register("quota", {
                                             required: "Kuota harap diisi",
                                             min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
-                                            max: { value: 100, message: "Kuota tidak boleh lebih dari 100" }
+                                            max: {
+                                                value: 100,
+                                                message: "Kuota tidak boleh lebih dari 100",
+                                            },
                                         })}
                                         type={"number"}
                                         name="quota"
@@ -263,45 +263,7 @@ const tambahState = () => {
                                         <Text textColor={"red"}>{errors.day.message}</Text>
                                     )}
                                 </Box>
-                                <Box width={"100%"} px={2} mt={[2, 2, 0, 0]}>
-                                    <FormLabel textColor={"black"}>Kategori</FormLabel>
-                                    <Select
-                                        {...register("category", {
-                                            required: "Kategori harap dipilih",
-                                        })}
-                                        placeholder="Pilih category STATE"
-                                        name="category"
-                                        textColor={"black"}
-                                        border={"solid"}
-                                        borderColor={"#CBD5E0"}
-                                        _hover={{ border: "solid #CBD5E0" }}
-                                    >
-                                        <option value='Media Kampus'>Media Kampus</option>
-                                        <option value='UKM Olahraga'>UKM Olahraga</option>
-                                        <option value='UKM Sains dan Sosial'>UKM Sains dan Sosial</option>
-                                        <option value='UKM Seni dan Budaya'>UKM Seni dan Budaya</option>
-                                    </Select>
-                                    {errors.category !== undefined && (
-                                        <Text textColor={"red"}>{errors.category.message}</Text>
-                                    )}
-                                </Box>
                             </Flex>
-                            <Box width={"100%"} px={2} mb={"0.8em"}>
-                                <FormLabel textColor={"black"}>Deskripsi Singkat</FormLabel>
-                                <Textarea
-                                    {...register("shortDesc", {
-                                        required: "Deskripsi singkat harap diisi",
-                                    })}
-                                    name="shortDesc"
-                                    textColor={"black"}
-                                    border={"solid"}
-                                    borderColor={"#CBD5E0"}
-                                    _hover={{ border: "solid #CBD5E0" }}
-                                />
-                                {errors.shortDesc !== undefined && (
-                                    <Text textColor={"red"}>{errors.shortDesc.message}</Text>
-                                )}
-                            </Box>
                             <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"1em"}>
                                 <FormLabel textColor={"black"}>Logo</FormLabel>
                                 <Box
@@ -319,65 +281,48 @@ const tambahState = () => {
                                     <Text textColor={"red"}>{errors.stateLogo.message}</Text>
                                 )}
                             </Box>
-                            <Box width={"100%"} px={2} mt={[2, 2, 0, 0]} mb={"0.8em"}>
-                                <FormLabel textColor={"black"}>Foto Sampul</FormLabel>
-                                <Box
-                                    padding={"1em"}
-                                    border={"solid #CBD5E0"}
-                                    width={"100%"}
-                                    height={"100%"}
-                                    borderRadius={10}
-                                    transition={"0.1s ease-in-out"}
-                                    _hover={{ border: "solid #CBD5E0" }}
-                                >
-                                    <Previews name="coverPhoto" setFiles={setFilesSampul} />
-                                </Box>
-                                {errors.coverPhoto !== undefined && (
-                                    <Text textColor={"red"}>{errors.coverPhoto.message}</Text>
-                                )}
-                            </Box>
                             <HStack
-                                    width={"100%"}
-                                    px={2}
-                                    mt={2}
-                                    mb={"0.8em"}
-                                    justifyContent={"right"}
-                                >
-                                    <Link href={"/state/daftarState"}>
-                                        <Button
-                                            w={100}
-                                            borderRadius={"999px"}
-                                            textColor="white"
-                                            colorScheme={"facebook"}
-                                        >
-                                            BACK
-                                        </Button>
-                                    </Link>
-                                    {isButtonLoading === true ? (
-                                        <Button
-                                            isLoading
-                                            w={100}
-                                            borderRadius={"999px"}
-                                            type="submit"
-                                            textColor="black"
-                                            bgColor={"green.200"}
-                                            _hover={{ bgColor: "yellow.200" }}
-                                        >
-                                            SUBMIT
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            w={100}
-                                            borderRadius={"999px"}
-                                            type="submit"
-                                            textColor="black"
-                                            bgColor={"green.200"}
-                                            _hover={{ bgColor: "yellow.200" }}
-                                        >
-                                            SUBMIT
-                                        </Button>
-                                    )}
-                                </HStack>
+                                width={"100%"}
+                                px={2}
+                                mt={2}
+                                mb={"0.8em"}
+                                justifyContent={"right"}
+                            >
+                                <Link href={"/state/daftarState"}>
+                                    <Button
+                                        w={100}
+                                        borderRadius={"999px"}
+                                        textColor="white"
+                                        colorScheme={"facebook"}
+                                    >
+                                        BACK
+                                    </Button>
+                                </Link>
+                                {isButtonLoading === true ? (
+                                    <Button
+                                        isLoading
+                                        w={100}
+                                        borderRadius={"999px"}
+                                        type="submit"
+                                        textColor="black"
+                                        bgColor={"green.200"}
+                                        _hover={{ bgColor: "yellow.200" }}
+                                    >
+                                        SUBMIT
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        w={100}
+                                        borderRadius={"999px"}
+                                        type="submit"
+                                        textColor="black"
+                                        bgColor={"green.200"}
+                                        _hover={{ bgColor: "yellow.200" }}
+                                    >
+                                        SUBMIT
+                                    </Button>
+                                )}
+                            </HStack>
                         </form>
                     </Box>
                 </Box>

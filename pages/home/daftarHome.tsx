@@ -56,7 +56,7 @@ const listHOME = () => {
             console.log(err);
             setIsSkeletonLoading(true);
         }
-    },[]);
+    }, []);
 
     const handleRemove = async (data: any) => {
         try {
