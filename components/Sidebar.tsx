@@ -100,7 +100,7 @@ const Links = ({ pathName, role, divisiName }: LinksProps) => {
             logo: DaftarMhsSVG,
             logo2: DaftarMhsBlueSVG,
             role: ["panitia"],
-            divisi: ["SuperAdmin", "Rocuta", "Griffin"],
+            divisi: ["SuperAdmin", "Rocuta", "Griffin", "Campi"],
         },
     ];
     return (
@@ -194,13 +194,13 @@ const Accor = ({ pathName, role, divisiName }: AccorProps) => {
                     name: "Tambah Data HoME",
                     link: "/home/tambahHome",
                     role: ["panitia"],
-                    divisi: ["SuperAdmin", "Rocuta", "Griffin"],
+                    divisi: ["SuperAdmin", "Rocuta", "Griffin", "Campi"],
                 },
                 {
                     name: "Tambah Media HoME",
                     link: "/home/tambahMediaHome",
                     role: ["panitia"],
-                    divisi: ["SuperAdmin", "Rocuta", "Griffin"],
+                    divisi: ["SuperAdmin", "Rocuta", "Griffin", "Campi"],
                 },
             ],
         },
@@ -220,7 +220,7 @@ const Accor = ({ pathName, role, divisiName }: AccorProps) => {
                     name: "Tambah STATE",
                     link: "/state/tambahState",
                     role: ["panitia"],
-                    divisi: ["SuperAdmin", "Rocuta", "Griffin"],
+                    divisi: ["SuperAdmin", "Rocuta", "Griffin", "Campi"],
                 },
             ],
         },
