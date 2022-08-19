@@ -13,6 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useReadLocalStorage } from "usehooks-ts";
 import Swal from "sweetalert2";
+import { useUserContext } from "../../useContext/UserContext";
 
 interface DataHoME {
     homeID: number;
@@ -42,6 +43,7 @@ const listHOME = () => {
     const headers = {
         "x-access-token": jwt!,
     };
+    const {divisiCode} = useUserContext()
 
     useEffect(() => {
         try {
@@ -186,6 +188,7 @@ const listHOME = () => {
                                 bgColor={"#bd0017"}
                                 _hover={{ bgColor: "#d01c1f" }}
                                 onClick={() => handleRemove(tableMeta.rowData[0])}
+                                disabled = { !["D01", "D02", "D03", "D04"].includes(divisiCode!) ? true : false}
                             />
                         </HStack>
                     );

@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import { useUserContext } from "../../../../useContext/UserContext";
 
 interface DataMedia {
     photoID: number;
@@ -23,6 +24,7 @@ interface DataMedia {
 const editMedia = ({ mediaID }: { mediaID: number }) => {
     const [dataMedia, setDataMedia] = useState<DataMedia[]>([]);
     const jwt = useReadLocalStorage<string | undefined>("token");
+    const {divisiCode} = useUserContext();
     const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
 
     useEffect(() => {
@@ -37,6 +39,8 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                         },
                     }
                 );
+
+                console.log(res);
 
                 setDataMedia(res.data);
             };
@@ -202,18 +206,20 @@ const editMedia = ({ mediaID }: { mediaID: number }) => {
                                 BACK
                             </Button>
                         </Link>
-                        <Link href="/home/tambahMediaHome">
-                            <Button
-                                w={100}
-                                borderRadius={"999px"}
-                                type="submit"
-                                textColor="black"
-                                bgColor={"green.200"}
-                                _hover={{ bgColor: "yellow.200" }}
-                            >
-                                TAMBAH
-                            </Button>
-                        </Link>
+                        {["D01", "D02", "D03", "D04"].includes(divisiCode!) && (
+                            <Link href="/home/tambahMediaHome">
+                                <Button
+                                    w={100}
+                                    borderRadius={"999px"}
+                                    type="submit"
+                                    textColor="black"
+                                    bgColor={"green.200"}
+                                    _hover={{ bgColor: "yellow.200" }}
+                                >
+                                    TAMBAH
+                                </Button>
+                            </Link>
+                        )}
                     </HStack>
                 </Box>
             </Flex>

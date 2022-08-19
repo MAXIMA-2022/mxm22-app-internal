@@ -13,6 +13,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
+import { useUserContext } from "../../useContext/UserContext";
 
 interface StateInfo {
     id: number;
@@ -36,6 +37,7 @@ const listSTATE = () => {
     const headers = {
         "x-access-token": jwt!,
     };
+    const {divisiCode} = useUserContext()
     useEffect(() => {
         try {
             setIsSkeletonLoading(false);
@@ -211,6 +213,7 @@ const listSTATE = () => {
                                 bgColor={"#bd0017"}
                                 _hover={{ bgColor: "#d01c1f" }}
                                 onClick={() => handleRemove(tableMeta.rowData[0])}
+                                disabled = { !["D01", "D02", "D03", "D04"].includes(divisiCode!) ? true : false}
                             />
                         </HStack>
                     );

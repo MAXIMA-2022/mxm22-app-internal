@@ -22,6 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useUserContext } from "../../../../useContext/UserContext";
 
 interface DataHoME {
     name: string;
@@ -45,6 +46,7 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
     const [dataHoME, setDataHoME] = useState<DataHoME[]>([]);
     const [chapter, setChapter] = useState<string[]>([]);
     const [chapterID, setChapterID] = useState<string>("0");
+    const {divisiCode} = useUserContext();
 
     useEffect(() => {
         try {
@@ -106,6 +108,7 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
 
             setIsButtonLoading(false);
         } catch (err: any) {
+            console.log(err.response.data.message)
             setError(err.response.data.message);
             toast.error(err.response.data.message);
             setIsButtonLoading(false);
@@ -412,6 +415,9 @@ const editHomeInfo = ({ informationID }: { informationID: number }) => {
                                             textColor="black"
                                             bgColor={"green.200"}
                                             _hover={{ bgColor: "yellow.200" }}
+                                            disabled = {
+                                                !["D01", "D02", "D03", "D04"].includes(divisiCode!) ? true : false
+                                            }
                                         >
                                             SUBMIT
                                         </Button>

@@ -12,6 +12,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUserContext } from "../../useContext/UserContext";
 
 interface DataPanit {
     name: String;
@@ -23,10 +24,12 @@ interface DataPanit {
 const DaftarPanit = () => {
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [panit, setPanit] = useState<DataPanit[]>([]);
-
+    const {divisiCode} = useUserContext();
     const headers = {
         "x-access-token": jwt!,
     };
+
+
 
     useEffect(() => {
         try {
@@ -154,6 +157,7 @@ const DaftarPanit = () => {
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
+                                        disabled = {['D01', 'D02', 'D04'].includes(divisiCode!) ? false : true}
                                         isChecked
                                         onChange={() => verifyData(tableMeta.rowData[1], "0")}
                                     />
@@ -162,6 +166,7 @@ const DaftarPanit = () => {
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
+                                        disabled = {['D01', 'D02', 'D04'].includes(divisiCode!) ? false : true}
                                         onChange={() => verifyData(tableMeta.rowData[1], "1")}
                                     />
                                 )}
