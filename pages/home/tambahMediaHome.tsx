@@ -20,11 +20,6 @@ const Previews = (props: any) => {
     const [files, setFiles] = useState([]);
     const { getRootProps, getInputProps } = useDropzone({
         maxFiles: 3,
-        accept: {
-            "image/jpg": [],
-            "image/jpeg": [],
-            "image/png": [],
-        },
         onDrop: (acceptedFiles: any) => {
             setFiles(
                 acceptedFiles.map((file: any) =>
