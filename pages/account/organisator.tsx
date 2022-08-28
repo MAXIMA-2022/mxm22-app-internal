@@ -11,6 +11,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUserContext } from "../../useContext/UserContext";
 
 const listAkun = () => {
     interface DataAkunOrg {
@@ -20,6 +21,7 @@ const listAkun = () => {
         verified: number;
     }
 
+    const {divisiCode} = useUserContext();
     const jwt = useReadLocalStorage<string | undefined>("token");
     const [org, setOrg] = useState<DataAkunOrg[]>([]);
     const headers = {
@@ -152,6 +154,7 @@ const listAkun = () => {
                                         borderRadius={"full"}
                                         bg={"gray.500"}
                                         isChecked
+                                        disabled = {['D01', 'D02', 'D04'].includes(divisiCode!) ? false : true}
                                         onChange={() => verifyData(tableMeta.rowData[1], "0")}
                                     />
                                 ) : (
@@ -159,6 +162,7 @@ const listAkun = () => {
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
+                                        disabled = {['D01', 'D02', 'D04'].includes(divisiCode!) ? false : true}
                                         onChange={() => verifyData(tableMeta.rowData[1], "1")}
                                     />
                                 )}
