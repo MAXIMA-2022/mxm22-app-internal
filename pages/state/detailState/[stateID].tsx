@@ -46,8 +46,10 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                 setstate(response.data);
             };
             const fetchparticipants = async () => {
-                const res = await axios.get(`${process.env.API_URL}/api/stateReg`, { headers });
-                setParticipant(res.data);
+                const res = await axios.get(`${process.env.API_URL}/api/stateRegBySID/${stateID}`, {
+                    headers,
+                });
+                setParticipant(res.data)
             };
             fetchparticipants();
             fetchstate();
