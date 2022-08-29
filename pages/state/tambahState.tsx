@@ -217,7 +217,7 @@ const tambahState = () => {
                                             min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
                                             max: {
                                                 value: 200,
-                                                message: "Kuota tidak boleh lebih dari 100",
+                                                message: "Kuota tidak boleh lebih dari 200",
                                             },
                                         })}
                                         type={"number"}
