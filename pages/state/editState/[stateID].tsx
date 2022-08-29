@@ -161,8 +161,8 @@ const editState = ({ stateID }: { stateID: number }) => {
                                                 required: "Kuota harap diisi",
                                                 min: { value: 1, message: "Kuota tidak boleh ≤ 0" },
                                                 max: {
-                                                    value: 100,
-                                                    message: "Kuota tidak boleh lebih dari 100",
+                                                    value: 200,
+                                                    message: "Kuota tidak boleh lebih dari 200",
                                                 },
                                             })}
                                             type={"number"}
