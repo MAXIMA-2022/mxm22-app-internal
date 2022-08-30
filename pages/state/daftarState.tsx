@@ -136,8 +136,21 @@ const listSTATE = () => {
             },
         },
         {
-            label: "Kode Presensi",
+            label: "Absensi Awal",
             name: "attendanceCode",
+            options: {
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <b>{column.label}</b>
+                        </TableCell>
+                    );
+                },
+            },
+        },
+        {
+            label: "Absensi Akhir",
+            name: "attendanceCode2",
             options: {
                 customHeadRender: ({ index, ...column }) => {
                     return (
@@ -196,6 +209,7 @@ const listSTATE = () => {
                                     color={"#163161"}
                                     border={"1px"}
                                     borderColor={"#163161"}
+                                    disabled = { !["D01", "D02", "D03", "D04"].includes(divisiCode!) ? true : false}
                                 >
                                     <Center>
                                         <HStack spacing={2}>
