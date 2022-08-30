@@ -21,6 +21,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from "next/router";
+import { useUserContext } from "../../../useContext/UserContext";
 
 interface StateInfo {
     name: string;
@@ -41,6 +42,7 @@ const editState = ({ stateID }: { stateID: number }) => {
     const [error, setError] = useState(undefined);
     const router = useRouter();
     const jwt = useReadLocalStorage<string | undefined>("token");
+    const {role} = useUserContext()
     const [state, setstate] = useState<StateInfo[]>([]);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
     const [date, setDate] = useState<string[]>([]);
@@ -50,6 +52,9 @@ const editState = ({ stateID }: { stateID: number }) => {
         "x-access-token": jwt!,
     };
     useEffect(() => {
+        if(role !== "panitia"){
+            router.push('/state/daftarState');
+        }
         try {
             const fetchstate = async () => {
                 const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, {
