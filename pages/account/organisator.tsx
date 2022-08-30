@@ -154,7 +154,7 @@ const listAkun = () => {
                                         borderRadius={"full"}
                                         bg={"gray.500"}
                                         isChecked
-                                        disabled = {['D01', 'D02', 'D04'].includes(divisiCode!) ? false : true}
+                                        disabled = {['D01', 'D02', 'D03', 'D04'].includes(divisiCode!) ? false : true}
                                         onChange={() => verifyData(tableMeta.rowData[1], "0")}
                                     />
                                 ) : (
@@ -162,7 +162,7 @@ const listAkun = () => {
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
                                         bg={"gray.500"}
-                                        disabled = {['D01', 'D02', 'D04'].includes(divisiCode!) ? false : true}
+                                        disabled = {['D01', 'D02', 'D03', 'D04'].includes(divisiCode!) ? false : true}
                                         onChange={() => verifyData(tableMeta.rowData[1], "1")}
                                     />
                                 )}
