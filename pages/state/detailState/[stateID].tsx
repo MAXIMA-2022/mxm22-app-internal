@@ -13,6 +13,7 @@ import { TableCell } from "@material-ui/core";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useReadLocalStorage } from "usehooks-ts";
+import { useUserContext } from "../../../useContext/UserContext";
 
 interface StateInfo {
     name: string;
@@ -33,26 +34,41 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
     const [state, setstate] = useState<StateInfo[]>([]);
     const [participant, setParticipant] = useState([]);
     const [isSkeletonLoading, setIsSkeletonLoading] = useState(false);
+    const {role} = useUserContext()
     const headers = {
         "x-access-token": jwt!,
     };
     useEffect(() => {
         try {
             setIsSkeletonLoading(false);
-            const fetchstate = async () => {
-                const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, {
-                    headers,
-                });
-                setstate(response.data);
+            const fetchstate = async (role: string | undefined) => {
+                if(role === "organisator"){
+                    const response = await axios.get(`${process.env.API_URL}/api/stateAct2/${stateID}`, {
+                        headers,
+                    });
+                    setstate(response.data);
+                } else {
+                    const response = await axios.get(`${process.env.API_URL}/api/stateAct/${stateID}`, {
+                        headers,
+                    });
+                    setstate(response.data);
+                }
             };
-            const fetchparticipants = async () => {
-                const res = await axios.get(`${process.env.API_URL}/api/stateRegBySID/${stateID}`, {
-                    headers,
-                });
-                setParticipant(res.data)
+            const fetchparticipants = async (role: string | undefined) => {
+                if(role === "organisator"){
+                    const res = await axios.get(`${process.env.API_URL}/api/stateRegBySID2/${stateID}`, {
+                        headers,
+                    });
+                    setParticipant(res.data)
+                } else {
+                    const res = await axios.get(`${process.env.API_URL}/api/stateRegBySID/${stateID}`, {
+                        headers,
+                    });
+                    setParticipant(res.data)
+                }
             };
-            fetchparticipants();
-            fetchstate();
+            fetchparticipants(role);
+            fetchstate(role);
             setIsSkeletonLoading(true);
         } catch (err: any) {
             console.log(err);
