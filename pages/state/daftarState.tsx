@@ -37,23 +37,30 @@ const listSTATE = () => {
     const headers = {
         "x-access-token": jwt!,
     };
-    const {divisiCode} = useUserContext()
+    const {divisiCode, role} = useUserContext()
     useEffect(() => {
         try {
             setIsSkeletonLoading(false);
-            const fetchstate = async () => {
-                const response = await axios.get(`${process.env.API_URL}/api/stateAct`, {
-                    headers,
-                });
-                setstate(response.data);
+            const fetchstate = async (role: string | undefined) => {
+                if(role === "organisator"){
+                    const response = await axios.get(`${process.env.API_URL}/api/stateAct2`, {
+                        headers,
+                    });
+                    setstate(response.data);
+                } else {
+                    const response = await axios.get(`${process.env.API_URL}/api/stateAct1`, {
+                        headers,
+                    });
+                    setstate(response.data);
+                }
             };
-            fetchstate();
+            fetchstate(role);
             setIsSkeletonLoading(true);
         } catch (err: any) {
             console.log(err);
             setIsSkeletonLoading(true);
         }
-    }, []);
+    }, [role]);
 
     const handleRemove = async (data: any) => {
         try {
