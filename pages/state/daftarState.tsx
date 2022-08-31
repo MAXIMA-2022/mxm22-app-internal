@@ -48,7 +48,7 @@ const listSTATE = () => {
                     });
                     setstate(response.data);
                 } else {
-                    const response = await axios.get(`${process.env.API_URL}/api/stateAct1`, {
+                    const response = await axios.get(`${process.env.API_URL}/api/stateAct`, {
                         headers,
                     });
                     setstate(response.data);
