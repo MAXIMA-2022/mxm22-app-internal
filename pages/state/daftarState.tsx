@@ -143,6 +143,19 @@ const listSTATE = () => {
             },
         },
         {
+            label: "Day",
+            name: "day",
+            options: {
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <b>{column.label}</b>
+                        </TableCell>
+                    );
+                },
+            },
+        },
+        {
             label: "Absensi Awal",
             name: "attendanceCode",
             options: {
