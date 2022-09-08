@@ -27,6 +27,10 @@ interface StateInfo {
     shortDesc: string;
     coverPhoto: string;
     date: string;
+    absensiAwal: string;
+    absensiAkhir: string;
+    attendanceTime: string;
+    tokenTime: string;
 }
 
 const detailSTATE = ({ stateID }: { stateID: number }) => {
@@ -59,11 +63,45 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                     const res = await axios.get(`${process.env.API_URL}/api/stateRegBySID2/${stateID}`, {
                         headers,
                     });
+                    for(let i = 0; i < res.data.length; i++){
+                        const date = new Date(res.data[i].attendanceTime)
+                        const date2 = new Date(res.data[i].tokenTime)
+                        if(res.data[i].attendanceTime === null){
+                            res.data[i].absensiAwal = ""
+                        }
+                        else {
+                            res.data[i].absensiAwal = date.toLocaleTimeString()
+                        }
+
+                        if(res.data[i].tokenTime === null){
+                            res.data[i].absensiAkhir = ""
+                        }
+                        else {
+                            res.data[i].absensiAkhir = date2.toLocaleTimeString()
+                        }
+                    }
                     setParticipant(res.data)
                 } else {
                     const res = await axios.get(`${process.env.API_URL}/api/stateRegBySID/${stateID}`, {
                         headers,
                     });
+                    for(let i = 0; i < res.data.length; i++){
+                        const date = new Date(res.data[i].attendanceTime)
+                        const date2 = new Date(res.data[i].tokenTime)
+                        if(res.data[i].attendanceTime === null){
+                            res.data[i].absensiAwal = ""
+                        }
+                        else {
+                            res.data[i].absensiAwal = date.toLocaleTimeString()
+                        }
+
+                        if(res.data[i].tokenTime === null){
+                            res.data[i].absensiAkhir = ""
+                        }
+                        else {
+                            res.data[i].absensiAkhir = date2.toLocaleTimeString()
+                        }
+                    }
                     setParticipant(res.data)
                 }
             };
@@ -149,6 +187,20 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
             },
         },
         {
+            label: "Check In",
+            name: "absensiAwal",
+            options: {
+                filter: true,
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <b>{column.label}</b>
+                        </TableCell>
+                    );
+                }
+            }
+        },
+        {
             label: "Absensi Akhir",
             name: "exitAttendance",
             options: {
@@ -174,6 +226,20 @@ const detailSTATE = ({ stateID }: { stateID: number }) => {
                     );
                 },
             },
+        },
+        {
+            label: "Check Out",
+            name: "absensiAkhir",
+            options: {
+                filter: true,
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <b>{column.label}</b>
+                        </TableCell>
+                    );
+                }
+            }
         },
     ];
 
