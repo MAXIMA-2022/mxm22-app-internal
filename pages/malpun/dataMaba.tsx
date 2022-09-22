@@ -38,11 +38,11 @@ const dataMaba = () => {
                 const res = await axios.get(`${process.env.API_URL}/api/malpun`, { headers });
                 for (let i = 0; i < res.data.length; i++) {
                     const date = new Date(res.data[i].timeVerified);
-                    const hari = date.toLocaleTimeString()
-                    if(hari === "7:00:00 AM"){
-                        res.data[i].timeVerified = ""
+                    const hari = date.toLocaleTimeString();
+                    if (hari === "7:00:00 AM") {
+                        res.data[i].timeVerified = "";
                     } else {
-                        res.data[i].timeVerified = hari
+                        res.data[i].timeVerified = hari;
                     }
                 }
                 setMaba(res.data);
@@ -149,7 +149,7 @@ const dataMaba = () => {
                                         borderRadius={"full"}
                                         bg={"red.400"}
                                         disabled={
-                                            ["D01", "D02", "D04", "D10", "D14"].includes(
+                                            ["D01", "D02", "D04", "D10", "D13", "D14"].includes(
                                                 divisiCode!
                                             )
                                                 ? false
@@ -165,7 +165,7 @@ const dataMaba = () => {
                                         borderRadius={"full"}
                                         bg={"green.200"}
                                         disabled={
-                                            ["D01", "D02", "D04", "D10", "D14"].includes(
+                                            ["D01", "D02", "D04", "D10", "D13", "D14"].includes(
                                                 divisiCode!
                                             )
                                                 ? false
