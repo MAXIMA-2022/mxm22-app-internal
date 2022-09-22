@@ -12,6 +12,8 @@ import { useReadLocalStorage } from "usehooks-ts";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUserContext } from "../../useContext/UserContext";
+import CheckIconSVG from "../../public/checkIcon.svg";
+import CrossIconSVG from "../../public/crossIcon.svg";
 
 interface DataMaba {
     name: String;
@@ -19,6 +21,8 @@ interface DataMaba {
     divisi: String;
     verified: number;
 }
+
+const svgSize = "16px";
 
 const dataMaba = () => {
     const jwt = useReadLocalStorage<string | undefined>("token");
@@ -32,15 +36,16 @@ const dataMaba = () => {
         try {
             const fetchMaba = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/malpun`, { headers });
-                // for (let i = 0; i < res.data.length; i++) {
-                //     const date = new Date(res.data[i].timeVerified);
-                //     if (res.data[i].timeVerified === null) {
-                //         res.data[i].timeVerified = "";
-                //     } else {
-                //         res.data[i].timeVerified = date.toLocaleTimeString();
-                //     }
-                // }
-                setMaba(res.data)
+                for (let i = 0; i < res.data.length; i++) {
+                    const date = new Date(res.data[i].timeVerified);
+                    const hari = date.toLocaleTimeString()
+                    if(hari === "7:00:00 AM"){
+                        res.data[i].timeVerified = ""
+                    } else {
+                        res.data[i].timeVerified = hari
+                    }
+                }
+                setMaba(res.data);
             };
             fetchMaba();
         } catch (err: any) {
@@ -64,6 +69,15 @@ const dataMaba = () => {
             );
 
             const res = await axios.get(`${process.env.API_URL}/api/malpun`, { headers });
+            for (let i = 0; i < res.data.length; i++) {
+                const date = new Date(res.data[i].timeVerified);
+                const hari = date.toLocaleTimeString();
+                if (hari === "7:00:00 AM") {
+                    res.data[i].timeVerified = "";
+                } else {
+                    res.data[i].timeVerified = hari;
+                }
+            }
             setMaba(res.data);
 
             toast.success(response.data.message);
@@ -178,6 +192,33 @@ const dataMaba = () => {
                         <TableCell key={index} style={{ zIndex: -1 }}>
                             <b>{column.label}</b>
                         </TableCell>
+                    );
+                },
+            },
+        },
+        {
+            label: "Status",
+            name: "Status",
+            options: {
+                filter: true,
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <Flex justifyContent={{ base: "none", lg: "center" }}>
+                                <b>{column.label}</b>
+                            </Flex>
+                        </TableCell>
+                    );
+                },
+                customBodyRender: (value: any, tableMeta: any) => {
+                    return (
+                        <Flex justifyContent={{ base: "none", lg: "center" }}>
+                            {tableMeta.rowData[2] === 1 ? (
+                                <Image src={CheckIconSVG} width={svgSize} height={svgSize} />
+                            ) : (
+                                <Image src={CrossIconSVG} width={svgSize} height={svgSize} />
+                            )}
+                        </Flex>
                     );
                 },
             },
