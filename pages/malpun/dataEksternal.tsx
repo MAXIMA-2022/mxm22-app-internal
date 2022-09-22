@@ -170,7 +170,7 @@ const dataEksternal = () => {
                                     <Button
                                         colorScheme={"blue"}
                                         borderRadius={"full"}
-                                        bg={"red.200"}
+                                        bg={"red.400"}
                                         disabled={
                                             ["D01", "D02", "D04", "D10", "D14"].includes(
                                                 divisiCode!
