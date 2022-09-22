@@ -172,7 +172,7 @@ const dataEksternal = () => {
                                         borderRadius={"full"}
                                         bg={"red.400"}
                                         disabled={
-                                            ["D01", "D02", "D04", "D10", "D14"].includes(
+                                            ["D01", "D02", "D04", "D10", "D13", "D14"].includes(
                                                 divisiCode!
                                             )
                                                 ? false
@@ -188,7 +188,7 @@ const dataEksternal = () => {
                                         borderRadius={"full"}
                                         bg={"green.200"}
                                         disabled={
-                                            ["D01", "D02", "D04", "D10", "D14"].includes(
+                                            ["D01", "D02", "D04", "D10", "D13", "D14"].includes(
                                                 divisiCode!
                                             )
                                                 ? false
