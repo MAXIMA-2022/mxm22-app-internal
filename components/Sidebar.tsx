@@ -29,6 +29,8 @@ import DaftarPanitSVG from "../public/daftarPanit.svg";
 import DaftarPanitBlueSVG from "../public/daftarPanitBlue.svg";
 import StateSVG from "../public/state.svg";
 import StateBlueSVG from "../public/stateBlue.svg";
+import MalpunSVG from "../public/icons8-stellar.svg";
+import MalpunBlueSVG from "../public/icons8-stellarblue.svg";
 import HomeSVG from "../public/home.svg";
 import HomeBlueSVG from "../public/homeBlue.svg";
 import IconSVG from "../public/icon.svg";
@@ -221,6 +223,26 @@ const Accor = ({ pathName, role, divisiName }: AccorProps) => {
                     link: "/state/tambahState",
                     role: ["panitia"],
                     divisi: ["SuperAdmin", "Rocuta", "Griffin", "Campi"],
+                },
+            ],
+        },
+        {
+            name: "MalPun",
+            icon: MalpunSVG,
+            icon2: MalpunBlueSVG,
+            role: ["panitia"],
+            accor: [
+                {
+                    name: "Data Maba",
+                    link: "/malpun/dataMaba",
+                    role: ["panitia"],
+                    divisi: ["SuperAdmin", "Rocuta", "Elvyn", "Dryad", "Griffin", "Cerberus"],
+                },
+                {
+                    name: "Data Eksternal",
+                    link: "/malpun/dataEksternal",
+                    role: ["panitia"],
+                    divisi: ["SuperAdmin", "Rocuta", "Elvyn", "Dryad", "Griffin", "Cerberus"],
                 },
             ],
         },
