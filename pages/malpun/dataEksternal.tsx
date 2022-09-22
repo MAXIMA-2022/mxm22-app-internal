@@ -20,6 +20,7 @@ interface DataEksternal {
     nim: String;
     divisi: String;
     verified: number;
+    timeVerified: string;
 }
 
 const dataEksternal = () => {
@@ -36,14 +37,13 @@ const dataEksternal = () => {
                 const res = await axios.get(`${process.env.API_URL}/api/malpunOuts`, { headers });
                 // for (let i = 0; i < res.data.length; i++) {
                 //     const date = new Date(res.data[i].timeVerified);
-                //     if (res.data[i].timeVerified === null) {
+                //     if (res.data[i].verified === null) {
                 //         res.data[i].timeVerified = "";
                 //     } else {
                 //         res.data[i].timeVerified = date.toLocaleTimeString();
                 //     }
                 // }
                 setEks(res.data);
-                //console.log(res.data)
             };
             fetcheks();
         } catch (err: any) {
