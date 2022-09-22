@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Button, HStack, Switch } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, HStack } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { TableCell } from "@material-ui/core";
@@ -9,7 +9,6 @@ import Image from "next/image";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUserContext } from "../../useContext/UserContext";
@@ -41,8 +40,7 @@ const dataMaba = () => {
                 //         res.data[i].timeVerified = date.toLocaleTimeString();
                 //     }
                 // }
-                setMaba(res.data);
-                //console.log(res.data)
+                setMaba(res.data)
             };
             fetchMaba();
         } catch (err: any) {

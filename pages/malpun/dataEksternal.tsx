@@ -1,6 +1,6 @@
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
-import { Box, Flex, Text, Button, HStack, Switch } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, HStack } from "@chakra-ui/react";
 import MUIDataTable, { MUIDataTableColumn } from "mui-datatables";
 import { CheckCircleIcon } from "@chakra-ui/icons";
 import { TableCell } from "@material-ui/core";
@@ -9,7 +9,6 @@ import Image from "next/image";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import { useRouter } from "next/router";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useUserContext } from "../../useContext/UserContext";
@@ -35,6 +34,15 @@ const dataEksternal = () => {
         try {
             const fetcheks = async () => {
                 const res = await axios.get(`${process.env.API_URL}/api/malpunOuts`, { headers });
+                // const timestamp = Date.parse(res.data.timeVerified);
+                // for(let i = 0; i < res.data.length; i++){
+                //     const timestamp = Date.parse(res.data[i].timeVerified);
+                //     const date = new Date(timestamp);
+                //     date.toLocaleTimeString();
+                // }
+                // if(res.data.verified === 1){
+                //     res.data.timeVerified = date.toLocaleTimeString();
+                // }
                 // for (let i = 0; i < res.data.length; i++) {
                 //     const date = new Date(res.data[i].timeVerified);
                 //     if (res.data[i].verified === null) {
