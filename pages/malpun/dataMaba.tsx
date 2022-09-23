@@ -46,6 +46,7 @@ const dataMaba = () => {
                     }
                 }
                 setMaba(res.data);
+                console.log(res.data)
             };
             fetchMaba();
         } catch (err: any) {
@@ -217,6 +218,43 @@ const dataMaba = () => {
                                 <Image src={CheckIconSVG} width={svgSize} height={svgSize} />
                             ) : (
                                 <Image src={CrossIconSVG} width={svgSize} height={svgSize} />
+                            )}
+                        </Flex>
+                    );
+                },
+            },
+        },
+        {
+            label: "Role",
+            name: "mentoring",
+            options: {
+                filter: true,
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <b>{column.label}</b>
+                        </TableCell>
+                    );
+                },
+                customBodyRender: (value: any, tableMeta: any) => {
+                    return (
+                        <Flex w={"80px"} justifyContent={{ base: "none", lg: "center" }}>
+                            {value === 1 ? (
+                                    <Flex
+                                        //colorScheme={"blue"}
+                                        justifyContent={"center"}
+                                        alignItems={'center'}
+                                        borderRadius={"20px"}
+                                        bgColor={"orange.300"}
+                                        fontSize={[12,12,12,14]}
+                                        //bg={"red.400"}
+                                        h={10}
+                                        w={150}
+                                    >
+                                        MENTOR
+                                    </Flex>
+                            ) : (
+                                <></>
                             )}
                         </Flex>
                     );
