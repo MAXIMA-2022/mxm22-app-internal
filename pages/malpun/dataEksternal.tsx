@@ -54,7 +54,7 @@ const dataEksternal = () => {
             console.log(err);
             toast.error(err.response.data.message);
         }
-    }, []);
+    }, [eks]);
 
     const verifyData = async (ID: number, verified: string) => {
         try {

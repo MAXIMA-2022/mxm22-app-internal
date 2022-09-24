@@ -240,19 +240,58 @@ const dataMaba = () => {
                     return (
                         <Flex w={"80px"} justifyContent={{ base: "none", lg: "center" }}>
                             {value === 1 ? (
-                                    <Flex
-                                        //colorScheme={"blue"}
-                                        justifyContent={"center"}
-                                        alignItems={'center'}
-                                        borderRadius={"20px"}
-                                        bgColor={"orange.300"}
-                                        fontSize={[12,12,12,14]}
-                                        //bg={"red.400"}
-                                        h={10}
-                                        w={150}
-                                    >
-                                        MENTOR
-                                    </Flex>
+                                <Flex
+                                    //colorScheme={"blue"}
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                    borderRadius={"20px"}
+                                    bgColor={"orange.300"}
+                                    fontSize={[12, 12, 12, 14]}
+                                    fontWeight={["bold", "bold", "bold", "bold"]}
+                                    //bg={"red.400"}
+                                    h={10}
+                                    w={150}
+                                >
+                                    MENTOR
+                                </Flex>
+                            ) : (
+                                <></>
+                            )}
+                        </Flex>
+                    );
+                },
+            },
+        },
+        {
+            label: "KP",
+            name: "kp",
+            options: {
+                filter: true,
+                customHeadRender: ({ index, ...column }) => {
+                    return (
+                        <TableCell key={index} style={{ zIndex: -1 }}>
+                            <b>{column.label}</b>
+                        </TableCell>
+                    );
+                },
+                customBodyRender: (value: any, tableMeta: any) => {
+                    return (
+                        <Flex w={"80px"} justifyContent={{ base: "none", lg: "center" }}>
+                            {value === 1 ? (
+                                <Flex
+                                    //colorScheme={"blue"}
+                                    justifyContent={"center"}
+                                    alignItems={"center"}
+                                    borderRadius={"20px"}
+                                    bgColor={"blue.300"}
+                                    fontSize={[12, 12, 12, 14]}
+                                    fontWeight={["bold", "bold", "bold", "bold"]}
+                                    //bg={"red.400"}
+                                    h={10}
+                                    w={150}
+                                >
+                                    KP
+                                </Flex>
                             ) : (
                                 <></>
                             )}
